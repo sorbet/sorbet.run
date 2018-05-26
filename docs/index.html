@@ -79,12 +79,17 @@ end</div>
     WebAssembly.compile(bytes)
   )
 
+  var stdout = []
   var print = function(line) {
     if (runId != curId) {
       return;
     }
-    output.innerHTML += ansi_up.ansi_to_html(line) + "\n";
+    stdout.push(line);
   };
+  var flush = function() {
+    output.innerHTML = ansi_up.ansi_to_html(stdout.join("\n"));
+    stdout = [];
+  }
   var sorbet = null;
   var typecheckOnLoad = false;
 
@@ -148,13 +153,20 @@ end</div>
       return;
     }
     typecheckOnLoad = false;
-    output.innerText = "";
+    // We somehow use up the WASM instance by calling this function so we have
+    // to null it out and recompile
+    sorbet = null;
 
     runId += 1;
     curId = runId;
     var f = Module.cwrap('typecheck', null, ['string']);
     var ruby = editor.getValue();
     f(ruby);
+
+    flush();
+
+    // Eagerly compile a new copy
+    compile();
   }
 
   function updateURL() {
