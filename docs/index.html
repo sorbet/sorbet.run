@@ -16,8 +16,6 @@ body {
 }
 </style>
 
-<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
-
   </head>
   <body>
 
@@ -44,7 +42,8 @@ end</div>
   });
 </script>
 
-<pre id="output" class="prettyprint lang-rb">
+<script src="ansi_up.js" type="text/javascript"></script>
+<pre id="output">
 </pre>
 
 <script>
@@ -52,12 +51,13 @@ end</div>
   var output = document.getElementById('output');
   var runId = 0;
   var curId = 0;
+  var ansi_up = new AnsiUp;
 
   var print = function(line) {
     if (runId != curId) {
       return;
     }
-    output.innerText += line + "\n";
+    output.innerHTML += ansi_up.ansi_to_html(line) + "\n";
   };
   var sorbet = null;
   var typecheckOnLoad = false;
@@ -77,6 +77,7 @@ end</div>
       printErr: function(line) {
         line = line.replace(/.*\[error\] /, '')
         line = line.replace(/http:\/\/[^ ]*/, '')
+        line = line.replace('git.corp.stripe.com/stripe-internal', 'github.com/stripe')
         print(line);
       },
     };
