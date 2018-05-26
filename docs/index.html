@@ -57,6 +57,7 @@ end</div>
 <script>
 (function() {
   var output = document.getElementById('output');
+  var lastRunId = 0;
   var runId = 0;
   var curId = 0;
   var ansi_up = new AnsiUp;
@@ -65,6 +66,10 @@ end</div>
     if (runId != curId) {
       return;
     }
+    if (lastRunId != curId) {
+      output.innerText = "";
+    }
+    lastRunId = curId;
     output.innerHTML += ansi_up.ansi_to_html(line) + "\n";
   };
   var sorbet = null;
@@ -95,7 +100,6 @@ end</div>
   }
 
   function typecheck() {
-    output.innerText = "";
     typecheckOnLoad = true;
     compile().then(compileCB);
   }
