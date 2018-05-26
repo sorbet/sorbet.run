@@ -33,14 +33,14 @@ var AnsiUp = (function () {
         this.VERSION = "3.0.0";
         this.ansi_colors = [
             [
-                { rgb: [0, 0, 0], class_name: "ansi-black" },
-                { rgb: [187, 0, 0], class_name: "ansi-red" },
-                { rgb: [0, 187, 0], class_name: "ansi-green" },
-                { rgb: [187, 187, 0], class_name: "ansi-yellow" },
-                { rgb: [0, 0, 187], class_name: "ansi-blue" },
-                { rgb: [187, 0, 187], class_name: "ansi-magenta" },
-                { rgb: [0, 187, 187], class_name: "ansi-cyan" },
-                { rgb: [255, 255, 255], class_name: "ansi-white" }
+                { rgb: [0x00, 0x2b, 0x36], class_name: "ansi-black" },
+                { rgb: [0xdc, 0x32, 0x2f], class_name: "ansi-red" },
+                { rgb: [0x85, 0x99, 0x00], class_name: "ansi-green" },
+                { rgb: [0xb5, 0x89, 0x00], class_name: "ansi-yellow" },
+                { rgb: [0x26, 0x8b, 0xd2], class_name: "ansi-blue" },
+                { rgb: [0xd3, 0x36, 0x82], class_name: "ansi-magenta" },
+                { rgb: [0x2a, 0xa1, 0x98], class_name: "ansi-cyan" },
+                { rgb: [0xfd, 0xf6, 0xe3], class_name: "ansi-white" }
             ],
             [
                 { rgb: [85, 85, 85], class_name: "ansi-bright-black" },
