@@ -115,7 +115,6 @@ end</div>
 
   function typecheck() {
     debounce(function() {
-      output.innerText = "";
       typecheckOnLoad = true;
       compile().then(compileCB);
     }, 250)();
@@ -129,6 +128,7 @@ end</div>
     // We somehow use up the WASM instance by calling this function so we have
     // to null it out and recompile
     sorbet = null;
+    output.innerText = "";
 
     runId += 1;
     curId = runId;
