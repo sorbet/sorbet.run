@@ -131,8 +131,12 @@ end</div>
         print(line);
       },
       instantiateWasm: function(info, realRecieveInstanceCallBack) {
-        sorbetModuleCompile.then(module => WebAssembly.instantiate(module, info).then(instance =>
-          realRecieveInstanceCallBack(instance, module)).catch(error => console.error(error)))
+        sorbetModuleCompile
+        .then(module =>
+          WebAssembly.instantiate(module, info)
+          .then(instance => realRecieveInstanceCallBack(instance, module))
+          .catch(error => console.error(error))
+        )
         return {}; // indicates lazy initialization
       },
     };
