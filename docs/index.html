@@ -1,1 +1,126 @@
-Sorbet
+<html>
+  <head>
+<style>
+body {
+  margin: 0;
+}
+
+#editor {
+  height: 50%;
+}
+
+#output {
+  margin: 0;
+  height: 50%;
+  overflow-y: scroll;
+}
+</style>
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+  </head>
+  <body>
+
+<div id="editor">class A
+  sig(foo: Integer).returns(String)
+  def bar(foo)
+    foo.to_s
+  end
+end
+
+def main
+  A.new.bar(91)
+  A.new.bar("91")
+end</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.3.3/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+  var editor = ace.edit("editor", {
+    printMargin: false,
+  });
+  editor.setTheme("ace/theme/monokai");
+  editor.session.setMode("ace/mode/ruby");
+  editor.session.on("change", function() {
+    typecheck();
+  });
+</script>
+
+<pre id="output" class="prettyprint lang-rb">
+</pre>
+
+<script>
+(function() {
+  var output = document.getElementById('output');
+  var runId = 0;
+  var curId = 0;
+
+  var print = function(line) {
+    if (runId != curId) {
+      return;
+    }
+    output.innerText += line + "\n";
+  };
+  var sorbet = null;
+  var typecheckOnLoad = false;
+
+  function compile() {
+    if (sorbet) {
+      // Already compiling or compiled
+      return sorbet;
+    }
+    // For some unkonwn reason this varible has to be new everytime, and can't
+    // be out of the closure
+    var opts = {
+      print: function(line) {
+        print(line);
+      },
+
+      printErr: function(line) {
+        line = line.replace(/.*\[error\] /, '')
+        line = line.replace(/http:\/\/[^ ]*/, '')
+        print(line);
+      },
+    };
+
+    sorbet = Sorbet(opts);
+    return sorbet;
+  }
+
+  function typecheck() {
+    output.innerText = "";
+    typecheckOnLoad = true;
+    compile().then(compileCB);
+  }
+
+  function compileCB(Module) {
+    if (!typecheckOnLoad) {
+      return;
+    }
+    sorbet = null;
+    typecheckOnLoad = false;
+
+    runId += 1;
+    curId = runId;
+    var f = Module.cwrap('typecheck', null, ['string']);
+    var ruby = editor.getValue();
+    f(ruby);
+
+    compile();
+  }
+
+  window.typecheck = typecheck;
+})();
+</script>
+<script>
+function async(u, c) {
+  var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+  o.src = u;
+  if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+  s.parentNode.insertBefore(o, s);
+}
+async("sorbet.js", typecheck);
+</script>
+
+  </body>
+</html>
