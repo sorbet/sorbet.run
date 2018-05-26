@@ -135,9 +135,6 @@ end</div>
       return;
     }
     typecheckOnLoad = false;
-    // We somehow use up the WASM instance by calling this function so we have
-    // to null it out and recompile
-    sorbet = null;
     output.innerText = "";
 
     runId += 1;
@@ -145,9 +142,6 @@ end</div>
     var f = Module.cwrap('typecheck', null, ['string']);
     var ruby = editor.getValue();
     f(ruby);
-
-    // Eagerly compile a new copy
-    compile();
   }
 
   window.typecheck = typecheck;
