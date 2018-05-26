@@ -27,6 +27,7 @@ body {
   </head>
   <body>
 
+<script src="ace.js" type="text/javascript" charset="utf-8"></script>
 <div id="editor">class A
   sig(foo: Integer).returns(String)
   def bar(foo)
@@ -38,7 +39,6 @@ def main
   A.new.barr(91)
   A.new.bar("91")
 end</div>
-<script src="ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
   var editor = ace.edit("editor", {
     printMargin: false,
