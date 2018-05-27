@@ -80,6 +80,8 @@
     window.location.hash = '#' + ruby;
   }
 
+  typecheck();
+
   window.typecheck = typecheck;
   window.updateURL = updateURL;
 })();
