@@ -15,6 +15,7 @@
   editor.setTheme("ace/theme/monokai");
   editor.session.setMode("ace/mode/ruby");
   editor.session.on("change", function() {
+    ga('send', 'event', 'Editor', 'change');
     typecheck();
     updateURL();
   });
