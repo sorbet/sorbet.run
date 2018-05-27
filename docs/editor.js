@@ -10,6 +10,7 @@
   var editor = ace.edit("editor", {
     printMargin: false,
     value: ruby,
+    tabSize: 2,
   });
   editor.setTheme("ace/theme/monokai");
   editor.session.setMode("ace/mode/ruby");
