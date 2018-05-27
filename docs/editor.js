@@ -21,6 +21,7 @@
   editor.session.on("load", function() {
     loadFromURL();
   });
+  editor.commands.removeCommands(["gotoline"]);
 
   window.editor = editor;
 })();
