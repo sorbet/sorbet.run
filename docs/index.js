@@ -19,7 +19,7 @@
     });
     gtag('event', 'typecheck', {
       'event_category': 'errors',
-      'event_label': stdout.join("\n").match(/^[^ ]/mg),
+      'event_label': stdout.join("\n").match(/^[^ ]/mg).count,
     });
     output.innerHTML = ansi_up.ansi_to_html(stdout.join("\n"));
     stdout = [];
