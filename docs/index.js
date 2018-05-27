@@ -70,8 +70,19 @@
     lastRuby = ruby;
     runId += 1;
     curId = runId;
+
+    var t0 = performance.now();
     var f = Module.cwrap('typecheck', null, ['string']);
     f(ruby);
+    var t1 = performance.now();
+
+    gtag('event', 'typecheck', {
+      'event_category' : 'typecheck_time',
+      'event_label' : t1 - t0,
+      'name': 'typecheck_time',
+      'value' : t1 - t0,
+    });
+
     flush();
   }
 
