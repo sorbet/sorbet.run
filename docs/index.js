@@ -17,9 +17,10 @@
       'event_category': 'error_lines',
       'event_label': stdout.length,
     });
+    var errorLines = stdout.join("\n").match(/^[^ ]/mg);
     gtag('event', 'typecheck', {
       'event_category': 'errors',
-      'event_label': stdout.join("\n").match(/^[^ ]/mg).length,
+      'event_label': errorLines ? errorLines.length : 0,
     });
     output.innerHTML = ansi_up.ansi_to_html(stdout.join("\n"));
     stdout = [];
