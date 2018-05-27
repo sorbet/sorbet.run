@@ -8,6 +8,7 @@
   ).then(bytes =>
     WebAssembly.compile(bytes)
   )
+  var lastRuby = "";
 
   var stdout = []
   var print = function(line) {
@@ -21,26 +22,6 @@
     stdout = [];
   }
   var sorbet = null;
-  var typecheckOnLoad = false;
-
-  // Returns a function, that, as long as it continues to be invoked, will not
-  // be triggered. The function will be called after it stops being called for
-  // N milliseconds. If `immediate` is passed, trigger the function on the
-  // leading edge, instead of the trailing.
-  function debounce(func, wait, immediate) {
-    var timeout;
-    return function() {
-      var context = this, args = arguments;
-      var later = function() {
-        timeout = null;
-        if (!immediate) func.apply(context, args);
-      };
-      var callNow = immediate && !timeout;
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-      if (callNow) func.apply(context, args);
-    };
-  };
 
   function compile() {
     if (sorbet) {
@@ -53,7 +34,6 @@
       print: function(line) {
         print(line);
       },
-
       printErr: function(line) {
         line = line.replace(/.*\[error\] /, '')
         line = line.replace(/http:\/\/[^ ]*/, '')
@@ -76,31 +56,23 @@
   }
 
   function typecheck() {
-    debounce(function() {
-      typecheckOnLoad = true;
-      compile().then(compileCB);
-    }, 250)();
+    setTimeout(function() {
+      compile().then(runCPP);
+    }, 1);
   }
 
-  function compileCB(Module) {
-    if (!typecheckOnLoad) {
+  function runCPP(Module) {
+    var ruby = editor.getValue();
+    if (lastRuby == ruby) {
       return;
     }
-    typecheckOnLoad = false;
-    // We somehow use up the WASM instance by calling this function so we have
-    // to null it out and recompile
+    lastRuby = ruby;
     sorbet = null;
-
     runId += 1;
     curId = runId;
     var f = Module.cwrap('typecheck', null, ['string']);
-    var ruby = editor.getValue();
     f(ruby);
-
     flush();
-
-    // Eagerly compile a new copy
-    compile();
   }
 
   function updateURL() {
