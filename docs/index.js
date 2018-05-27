@@ -36,6 +36,12 @@
         line = line.replace('git.corp.stripe.com/stripe-internal', 'github.com/stripe')
         print(line);
       },
+      onAbort: function() {
+        // On abort, throw away our WebAssembly instance and create a
+        // new one. This can happen due to out-of-memory, C++ exceptions,
+        // or other reasons; Throwing away and restarting should get us to a healthy state.
+        sorbet = null;
+      }
     };
 
     sorbet = Sorbet(opts);
