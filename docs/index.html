@@ -27,7 +27,6 @@ body {
   </head>
   <body>
 
-<script src="ace.js" type="text/javascript" charset="utf-8"></script>
 <div id="editor">class A
   sig(foo: Integer).returns(String)
   def bar(foo)
@@ -39,24 +38,15 @@ def main
   A.new.barr(91)
   A.new.bar("91")
 end</div>
-<script src="editor.js"></script>
 
-<script src="ansi_up.js" type="text/javascript"></script>
 <pre id="output">
 </pre>
 
+<script src="ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="editor.js"></script>
+<script src="ansi_up.js" type="text/javascript"></script>
+<script src="sorbet.js"></script>
 <script src="index.js"></script>
-<script>
-function async(u, c) {
-  var d = document, t = 'script',
-      o = d.createElement(t),
-      s = d.getElementsByTagName(t)[0];
-  o.src = u;
-  if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
-  s.parentNode.insertBefore(o, s);
-}
-async("sorbet.js", typecheck);
-</script>
 
   </body>
 </html>
