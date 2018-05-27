@@ -15,11 +15,11 @@
   var flush = function() {
     gtag('event', 'typecheck', {
       'event_category': 'error_lines',
-      'event_label': stdout.count,
+      'event_label': stdout.length,
     });
     gtag('event', 'typecheck', {
       'event_category': 'errors',
-      'event_label': stdout.join("\n").match(/^[^ ]/mg).count,
+      'event_label': stdout.join("\n").match(/^[^ ]/mg).length,
     });
     output.innerHTML = ansi_up.ansi_to_html(stdout.join("\n"));
     stdout = [];
