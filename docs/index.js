@@ -3,11 +3,6 @@
   var runId = 0;
   var curId = 0;
   var ansi_up = new AnsiUp;
-  var sorbetModuleCompile = fetch('sorbet.wasm').then(response =>
-    response.arrayBuffer()
-  ).then(bytes =>
-    WebAssembly.compile(bytes)
-  )
   var lastRuby = "";
 
   var stdout = []
@@ -40,15 +35,6 @@
         line = line.replace('git.corp.stripe.com/stripe-internal', 'github.com/stripe')
         print(line);
       },
-      instantiateWasm: function(info, realRecieveInstanceCallBack) {
-        sorbetModuleCompile
-        .then(module =>
-          WebAssembly.instantiate(module, info)
-          .then(instance => realRecieveInstanceCallBack(instance, module))
-          .catch(error => console.error(error))
-        )
-        return {}; // indicates lazy initialization
-      },
     };
 
     sorbet = Sorbet(opts);
@@ -67,7 +53,6 @@
       return;
     }
     lastRuby = ruby;
-    sorbet = null;
     runId += 1;
     curId = runId;
     var f = Module.cwrap('typecheck', null, ['string']);
