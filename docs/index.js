@@ -76,7 +76,7 @@
     f(ruby);
     var t1 = performance.now();
 
-    gtag('event', 'typecheck', {
+    gtag('event', 'timing_complete', {
       'event_category' : 'typecheck_time',
       'event_label' : t1 - t0,
       'name': 'typecheck_time',
