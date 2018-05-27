@@ -13,7 +13,14 @@
     stdout.push(line);
   };
   var flush = function() {
-    ga('send', 'event', 'Typecheck', 'lines', null, stdout.count);
+    gtag('event', 'typecheck', {
+      'event_category': 'error_lines',
+      'event_label': stdout.count,
+    });
+    gtag('event', 'typecheck', {
+      'event_category': 'errors',
+      'event_label': stdout.join("\n").match(/^[^ ]/mg),
+    });
     output.innerHTML = ansi_up.ansi_to_html(stdout.join("\n"));
     stdout = [];
   }
