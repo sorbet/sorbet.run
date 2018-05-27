@@ -13,6 +13,7 @@
     stdout.push(line);
   };
   var flush = function() {
+    ga('send', 'event', 'Typecheck', 'lines', null, stdout.count);
     output.innerHTML = ansi_up.ansi_to_html(stdout.join("\n"));
     stdout = [];
   }
