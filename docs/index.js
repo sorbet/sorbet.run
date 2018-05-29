@@ -106,6 +106,25 @@
     var ruby = editor.getValue();
     window.location.hash = '#' + ruby;
   }
+  window.addEventListener('hashchange', function() {
+    var ruby = window.location.hash;
+    ruby = decodeURI(ruby);
+    ruby = ruby.substr(1); // Cut off the #
+    if (editor.getValue() != ruby) {
+      editor.setValue(ruby);
+    }
+  });
+
+  var shown;
+  document.getElementById('menu').addEventListener("click", function() {
+    var e = document.getElementById('examples');
+    if (shown) {
+      e.style.display = "none";
+    } else {
+      e.style.display = "block";
+    }
+    shown = !shown;
+  });
 
   typecheck();
 
