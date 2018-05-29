@@ -62,7 +62,7 @@
           .then(instance => realRecieveInstanceCallBack(instance, module))
           .catch(error => console.log(error))
         ).catch(function(error) {
-            output.innerText = "Error loading sorbet.wasm. Maybe your adblock blocked it? Some of them are pretty aggressive on github.io domains. We promise we aren't mining crypto currencies on your laptop."
+            output.innerText = "Error loading sorbet.wasm. Maybe your adblock blocked it? Some of them are pretty aggressive on github.io domains. We promise we aren't mining crypto currencies on your computer."
         });
         return {}; // indicates lazy initialization
       },
