@@ -3,6 +3,11 @@
   var runId = 0;
   var curId = 0;
   var ansi_up = new AnsiUp;
+  var sorbetModuleCompile = fetch('sorbet.wasm').then(response =>
+    response.arrayBuffer()
+  ).then(bytes =>
+    WebAssembly.compile(bytes)
+  )
   var lastRuby = "";
 
   var stdout = []
@@ -49,7 +54,16 @@
         // new one. This can happen due to out-of-memory, C++ exceptions,
         // or other reasons; Throwing away and restarting should get us to a healthy state.
         sorbet = null;
-      }
+      },
+      instantiateWasm: function(info, realRecieveInstanceCallBack) {
+        sorbetModuleCompile
+        .then(module =>
+          WebAssembly.instantiate(module, info)
+          .then(instance => realRecieveInstanceCallBack(instance, module))
+          .catch(error => console.error(error))
+        )
+        return {}; // indicates lazy initialization
+      },
     };
 
     sorbet = Sorbet(opts);
