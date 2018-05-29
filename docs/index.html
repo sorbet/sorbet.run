@@ -29,12 +29,63 @@ body {
   right: 5;
   color: #FDF6E3;
 }
+
+#menu {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0 5px;
+  color: #FDF6E3;
+  z-index: 2;
+  cursor: pointer;
+  text-align: right;
+  font-size: 12px;
+  background-color: #282823;
+}
+
+#examples {
+  display: none;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+#examples a {
+  color: #FDF6E3;
+  text-decoration: none;
+}
+
 </style>
 
   </head>
   <body>
 
 <a id="email" href="mailto:sorbet@stripe.com">sorbet@stripe.com</a>
+
+<div id="menu">Examples &#x2630;
+  <ul id="examples">
+    <li>
+      <a href="#([1,%202].count%20+%203).next">Standard library</a>
+    </li><li>
+      <a href="#'str'%20+%20:sym%0A">String + Symbol</a>
+    </li><li>
+      <a href="#foo%20=%20T::Array[String].new[0]%0Areturn%20foo.empty?%0A">Array access is nilable</a>
+    </li><li>
+      <a href="#if%20Random.rand%0A%20%20%20%20foo%20=%201%0Aelse%0A%20%20%20%20foo%20=%202%0Aend">Dead code</a>
+    </li><li>
+      <a href="#class%20Foo%0A%20%20extend%20T::Helpers%0A%20%20%0A%20%20sig(%0A%20%20%20%20%20%20#%20Both%20positional%20and%20named%20parameters%20are%20referred%20to%20by%20name.%0A%20%20%20%20%20%20#%20You%20must%20declare%20all%20parameters%20(and%20the%20return%20value%20below).%0A%20%20%20%20%20%20foobar:%20Integer,%0A%20%20%20%20%20%20widget:%20String%0A%20%20)%0A%20%20.returns(Symbol)%0A%20%20def%20foo(foobar,%20widget:%20nil)%0A%20%20%20%20foobar.to_s.to_sym%0A%20%20end%0Aend">Signagures</a>
+    </li><li>
+      <a href='#class%20Foo%0A%20%20sig.returns(String)%20#%20Optional%20but%20not%20inferred%0A%20%20def%20foo%0A%20%20%20%20%20%20a%20=%205%20#%20Integer%0A%20%20%20%20%20%20b%20=%20T.let("str",%20String)%20#%20String%0A%20%20end%0Aend'>Local inference</a>
+    </li><li>
+      <a href="#module%20Fooable%0A%20%20abstract!%0A%20%20sig.abstract%0A%20%20def%20foo%0A%20%20end%0Aend%0A%0Aclass%20MyFooable%0A%20%20include%20Fooable%0A%0A%20%20def%20foo%0A%20%20end%0Aend">Interfaces</a>
+    </li><li>
+      <a href="#class%20Box%0A%20%20extend%20T::Generic%0A%0A%20%20Elem%20=%20type_member%0A%0A%20%20sig.returns(Elem)%0A%20%20def%20x%0A%20%20%20%20@x%0A%20%20end%0A%0A%20%20sig(x:%20Elem).returns(Elem)%0A%20%20def%20x=(x)%0A%20%20%20%20@x=x%0A%20%20end%0Aend%0A%0ABox[Integer].new.x%20+%20Box[String].new.x%20%0A">Generic classes</a>
+    </li><li>
+      <a href="#class%20MyArray%20<%20Array%0A%20%20Elem%20=%20type_member%0A%0A%20%20type_parameters(:U).sig(%0A%20%20%20%20%20%20blk:%20T.proc(arg0:%20Elem).returns(T.type_parameter(:U)),%0A%20%20)%0A%20%20.returns(T::Array[T.type_parameter(:U)])%0A%20%20def%20my_map(&blk)%0A%20%20%20%20map(&blk);%0A%20%20end%0Aend">Generic methods</a>
+    </li>
+  </ul>
+</div>
+
 
 <div id="editor">class A
   sig(foo: Integer).returns(String)
