@@ -11,6 +11,7 @@
     printMargin: false,
     value: ruby,
     tabSize: 2,
+    fontSize: 24,
   });
   editor.setTheme("ace/theme/monokai");
   editor.session.setMode("ace/mode/ruby");
