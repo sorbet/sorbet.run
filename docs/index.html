@@ -82,7 +82,7 @@ html, body {
     </li><li>
       <a href="#module%20Fooable%0A%20%20abstract!%0A%20%20sig.abstract%0A%20%20def%20foo%0A%20%20end%0Aend%0A%0Aclass%20GoodFooable%0A%20%20include%20Fooable%0A%0A%20%20def%20foo%0A%20%20end%0Aend%0A%0Aclass%20BadFooable%0A%20%20include%20Fooable%0Aend">Interfaces</a>
     </li><li>
-      <a href="#class%20Box%0A%20%20extend%20T::Generic%0A%0A%20%20Elem%20=%20type_member%0A%0A%20%20sig.returns(Elem)%0A%20%20def%20x%0A%20%20%20%20@x%0A%20%20end%0A%0A%20%20sig(x:%20Elem).returns(Elem)%0A%20%20def%20x=(x)%0A%20%20%20%20@x=x%0A%20%20end%0Aend%0A%0ABox[Integer].new.x%20+%20Box[String].new.x">Generic classes</a>
+      <a href="#class%20Box%0A%20%20extend%20T%3A%3AGeneric%0A%0A%20%20Elem%20%3D%20type_member%0A%0A%20%20sig.returns(Elem)%0A%20%20attr_reader%20%3Ax%0A%0A%20%20sig(x%3A%20Elem).returns(Elem)%0A%20%20attr_writer%20%3Ax%0Aend%0A%0ABox%5BInteger%5D.new.x%20%2B%20Box%5BString%5D.new.x">Generic classes</a>
     </li><li>
       <a href="#class%20Box%0A%20%20Elem%20%3D%20type_member%0A%0A%20%20sig(x%3A%20Elem).void%0A%20%20def%20initialize(x)%0A%20%20%20%20%40x%3Dx%0A%20%20end%0A%0A%20%20type_parameters(%3AU).sig(%0A%20%20%20%20blk%3A%20T.proc(arg0%3A%20Elem).returns(T.type_parameter(%3AU))%2C%0A%20%20)%0A%20%20.returns(Box%5BT.type_parameter(%3AU)%5D)%0A%20%20def%20map(%26blk)%0A%20%20%20%20Box.new(blk.call(%40x))%0A%20%20end%0Aend%0A%0ABox%5BInteger%5D.new(0).map(%26%3Asucc).map(%26%3Afoo)">Generic methods</a>
     </li>
