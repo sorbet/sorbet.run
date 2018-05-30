@@ -78,7 +78,7 @@ html, body {
     </li><li>
       <a href='#class%20Foo%0A%20%20sig.returns(String)%20#%20Optional%20but%20not%20inferred%0A%20%20def%20foo%0A%20%20%20%20%20%20a%20=%205%20#%20Integer%0A%20%20%20%20%20%20b%20=%20T.let("str",%20String)%20#%20String%0A%20%20end%0Aend'>Local inference</a>
     </li><li>
-      <a href="#module%20Fooable%0A%20%20abstract!%0A%20%20sig.abstract%0A%20%20def%20foo%0A%20%20end%0Aend%0A%0Aclass%20MyFooable%0A%20%20include%20Fooable%0A%0A%20%20def%20foo%0A%20%20end%0Aend">Interfaces</a>
+      <a href="#module%20Fooable%0A%20%20abstract!%0A%20%20sig.abstract%0A%20%20def%20foo%0A%20%20end%0Aend%0A%0Aclass%20GoodFooable%0A%20%20include%20Fooable%0A%0A%20%20def%20foo%0A%20%20end%0Aend%0A%0Aclass%20BadFooable%0A%20%20include%20Fooable%0Aend">Interfaces</a>
     </li><li>
       <a href="#class%20Box%0A%20%20extend%20T::Generic%0A%0A%20%20Elem%20=%20type_member%0A%0A%20%20sig.returns(Elem)%0A%20%20def%20x%0A%20%20%20%20@x%0A%20%20end%0A%0A%20%20sig(x:%20Elem).returns(Elem)%0A%20%20def%20x=(x)%0A%20%20%20%20@x=x%0A%20%20end%0Aend%0A%0ABox[Integer].new.x%20+%20Box[String].new.x">Generic classes</a>
     </li><li>
