@@ -108,7 +108,7 @@
   }
   window.addEventListener('hashchange', function() {
     var ruby = window.location.hash;
-    ruby = decodeURI(ruby);
+    ruby = decodeURIComponent(ruby);
     ruby = ruby.substr(1); // Cut off the #
     if (editor.getValue() != ruby) {
       editor.setValue(ruby);
