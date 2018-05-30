@@ -1,7 +1,7 @@
 (function() {
   var ruby = window.location.hash;
   if (ruby) {
-    ruby = decodeURI(ruby);
+    ruby = decodeURIComponent(ruby);
     ruby = ruby.substr(1); // Cut off the #
   } else {
     ruby = document.getElementById('editor').innerHTML;
