@@ -75,7 +75,7 @@ html, body {
     </li><li>
       <a href="#if%20Random.rand%0A%20%20%20%20foo%20=%201%0Aelse%0A%20%20%20%20foo%20=%202%0Aend">Dead code</a>
     </li><li>
-      <a href="#class%20Foo%0A%20%20extend%20T::Helpers%0A%20%20%0A%20%20sig(%0A%20%20%20%20%20%20#%20Both%20positional%20and%20named%20parameters%20are%20referred%20to%20by%20name.%0A%20%20%20%20%20%20#%20You%20must%20declare%20all%20parameters%20(and%20the%20return%20value%20below).%0A%20%20%20%20%20%20foobar:%20Integer,%0A%20%20%20%20%20%20widget:%20String%0A%20%20)%0A%20%20.returns(Symbol)%0A%20%20def%20foo(foobar,%20widget:%20nil)%0A%20%20%20%20foobar.to_s.to_sym%0A%20%20end%0Aend">Signagures</a>
+      <a href="#class%20Foo%0A%20%20extend%20T::Helpers%0A%20%20%0A%20%20sig(%0A%20%20%20%20%20%20#%20Both%20positional%20and%20named%20parameters%20are%20referred%20to%20by%20name.%0A%20%20%20%20%20%20#%20You%20must%20declare%20all%20parameters%20(and%20the%20return%20value%20below).%0A%20%20%20%20%20%20foobar:%20Integer,%0A%20%20%20%20%20%20widget:%20String%0A%20%20)%0A%20%20.returns(Symbol)%0A%20%20def%20foo(foobar,%20widget:%20nil)%0A%20%20%20%20foobar.to_s.to_sym%0A%20%20end%0Aend">Signatures</a>
     </li><li>
       <a href='#class%20Foo%0A%20%20sig.returns(String)%20#%20Optional%20but%20not%20inferred%0A%20%20def%20foo%0A%20%20%20%20%20%20a%20=%205%20#%20Integer%0A%20%20%20%20%20%20b%20=%20T.let("str",%20String)%20#%20String%0A%20%20end%0Aend'>Local inference</a>
     </li><li>
