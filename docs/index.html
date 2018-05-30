@@ -80,7 +80,7 @@ html, body {
     </li><li>
       <a href="#module%20Fooable%0A%20%20abstract!%0A%20%20sig.abstract%0A%20%20def%20foo%0A%20%20end%0Aend%0A%0Aclass%20MyFooable%0A%20%20include%20Fooable%0A%0A%20%20def%20foo%0A%20%20end%0Aend">Interfaces</a>
     </li><li>
-      <a href="#class%20Box%0A%20%20extend%20T::Generic%0A%0A%20%20Elem%20=%20type_member%0A%0A%20%20sig.returns(Elem)%0A%20%20def%20x%0A%20%20%20%20@x%0A%20%20end%0A%0A%20%20sig(x:%20Elem).returns(Elem)%0A%20%20def%20x=(x)%0A%20%20%20%20@x=x%0A%20%20end%0Aend%0A%0ABox[Integer].new.x%20+%20Box[String].new.x%20">Generic classes</a>
+      <a href="#class%20Box%0A%20%20extend%20T::Generic%0A%0A%20%20Elem%20=%20type_member%0A%0A%20%20sig.returns(Elem)%0A%20%20def%20x%0A%20%20%20%20@x%0A%20%20end%0A%0A%20%20sig(x:%20Elem).returns(Elem)%0A%20%20def%20x=(x)%0A%20%20%20%20@x=x%0A%20%20end%0Aend%0A%0ABox[Integer].new.x%20+%20Box[String].new.x">Generic classes</a>
     </li><li>
       <a href="#class%20MyArray%20<%20Array%0A%20%20Elem%20=%20type_member%0A%0A%20%20type_parameters(:U).sig(%0A%20%20%20%20blk:%20T.proc(arg0:%20Elem).returns(T.type_parameter(:U)),%0A%20%20)%0A%20%20.returns(T::Array[T.type_parameter(:U)])%0A%20%20def%20my_map(&blk)%0A%20%20%20%20map(&blk);%0A%20%20end%0Aend">Generic methods</a>
     </li>
