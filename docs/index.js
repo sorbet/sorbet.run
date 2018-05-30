@@ -104,7 +104,7 @@
 
   function updateURL() {
     var ruby = editor.getValue();
-    window.location.hash = '#' + ruby;
+    window.location.hash = '#' + encodeURIComponent(ruby);
   }
   window.addEventListener('hashchange', function() {
     var ruby = window.location.hash;
