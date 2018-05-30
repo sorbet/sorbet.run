@@ -89,7 +89,7 @@
 
     var t0 = performance.now();
     var f = Module.cwrap('typecheck', null, ['string']);
-    f(ruby);
+    f(ruby + "\n");
     var t1 = performance.now();
 
     gtag('event', 'timing_complete', {
