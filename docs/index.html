@@ -80,7 +80,7 @@ html, body {
     </li><li>
       <a href="#class%20Foo%0A%20%20extend%20T%3A%3AHelpers%0A%20%20%0A%20%20sig(%0A%20%20%20%20%20%20%23%20Both%20positional%20and%20named%20parameters%20are%20referred%20to%20by%20name.%0A%20%20%20%20%20%20%23%20You%20must%20declare%20all%20parameters%20(and%20the%20return%20value%20below).%0A%20%20%20%20%20%20foobar%3A%20Integer%2C%0A%20%20%20%20%20%20widget%3A%20String%0A%20%20)%0A%20%20.returns(Symbol)%0A%20%20def%20foo(foobar%2C%20widget%3A%20nil)%0A%20%20%20%20(foobar.to_s%20%2B%20widget).to_sym%0A%20%20end%0Aend">Signatures</a>
     </li><li>
-      <a href="#sig.returns(String)%20%23%20optional%20but%20not%20inferred%0Adef%20foo%0A%20%20a%20%3D%205%20%23%20inferred%20as%20Integer%0A%20%20b%20%3D%20T.let(bar%2C%20String)%20%23%20explicitly%20a%20String%0Aend%0A%0Adef%20bar%0Aend">Local inference</a>
+      <a href="#sig.returns(Integer)%0Adef%20foo%0A%20%201%20%23%20inferred%20as%20Integer%0Aend">Local inference</a>
     </li><li>
       <a href="#a%20%3D%205%0Aa%20%3D%20%3Asym%0A%0Ab%20%3D%20T.let('str'%2C%20String)%20%23%20Pinned%20to%20a%20String%0Ab%20%3D%20%3Asym">Pining</a>
     </li><li>
