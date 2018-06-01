@@ -88,6 +88,8 @@ html, body {
       <a href="#class%20Box%0A%20%20extend%20T%3A%3AGeneric%0A%0A%20%20Elem%20%3D%20type_member%0A%0A%20%20sig.returns(Elem)%0A%20%20attr_reader%20%3Ax%0A%0A%20%20sig(x%3A%20Elem).returns(Elem)%0A%20%20attr_writer%20%3Ax%0Aend%0A%0ABox%5BInteger%5D.new.x%20%2B%20Box%5BString%5D.new.x">Generic classes</a>
     </li><li>
       <a href="#class%20Box%0A%20%20Elem%20%3D%20type_member%0A%0A%20%20sig(x%3A%20Elem).void%0A%20%20def%20initialize(x)%0A%20%20%20%20%40x%3Dx%0A%20%20end%0A%0A%20%20type_parameters(%3AU).sig(%0A%20%20%20%20blk%3A%20T.proc(arg0%3A%20Elem).returns(T.type_parameter(%3AU))%2C%0A%20%20)%0A%20%20.returns(Box%5BT.type_parameter(%3AU)%5D)%0A%20%20def%20map(%26blk)%0A%20%20%20%20Box.new(blk.call(%40x))%0A%20%20end%0Aend%0A%0ABox%5BInteger%5D.new(0).map(%26%3Asucc).map(%26%3Afoo)">Generic methods</a>
+    </li><li>
+      <a href='#tuple%20%3D%20%5B1%2C%202%2C%20"3"%5D%0A%23%20This%20is%20not%20yet%20working%20in%20this%20version.%0A%23%20We%20have%20a%20prototype%20that%20would%20make%20it%20work%2C%20but%20it%20is%20too%20strict.%0A%23%20We%20are%20still%20working%20out%20details%20of%20how%20permissive%5Cstrict%20we%20should%20be.%0AT.assert_type!(tuple%5B0%5D%2C%20Integer)%0A%0A%23%20Calls%20work%20though%3A%0Asig(arg%3A%20%5BInteger%2C%20Integer%2C%20Integer%5D).void%0Adef%20meth(arg)%20end%0Ameth(tuple)%0A%0Ashape%20%3D%20%7Bstring%3A%20"value"%2C%20int%3A%200%7D%0A%0A%23%20Same%20with%20shapes.%0AT.assert_type!(shake%5B%3Astring%5D%2C%20String)%0A'>Generic methods</a>
     </li>
   </ul>
 </div>
