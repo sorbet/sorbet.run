@@ -89,6 +89,8 @@ html, body {
     </li><li>
       <a href="#if%20Random.rand%20>%200.5%0A%20%20arg%20%3D%201%0Aelse%0A%20%20arg%20%3D%20'1'%0Aend%0A%0Aarg%20%3D%20T.assert_type!(arg%2C%20T.any(Integer%2C%20String))%0A%0Acase%20arg%0Awhen%20Integer%0A%20%20arg%20%2B%202%0Awhen%20String%0A%20%20arg%20%2B%20'2'%0Aend">Union</a>
     </li><li>
+      <a href="#module%20A%0Aend%0A%0Amodule%20B%0Aend%0A%0Aclass%20C%0A%20%20include%20A%0A%20%20include%20B%0Aend%0A%0AT.assert_type!(C.new%2C%20T.all(A%2C%20B))">Intersection</a>
+    </li><li>
       <a href="#class%20Box%0A%20%20extend%20T%3A%3AGeneric%0A%0A%20%20Elem%20%3D%20type_member%0A%0A%20%20sig.returns(Elem)%0A%20%20attr_reader%20%3Ax%0A%0A%20%20sig(x%3A%20Elem).returns(Elem)%0A%20%20attr_writer%20%3Ax%0Aend%0A%0ABox%5BInteger%5D.new.x%20%2B%20Box%5BString%5D.new.x">Generic classes</a>
     </li><li>
       <a href="#class%20Box%0A%20%20Elem%20%3D%20type_member%0A%0A%20%20sig(x%3A%20Elem).void%0A%20%20def%20initialize(x)%0A%20%20%20%20%40x%3Dx%0A%20%20end%0A%0A%20%20type_parameters(%3AU).sig(%0A%20%20%20%20blk%3A%20T.proc(arg0%3A%20Elem).returns(T.type_parameter(%3AU))%2C%0A%20%20)%0A%20%20.returns(Box%5BT.type_parameter(%3AU)%5D)%0A%20%20def%20map(%26blk)%0A%20%20%20%20Box.new(blk.call(%40x))%0A%20%20end%0Aend%0A%0ABox%5BInteger%5D.new(0).map(%26%3Asucc).map(%26%3Afoo)">Generic methods</a>
