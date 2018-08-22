@@ -96,9 +96,7 @@ html, body {
     </li><li>
       <a href="#extend%20T%3A%3AHelpers%0A%0Asig.returns(T.noreturn)%0Adef%20good%0A%20%20raise%20'good'%0Aend%0A%0Asig.returns(T.noreturn)%0Adef%20bad%0A%20%20return%20'bad'%0Aend">Noreturn</a>
     </li><li>
-      <a
-        href="#module%20A%0Aend%0A%0Aclass%20B%0A%20%20include%20A%0Aend%0A%0A%23%20instances%20have%20the%20type%20of%20their%20class%0AT.assert_type!(B.new%2C%20B)%0A%0A%23%20classes%20have%20the%20type%20of%20their%20singleton%20class%0AT.assert_type!(B%2C%20T.class_of(B))%0A%0AT.assert_type!(B%2C%20T.class_of(A))%20%23%20a%20current%20bug%2C%20should%20work">Singleton
-        class</a>
+      <a href="#class%20A%0Aend%0A%0Aclass%20B%20%3C%20A%0Aend%0A%0A%23%20instances%20have%20the%20type%20of%20their%20class%0AT.assert_type!(B.new%2C%20B)%0A%0A%23%20classes%20have%20the%20type%20of%20their%20singleton%20class%0AT.assert_type!(B%2C%20T.class_of(B))%0AT.assert_type!(B%2C%20T.class_of(A))">Singleton class</a>
     </li><li>
       <a href="#class%20Box%0A%20%20extend%20T%3A%3AGeneric%0A%0A%20%20Elem%20%3D%20type_member%0A%0A%20%20sig.returns(Elem)%0A%20%20attr_reader%20%3Ax%0A%0A%20%20sig(x%3A%20Elem).returns(Elem)%0A%20%20attr_writer%20%3Ax%0Aend%0A%0ABox%5BInteger%5D.new.x%20%2B%20Box%5BString%5D.new.x">Generic class</a>
     </li><li>
