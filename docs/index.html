@@ -82,33 +82,33 @@ html, body {
     </li><li>
       <a href="#if%20Random.rand%0A%20%20%20%20foo%20=%201%0Aelse%0A%20%20%20%20foo%20=%202%0Aend">Dead code</a>
     </li><li>
-      <a href="#class%20Foo%0A%20%20extend%20T%3A%3AHelpers%0A%20%20%0A%20%20sig(%0A%20%20%20%20%20%20%23%20Both%20positional%20and%20named%20parameters%20are%20referred%20to%20by%20name.%0A%20%20%20%20%20%20%23%20You%20must%20declare%20all%20parameters%20(and%20the%20return%20value%20below).%0A%20%20%20%20%20%20foobar%3A%20Integer%2C%0A%20%20%20%20%20%20widget%3A%20String%0A%20%20)%0A%20%20.returns(Symbol)%0A%20%20def%20foo(foobar%2C%20widget%3A%20nil)%0A%20%20%20%20(foobar.to_s%20%2B%20widget).to_sym%0A%20%20end%0Aend">Method signature</a>
+      <a href="#class%20Foo%0A%20%20extend%20T%3A%3AHelpers%0A%20%20%0A%20%20sig%20do%0A%20%20%20%20params(%0A%20%20%20%20%20%20%23%20Both%20positional%20and%20named%20parameters%20are%20referred%20to%20by%20name.%0A%20%20%20%20%20%20%23%20You%20must%20declare%20all%20parameters%20(and%20the%20return%20value%20below).%0A%20%20%20%20%20%20foobar%3A%20Integer%2C%0A%20%20%20%20%20%20widget%3A%20String%0A%20%20%20%20)%0A%20%20%20%20.returns(Symbol)%0A%20%20end%0A%20%20def%20foo(foobar%2C%20widget%3A%20nil)%0A%20%20%20%20(foobar.to_s%20%2B%20widget).to_sym%0A%20%20end%0Aend">Method signature</a>
     </li><li>
-      <a href="#extend%20T%3A%3AHelpers%0Asig.returns(Integer)%0Adef%20foo%0A%20%201%20%23%20inferred%20as%20Integer%0Aend">Local inference</a>
+      <a href="#extend%20T%3A%3AHelpers%0Asig%20%7Breturns(Integer)%7D%0Adef%20foo%0A%20%201%20%23%20inferred%20as%20Integer%0Aend">Local inference</a>
     </li><li>
       <a href="#a%20%3D%205%0Aa%20%3D%20%3Asym%0A%0Ab%20%3D%20T.let('str'%2C%20String)%20%23%20Pinned%20to%20a%20String%0Ab%20%3D%20%3Asym">Pinning</a>
     </li><li>
-      <a href="#module%20Fooable%0A%20%20extend%20T%3A%3AHelpers%0A%20%20abstract!%0A%20%20sig.abstract%0A%20%20def%20foo%0A%20%20end%0Aend%0A%0Aclass%20GoodFooable%0A%20%20include%20Fooable%0A%0A%20%20def%20foo%0A%20%20end%0Aend%0A%0Aclass%20BadFooable%0A%20%20include%20Fooable%0Aend">Interface</a>
+      <a href="#module%20Fooable%0A%20%20extend%20T%3A%3AHelpers%0A%20%20abstract!%0A%20%20sig%20%7Babstract%7D%0A%20%20def%20foo%0A%20%20end%0Aend%0A%0Aclass%20GoodFooable%0A%20%20include%20Fooable%0A%0A%20%20def%20foo%0A%20%20end%0Aend%0A%0Aclass%20BadFooable%0A%20%20include%20Fooable%0Aend">Interface</a>
     </li><li>
       <a href="#if%20Random.rand%20>%200.5%0A%20%20arg%20%3D%201%0Aelse%0A%20%20arg%20%3D%20'1'%0Aend%0A%0Aarg%20%3D%20T.assert_type!(arg%2C%20T.any(Integer%2C%20String))%0A%0Acase%20arg%0Awhen%20Integer%0A%20%20arg%20%2B%202%0Awhen%20String%0A%20%20arg%20%2B%20'2'%0Aend">Union</a>
     </li><li>
       <a href="#module%20A%0Aend%0A%0Amodule%20B%0Aend%0A%0Aclass%20C%0A%20%20include%20A%0A%20%20include%20B%0Aend%0A%0AT.assert_type!(C.new%2C%20T.all(A%2C%20B))">Intersection</a>
     </li><li>
-      <a href="#extend%20T%3A%3AHelpers%0A%0Asig.returns(T.noreturn)%0Adef%20good%0A%20%20raise%20'good'%0Aend%0A%0Asig.returns(T.noreturn)%0Adef%20bad%0A%20%20return%20'bad'%0Aend">Noreturn</a>
+      <a href="#extend%20T%3A%3AHelpers%0A%0Asig%20%7Breturns(T.noreturn)%7D%0Adef%20good%0A%20%20raise%20'good'%0Aend%0A%0Asig%20%7Breturns(T.noreturn)%7D%0Adef%20bad%0A%20%20return%20'bad'%0Aend">Noreturn</a>
     </li><li>
       <a href="#class%20A%0Aend%0A%0Aclass%20B%20%3C%20A%0Aend%0A%0A%23%20instances%20have%20the%20type%20of%20their%20class%0AT.assert_type!(B.new%2C%20B)%0A%0A%23%20classes%20have%20the%20type%20of%20their%20singleton%20class%0AT.assert_type!(B%2C%20T.class_of(B))%0AT.assert_type!(B%2C%20T.class_of(A))">Singleton class</a>
     </li><li>
-      <a href="#class%20Box%0A%20%20extend%20T%3A%3AGeneric%0A%0A%20%20Elem%20%3D%20type_member%0A%0A%20%20sig.returns(Elem)%0A%20%20attr_reader%20%3Ax%0A%0A%20%20sig(x%3A%20Elem).returns(Elem)%0A%20%20attr_writer%20%3Ax%0Aend%0A%0ABox%5BInteger%5D.new.x%20%2B%20Box%5BString%5D.new.x">Generic class</a>
+      <a href="#class%20Box%0A%20%20extend%20T%3A%3AGeneric%0A%0A%20%20Elem%20%3D%20type_member%0A%0A%20%20sig%20%7Breturns(Elem)%7D%0A%20%20attr_reader%20%3Ax%0A%0A%20%20sig%20%7Bparams(x%3A%20Elem).returns(Elem)%7D%0A%20%20attr_writer%20%3Ax%0Aend%0A%0ABox%5BInteger%5D.new.x%20%2B%20Box%5BString%5D.new.x">Generic class</a>
     </li><li>
-      <a href="#class%20Box%0A%20%20extend%20T%3A%3AGeneric%0A%20%20Elem%20%3D%20type_member%0A%0A%20%20sig(x%3A%20Elem).void%0A%20%20def%20initialize(x)%0A%20%20%20%20%40x%3Dx%0A%20%20end%0A%0A%20%20type_parameters(%3AU).sig(%0A%20%20%20%20blk%3A%20T.proc(arg0%3A%20Elem).returns(T.type_parameter(%3AU))%2C%0A%20%20)%0A%20%20.returns(Box%5BT.type_parameter(%3AU)%5D)%0A%20%20def%20map(%26blk)%0A%20%20%20%20Box.new(blk.call(%40x))%0A%20%20end%0Aend%0A%0ABox%5BInteger%5D.new(0).map(%26%3Asucc).map(%26%3Afoo)">Generic method</a>
+      <a href="#class%20Box%0A%20%20extend%20T%3A%3AGeneric%0A%20%20Elem%20%3D%20type_member%0A%0A%20%20sig%20%7Bparams(x%3A%20Elem).void%7D%0A%20%20def%20initialize(x)%0A%20%20%20%20%40x%3Dx%0A%20%20end%0A%0A%20%20sig%20do%0A%20%20%20%20type_parameters(%3AU)%0A%20%20%20%20.params(%0A%20%20%20%20%20%20blk%3A%20T.proc.params(arg0%3A%20Elem).returns(T.type_parameter(%3AU))%2C%0A%20%20%20%20)%0A%20%20%20%20.returns(Box%5BT.type_parameter(%3AU)%5D)%0A%20%20end%0A%20%20def%20map(%26blk)%0A%20%20%20%20Box.new(blk.call(%40x))%0A%20%20end%0Aend%0A%0ABox%5BInteger%5D.new(0).map(%26%3Asucc).map(%26%3Afoo)">Generic method</a>
     </li><li>
       <a href="#foo%20%3D%20'1'%0A%0A2%20%2B%20foo%0A2%20%2B%20T.unsafe(foo)%20%23%20an%20escape%20hatch%20tells%20the%20typechecker%20to%20allow%20anything">Escape hatch</a>
     </li><li>
-      <a href="#extend%20T%3A%3AHelpers%0Asig(%0A%20%20blk%3A%20T.proc(a%3A%20Integer%2C%20b%3A%20String).returns(Integer)%0A).returns(String)%0Adef%20foo(%26blk)%0A%20%20blk.call(1%2C%20'2')%0Aend">Proc</a>
+      <a href="#extend%20T%3A%3AHelpers%0Asig%20do%0A%20%20params(%0A%20%20%20%20blk%3A%20T.proc.params(a%3A%20Integer%2C%20b%3A%20String).returns(Integer)%0A%20%20)%0A%20%20.returns(String)%0Aend%0Adef%20foo(%26blk)%0A%20%20blk.call(1%2C%20'2')%0Aend">Proc</a>
     </li><li>
-      <a href="#class%20A%0A%20%20extend%20T%3A%3AHelpers%0A%20%20sig(a%3A%20Integer).void%0A%20%20def%20initialize(a)%0A%20%20end%0A%20%20%0A%20%20sig.void%0A%20%20def%20foo%0A%20%20end%0Aend%0A%0AA.new(3).foo.bar">Void</a>
+      <a href="#class%20A%0A%20%20extend%20T%3A%3AHelpers%0A%20%20sig%20%7Bparams(a%3A%20Integer).void%7D%0A%20%20def%20initialize(a)%0A%20%20end%0A%20%20%0A%20%20sig%20%7Bvoid%7D%0A%20%20def%20foo%0A%20%20end%0Aend%0A%0AA.new(3).foo.bar">Void</a>
     </li><li>
-      <a href="#%23%20This%20example%20shows%20some%20of%20our%20incomplete%20additions%20to%20the%20type%20system%0A%23%20but%20hopefully%20gives%20you%20an%20idea%20of%20the%20posibilities.%0Aextend%20T%3A%3AHelpers%0Asig(arg%3A%20%5BInteger%2C%20String%2C%20Array%5D)%0A.returns(Integer)%0Adef%20tuple_method(arg)%0A%20%20arg%5B0%5D%20%23%20This%20currently%20returns%20T.unsafe%20so%20isn't%20checked.%0Aend%0A%0Asig(arg%3A%20%7B%0A%20%20my_string%3A%20String%2C%0A%20%20my_int%3A%20Integer%2C%0A%7D)%0A.returns(Integer)%0Adef%20shape_method(arg)%0A%20%20arg%5B%3Amy_int%5D%20%23%20This%20currently%20returns%20T.unsafe%20so%20isn't%20checked.%0Aend%0A%0Atuple%20%3D%20%5B1%2C%20"2"%2C%20%5B3%5D%5D%0A%23%20This%20is%20not%20yet%20working%20in%20this%20version.%0A%23%20We%20have%20a%20prototype%20that%20would%20make%20it%20work%2C%20but%20it%20is%20too%20strict.%0A%23%20We%20are%20still%20working%20out%20details%20of%20how%20permissive%20or%20strict%20we%20should%20be.%0A%23%20T.assert_type!(tuple%5B0%5D%2C%20Integer)%0Atuple_method(tuple)%0A%23%20If%20the%20tuples%20don't%20match%2C%20we%20error%3A%0Atuple_method(%5B1%2C%202%2C%203%5D)%0A%0Ashape%20%3D%20%7Bmy_string%3A%20"value"%2C%20my_int%3A%200%7D%0A%23%20Same%20with%20shapes.%0A%23%20T.assert_type!(shape%5B%3Amy_string%5D%2C%20String)%0Ashape_method(shape)%0A%23%20We%20do%20check%20shapes%20have%20all%20the%20keys%20you%20required.%0Ashape_method(%7Bmy_string%3A%20"value"%7D)">Tuple and Shape</a>
+      <a href="#%23%20This%20example%20shows%20some%20of%20our%20incomplete%20additions%20to%20the%20type%20system%0A%23%20but%20hopefully%20gives%20you%20an%20idea%20of%20the%20posibilities.%0Aextend%20T%3A%3AHelpers%0Asig%20do%0A%20%20params(arg%3A%20%5BInteger%2C%20String%2C%20Array%5D)%0A%20%20.returns(Integer)%0Aend%0Adef%20tuple_method(arg)%0A%20%20arg%5B0%5D%20%23%20This%20currently%20returns%20T.unsafe%20so%20isn't%20checked.%0Aend%0A%0Asig%20do%0A%20%20params(arg%3A%20%7B%0A%20%20%20%20my_string%3A%20String%2C%0A%20%20%20%20my_int%3A%20Integer%2C%0A%20%20%7D)%0A%20%20.returns(Integer)%0Aend%0Adef%20shape_method(arg)%0A%20%20arg%5B%3Amy_int%5D%20%23%20This%20currently%20returns%20T.unsafe%20so%20isn't%20checked.%0Aend%0A%0Atuple%20%3D%20%5B1%2C%20'2'%2C%20%5B3%5D%5D%0A%23%20This%20is%20not%20yet%20working%20in%20this%20version.%0A%23%20We%20have%20a%20prototype%20that%20would%20make%20it%20work%2C%20but%20it%20is%20too%20strict.%0A%23%20We%20are%20still%20working%20out%20details%20of%20how%20permissive%20or%20strict%20we%20should%20be.%0A%23%20T.assert_type!(tuple%5B0%5D%2C%20Integer)%0Atuple_method(tuple)%0A%23%20If%20the%20tuples%20don't%20match%2C%20we%20error%3A%0Atuple_method(%5B1%2C%202%2C%203%5D)%0A%0Ashape%20%3D%20%7Bmy_string%3A%20'value'%2C%20my_int%3A%200%7D%0A%23%20Same%20with%20shapes.%0A%23%20T.assert_type!(shape%5B%3Amy_string%5D%2C%20String)%0Ashape_method(shape)%0A%23%20We%20do%20check%20shapes%20have%20all%20the%20keys%20you%20required.%0Ashape_method(%7Bmy_string%3A%20'value'%7D)">Tuple and Shape</a>
     </li>
   </ul>
 </div>
@@ -116,7 +116,7 @@ html, body {
 
 <div id="editor">class A
   extend T::Helpers
-  sig(foo: Integer).returns(String)
+  sig {params(foo: Integer).returns(String)}
   def bar(foo)
     foo.to_s
   end
