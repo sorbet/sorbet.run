@@ -3,7 +3,7 @@
   var runId = 0;
   var curId = 0;
   var ansi_up = new AnsiUp;
-  var sorbetModuleCompile = fetch('sorbet.wasm').then(response =>
+  var sorbetModuleCompile = fetch('sorbet-wasm.wasm').then(response =>
     response.arrayBuffer()
   ).then(bytes =>
     WebAssembly.compile(bytes)
