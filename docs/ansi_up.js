@@ -3,32 +3,19 @@
  *  license : MIT
  *  http://github.com/drudru/ansi_up
  */
-(function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['exports'], factory);
-    } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
-        // CommonJS
-        factory(exports);
-    } else {
-        // Browser globals
-        var exp = {};
-        factory(exp);
-        root.AnsiUp = exp.default;
-    }
-}(this, function (exports) {
 "use strict";
-function rgx(tmplObj) {
-    var subst = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        subst[_i - 1] = arguments[_i];
-    }
-    var regexText = tmplObj.raw[0];
-    var wsrgx = /^\s+|\s+\n|\s+#[\s\S]+?\n/gm;
-    var txt2 = regexText.replace(wsrgx, '');
-    return new RegExp(txt2, 'm');
-}
 var AnsiUp = (function () {
+    function rgx(tmplObj) {
+        var subst = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            subst[_i - 1] = arguments[_i];
+        }
+        var regexText = tmplObj.raw[0];
+        var wsrgx = /^\s+|\s+\n|\s+#[\s\S]+?\n/gm;
+        var txt2 = regexText.replace(wsrgx, '');
+        return new RegExp(txt2, 'm');
+    }
+
     function AnsiUp() {
         this.VERSION = "3.0.0";
         this.ansi_colors = [
@@ -327,7 +314,3 @@ var AnsiUp = (function () {
     };
     return AnsiUp;
 }());
-//# sourceMappingURL=ansi_up.js.map
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = AnsiUp;
-}));

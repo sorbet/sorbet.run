@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
     <title>Sorbet Playground</title>
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -10,6 +11,8 @@
 <meta name="theme-color" content="#ffffff">
 <meta property="og:description" content="Fast gradual typechecker playground for Ruby" />
 
+<link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.14.3/min/vs/editor/editor.main.css">
+
 <style>
 html, body {
   margin: 0;
@@ -17,13 +20,19 @@ html, body {
   font-size: 24px;
 }
 
-#editor {
-  height: 50%;
+#editor, #output {
+  float: left;
+  font-family: Menlo;
+  font-size: 16px;
+  height: 100%;
+  width: 50%;
 }
 
 #output {
   margin: 0;
-  height: 50%;
+  height: calc(100% - 40px);
+  padding-top: 40px;
+  white-space: pre-wrap;
   overflow-y: scroll;
   background-color: #002b36;
   color: #fdf6e3;
@@ -91,8 +100,8 @@ html, body {
       <a href="#a%20%3D%205%0Aa%20%3D%20%3Asym%0A%0Ab%20%3D%20T.let('str'%2C%20String)%20%23%20Pinned%20to%20a%20String%0Ab%20%3D%20%3Asym">Pinning</a>
     </li><li>
       <a href="#module%20Fooable%0A%20%20extend%20T%3A%3AHelpers%0A%20%20abstract!%0A%20%20sig%20%7Babstract%7D%0A%20%20def%20foo%0A%20%20end%0Aend%0A%0Aclass%20GoodFooable%0A%20%20include%20Fooable%0A%0A%20%20def%20foo%0A%20%20end%0Aend%0A%0Aclass%20BadFooable%0A%20%20include%20Fooable%0Aend">Interface</a>
-    </li><li>
-      <a href="#if%20Random.rand%20>%200.5%0A%20%20arg%20%3D%201%0Aelse%0A%20%20arg%20%3D%20'1'%0Aend%0A%0Aarg%20%3D%20T.assert_type!(arg%2C%20T.any(Integer%2C%20String))%0A%0Acase%20arg%0Awhen%20Integer%0A%20%20arg%20%2B%202%0Awhen%20String%0A%20%20arg%20%2B%20'2'%0Aend">Union</a>
+    <!-- </li><li> -->
+    <!--   <a href="#if%20Random.rand%20>%200.5%0A%20%20arg%20%3D%201%0Aelse%0A%20%20arg%20%3D%20'1'%0Aend%0A%0Aarg%20%3D%20T.assert_type!(arg%2C%20T.any(Integer%2C%20String))%0A%0Acase%20arg%0Awhen%20Integer%0A%20%20arg%20%2B%202%0Awhen%20String%0A%20%20arg%20%2B%20'2'%0Aend">Union</a> -->
     </li><li>
       <a href="#module%20A%0Aend%0A%0Amodule%20B%0Aend%0A%0Aclass%20C%0A%20%20include%20A%0A%20%20include%20B%0Aend%0A%0AT.assert_type!(C.new%2C%20T.all(A%2C%20B))">Intersection</a>
     </li><li>
@@ -116,27 +125,16 @@ html, body {
 </div>
 
 
-<div id="editor">class A
-  extend T::Helpers
-  sig {params(foo: Integer).returns(String)}
-  def bar(foo)
-    foo.to_s
-  end
-end
-
-def main
-  A.new.barr(91)
-  A.new.bar("91")
-end</div>
+<div id="editor"></div>
 
 <pre id="output">
 Loading...
 </pre>
 
-<script src="ace.js" type="text/javascript" charset="utf-8"></script>
-<script src="editor.js"></script>
+<script src="third_party/monaco-editor/min/vs/loader.js"></script>
 <script src="ansi_up.js" type="text/javascript"></script>
-<script src="sorbet.js"></script>
+<script src="editor.js"></script>
+<script src="sorbet-debug.js"></script>
 <script src="index.js"></script>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->

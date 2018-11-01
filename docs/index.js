@@ -80,7 +80,7 @@
   }
 
   function runCPP(Module) {
-    var ruby = editor.getValue();
+    var ruby = editor.getModel().getValue();
     if (lastRuby == ruby) {
       return;
     }
@@ -104,16 +104,16 @@
   }
 
   function updateURL() {
-    var ruby = editor.getValue();
+    var ruby = editor.getModel().getValue();
     window.location.hash = '#' + encodeURIComponent(ruby);
   }
   window.addEventListener('hashchange', function() {
     var ruby = window.location.hash;
     ruby = decodeURIComponent(ruby);
     ruby = ruby.substr(1); // Cut off the #
-    if (editor.getValue() != ruby) {
-      editor.setValue(ruby);
-      editor.clearSelection();
+    var model = editor.getModel();
+    if (model.getValue() != ruby) {
+      model.setValue(ruby);
     }
   });
 
@@ -128,7 +128,7 @@
     shown = !shown;
   });
 
-  typecheck();
+  // typecheck();
 
   window.typecheck = typecheck;
   window.updateURL = updateURL;
