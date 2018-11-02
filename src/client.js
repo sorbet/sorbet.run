@@ -12,8 +12,8 @@ import {sorbetModuleCompile} from './compile';
 let sorbet = null;
 
 const stdout = [];
-const runId = 0;
-const curId = 0;
+let runId = 0;
+let curId = 0;
 
 const print = (line) => {
   if (runId !== curId) {
@@ -70,26 +70,27 @@ const compile = () => {
   return sorbet;
 };
 
-// const handleMessage = (flushOut, message) => (Module) => {
-//   runId += 1;
-//   curId = runId;
+const processRequest = (message) => (Module) => {
+  runId += 1;
+  curId = runId;
 
-//   const f = Module.cwrap('typecheck', null, ['string']);
-//   f(`${contents}\n`);
+  console.log('before');
+  const f = Module.cwrap('processRequest', null, ['string']);
+  console.log('here');
+  f(JSON.stringify(message));
 
-//   flush(flushOut);
-// };
+  console.log(stdout);
+};
 
 export const getClient = () => {
-  // TODO(jez) Use the compiled thing to actually make the request
-  // const compiled = compile();
+  const compiled = compile();
 
   const listeners = [];
-  const flushOut = (output) => {
-    listeners.forEach((listener) => {
-      listener({jsonrpc: output});
-    });
-  };
+  // const flushOut = (output) => {
+  //   listeners.forEach((listener) => {
+  //     listener({jsonrpc: output});
+  //   });
+  // };
 
   const connection = rpc.createMessageConnection(
     // Reader
@@ -115,8 +116,8 @@ export const getClient = () => {
       write: (message) => {
         console.log('write');
         console.log(message);
-        // compiled.then()
-        // call flushOut after
+        compiled.then(processRequest(message));
+        // TODO(jez) call flushOut after
       },
     }
   );

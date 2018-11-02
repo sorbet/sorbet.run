@@ -1,1 +1,3 @@
 docs
+public/sorbet-wasm.js
+public/sorbet-wasm.wasm
