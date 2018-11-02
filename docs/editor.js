@@ -29,8 +29,10 @@
   editor.commands.removeCommands(["gotoline"]);
   editor.focus();
 
-  console.info('Run this to get Vim keybindings:');
-  console.info('editor.setKeyboardHandler("ace/keyboard/vim");');
+  var vimButton = document.getElementById('vim-button');
+  vimButton.addEventListener('click', (ev) => {
+    editor.setKeyboardHandler("ace/keyboard/vim");
+  });
 
   window.editor = editor;
 })();
