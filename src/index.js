@@ -6,8 +6,8 @@ import 'monaco-editor';
 import {MonacoServices} from 'monaco-languageclient';
 import AnsiUp from 'ansi_up';
 
-import {typecheck} from './compileAndCheck';
-// import {getClient} from './client';
+import {typecheck} from './typecheck';
+import {getClient} from './client';
 
 window.MonacoEnvironment = {
   getWorkerUrl: () => './editor.worker.bundle.js',
@@ -57,7 +57,7 @@ model.onDidChangeContent((changeEvent) => {
   typecheckOne(model.getValue());
 });
 
-// const languageClient = getClient();
-// languageClient.start();
+const languageClient = getClient();
+languageClient.start();
 
 typecheckOne(model.getValue());

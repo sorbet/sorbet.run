@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 687);
+/******/ 	return __webpack_require__(__webpack_require__.s = 689);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -1949,7 +1949,7 @@ function setImmediate(callback) {
 }
 var OS = (_isMacintosh ? 2 /* Macintosh */ : (_isWindows ? 1 /* Windows */ : 3 /* Linux */));
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(46), __webpack_require__(57)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(46), __webpack_require__(58)))
 
 /***/ }),
 
@@ -3003,7 +3003,7 @@ var MirrorTextModel = /** @class */ (function () {
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = computeLinks;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_characterClassifier_js__ = __webpack_require__(69);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_uint_js__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_uint_js__ = __webpack_require__(60);
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -5482,7 +5482,7 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ 57:
+/***/ 58:
 /***/ (function(module, exports) {
 
 var g;
@@ -5510,7 +5510,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 59:
+/***/ 60:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5572,7 +5572,7 @@ function toUint32Array(arr) {
 
 /***/ }),
 
-/***/ 687:
+/***/ 689:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5617,7 +5617,7 @@ self.onmessage = function (e) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CharacterClassifier; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return CharacterSet; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__uint_js__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__uint_js__ = __webpack_require__(60);
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8106,7 +8106,7 @@ var TPromise = __winjs_exports.TPromise;
 var PPromise = __winjs_exports.PPromise;
 // ESM-uncomment-end
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(57), __webpack_require__(46)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(58), __webpack_require__(46)))
 
 /***/ }),
 
@@ -8932,7 +8932,7 @@ var LcsDiff = /** @class */ (function () {
 /* unused harmony export PrefixSumIndexOfResult */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PrefixSumComputer; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return PrefixSumComputerWithCache; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_uint_js__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_uint_js__ = __webpack_require__(60);
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
