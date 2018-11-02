@@ -11,7 +11,7 @@
     printMargin: false,
     value: ruby,
     tabSize: 2,
-    fontSize: 24,
+    fontSize: 16,
   });
   editor.setTheme("ace/theme/monokai");
   editor.session.setMode("ace/mode/ruby");
@@ -27,6 +27,10 @@
     loadFromURL();
   });
   editor.commands.removeCommands(["gotoline"]);
+  editor.focus();
+
+  console.info('Run this to get Vim keybindings:');
+  console.info('editor.setKeyboardHandler("ace/keyboard/vim");');
 
   window.editor = editor;
 })();
