@@ -1,0 +1,59 @@
+
+html, body {
+  margin: 0;
+  height: 100%;
+  font-size: 24px;
+}
+
+#editor, #output {
+  float: left;
+  font-family: Menlo;
+  font-size: 16px;
+  height: 100%;
+  width: 50%;
+}
+
+#output {
+  margin: 0;
+  height: calc(100% - 40px);
+  padding-top: 40px;
+  white-space: pre-wrap;
+  overflow-y: scroll;
+  background-color: #002b36;
+  color: #fdf6e3;
+}
+
+#email {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  color: #FDF6E3;
+}
+
+#menu {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0 10px;
+  color: #FDF6E3;
+  z-index: 2;
+  cursor: pointer;
+  font-size: 24px;
+  background-color: #282823;
+}
+
+#menu ul {
+  padding-bottom: 10px;
+}
+
+#examples {
+  display: none;
+  margin: 0;
+  padding: 12px 0 0 0;
+  list-style-type: none;
+}
+
+#examples a {
+  color: #FDF6E3;
+  text-decoration: none;
+}
