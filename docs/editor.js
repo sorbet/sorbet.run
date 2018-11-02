@@ -31,6 +31,7 @@
 
   var vimButton = document.getElementById('vim-button');
   vimButton.addEventListener('click', (ev) => {
+    ev.preventDefault();
     editor.setKeyboardHandler("ace/keyboard/vim");
   });
 
