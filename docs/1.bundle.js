@@ -1,14 +1,14 @@
 webpackJsonp([1],{
 
-/***/ 690:
+/***/ 691:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["setupMode"] = setupMode;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__workerManager_js__ = __webpack_require__(747);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__languageFeatures_js__ = __webpack_require__(748);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tokenization_js__ = __webpack_require__(750);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__workerManager_js__ = __webpack_require__(748);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__languageFeatures_js__ = __webpack_require__(749);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tokenization_js__ = __webpack_require__(751);
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -60,7 +60,7 @@ var richEditConfiguration = {
 
 /***/ }),
 
-/***/ 739:
+/***/ 740:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -417,13 +417,13 @@ function isDigit(ch) {
 
 /***/ }),
 
-/***/ 740:
+/***/ 741:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = format;
 /* harmony export (immutable) */ __webpack_exports__["b"] = isEOL;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scanner_js__ = __webpack_require__(739);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scanner_js__ = __webpack_require__(740);
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -622,7 +622,7 @@ function isEOL(text, offset) {
 
 /***/ }),
 
-/***/ 741:
+/***/ 742:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -636,7 +636,7 @@ function isEOL(text, offset) {
 /* harmony export (immutable) */ __webpack_exports__["b"] = findNodeAtOffset;
 /* harmony export (immutable) */ __webpack_exports__["i"] = visit;
 /* harmony export (immutable) */ __webpack_exports__["h"] = stripComments;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scanner_js__ = __webpack_require__(739);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scanner_js__ = __webpack_require__(740);
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -1244,7 +1244,7 @@ function getLiteralNodeType(value) {
 
 /***/ }),
 
-/***/ 747:
+/***/ 748:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1333,7 +1333,7 @@ function toShallowCancelPromise(p) {
 
 /***/ }),
 
-/***/ 748:
+/***/ 749:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1345,7 +1345,7 @@ function toShallowCancelPromise(p) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return DocumentRangeFormattingEditProvider; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return DocumentColorAdapter; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return FoldingRangeAdapter; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__deps_vscode_languageserver_types_main_js__ = __webpack_require__(749);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__deps_vscode_languageserver_types_main_js__ = __webpack_require__(750);
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -1858,7 +1858,7 @@ function wireCancellationToken(token, promise) {
 
 /***/ }),
 
-/***/ 749:
+/***/ 750:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3273,7 +3273,7 @@ var Is;
 
 /***/ }),
 
-/***/ 750:
+/***/ 751:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3289,7 +3289,7 @@ var Is;
 /* unused harmony export TOKEN_PROPERTY_NAME */
 /* unused harmony export TOKEN_COMMENT_BLOCK */
 /* unused harmony export TOKEN_COMMENT_LINE */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__deps_jsonc_parser_main_js__ = __webpack_require__(751);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__deps_jsonc_parser_main_js__ = __webpack_require__(752);
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -3442,7 +3442,7 @@ function tokenize(comments, line, state, offsetDelta, stopAtOffset) {
 
 /***/ }),
 
-/***/ 751:
+/***/ 752:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3459,10 +3459,10 @@ function tokenize(comments, line, state, offsetDelta, stopAtOffset) {
 /* unused harmony export format */
 /* unused harmony export modify */
 /* unused harmony export applyEdits */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__impl_format_js__ = __webpack_require__(740);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__impl_edit_js__ = __webpack_require__(752);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__impl_scanner_js__ = __webpack_require__(739);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__impl_parser_js__ = __webpack_require__(741);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__impl_format_js__ = __webpack_require__(741);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__impl_edit_js__ = __webpack_require__(753);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__impl_scanner_js__ = __webpack_require__(740);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__impl_parser_js__ = __webpack_require__(742);
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -3562,7 +3562,7 @@ function applyEdits(text, edits) {
 
 /***/ }),
 
-/***/ 752:
+/***/ 753:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3570,8 +3570,8 @@ function applyEdits(text, edits) {
 /* harmony export (immutable) */ __webpack_exports__["b"] = setProperty;
 /* harmony export (immutable) */ __webpack_exports__["a"] = applyEdit;
 /* unused harmony export isWS */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__format_js__ = __webpack_require__(740);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__parser_js__ = __webpack_require__(741);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__format_js__ = __webpack_require__(741);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__parser_js__ = __webpack_require__(742);
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.

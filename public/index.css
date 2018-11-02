@@ -1,11 +1,12 @@
-
-html, body {
+html,
+body {
   margin: 0;
   height: 100%;
   font-size: 24px;
 }
 
-#editor, #output {
+#editor,
+#output {
   float: left;
   font-family: Menlo;
   font-size: 16px;
@@ -27,7 +28,7 @@ html, body {
   position: absolute;
   bottom: 5px;
   right: 5px;
-  color: #FDF6E3;
+  color: #fdf6e3;
 }
 
 #menu {
@@ -35,7 +36,7 @@ html, body {
   top: 0;
   right: 0;
   padding: 0 10px;
-  color: #FDF6E3;
+  color: #fdf6e3;
   z-index: 2;
   cursor: pointer;
   font-size: 24px;
@@ -54,6 +55,6 @@ html, body {
 }
 
 #examples a {
-  color: #FDF6E3;
+  color: #fdf6e3;
   text-decoration: none;
 }

@@ -1,0 +1,6 @@
+arrowParens: always
+singleQuote: true
+# TODO(jez) Can we turn on trailing commas?
+trailingComma: es5
+bracketSpacing: false
+proseWrap: always

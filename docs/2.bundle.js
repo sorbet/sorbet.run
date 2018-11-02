@@ -1,13 +1,13 @@
 webpackJsonp([2],{
 
-/***/ 691:
+/***/ 692:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["setupMode"] = setupMode;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__workerManager_js__ = __webpack_require__(753);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__languageFeatures_js__ = __webpack_require__(754);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__workerManager_js__ = __webpack_require__(754);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__languageFeatures_js__ = __webpack_require__(755);
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -41,7 +41,7 @@ function setupMode(defaults) {
 
 /***/ }),
 
-/***/ 753:
+/***/ 754:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -130,7 +130,7 @@ function toShallowCancelPromise(p) {
 
 /***/ }),
 
-/***/ 754:
+/***/ 755:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -141,7 +141,7 @@ function toShallowCancelPromise(p) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return DocumentFormattingEditProvider; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return DocumentRangeFormattingEditProvider; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return FoldingRangeAdapter; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__deps_vscode_languageserver_types_main_js__ = __webpack_require__(755);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__deps_vscode_languageserver_types_main_js__ = __webpack_require__(756);
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -564,7 +564,7 @@ function wireCancellationToken(token, promise) {
 
 /***/ }),
 
-/***/ 755:
+/***/ 756:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
