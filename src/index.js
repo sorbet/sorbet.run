@@ -7,6 +7,7 @@ import {MonacoServices} from 'monaco-languageclient';
 import AnsiUp from 'ansi_up';
 
 import {typecheck} from './compileAndCheck';
+// import {getClient} from './client';
 
 window.MonacoEnvironment = {
   getWorkerUrl: () => './editor.worker.bundle.js',
@@ -56,21 +57,7 @@ model.onDidChangeContent((changeEvent) => {
   typecheckOne(model.getValue());
 });
 
-typecheckOne(model.getValue());
+// const languageClient = getClient();
+// languageClient.start();
 
-// Need to implement:
-//
-// MessageReader
-// {
-//   onClose: (() => void) => void
-//   onError: ((...) => void) => void
-//   dispose: () => void
-//   listen: ((message: {jsonrpc: string}) => void) => void
-// }
-//
-// MessageWriter
-// {
-//   onClose: (() => void) => void
-//   onError: ((...) => void) => void
-//   write: (message: {jsonrpc: string}) => void
-// }
+typecheckOne(model.getValue());
