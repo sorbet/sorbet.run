@@ -14,19 +14,24 @@
 html, body {
   margin: 0;
   height: 100%;
-  font-size: 24px;
+  font-size: 16px;
 }
 
-#editor {
-  height: 50%;
+#editor, #output {
+  float: left;
+  font-family: Menlo;
+  height: 100%;
+  width: 50%;
 }
 
 #output {
   margin: 0;
-  height: 50%;
   overflow-y: scroll;
   background-color: #002b36;
   color: #fdf6e3;
+  height: calc(100% - 40px);
+  padding-top: 40px;
+  white-space: pre-wrap;
 }
 
 #email {
