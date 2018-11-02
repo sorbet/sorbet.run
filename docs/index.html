@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Sorbet Playground</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -35,8 +36,19 @@ html, body {
   white-space: pre-wrap;
 }
 
+@media (max-width: 480px) {
+    #editor, #output {
+      height: 50%;
+      width: 100%;
+    }
+
+    #output {
+      height: calc(50% - 40px);
+    }
+}
+
 #email {
-  position: absolute;
+  position: fixed;
   bottom: 5px;
   right: 5px;
   color: #FDF6E3;
