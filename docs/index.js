@@ -1,86 +1,81 @@
-(function() {
-  var output = document.getElementById('output');
-  var runId = 0;
-  var curId = 0;
-  var ansi_up = new AnsiUp;
-  var sorbetModuleCompile = fetch('sorbet-wasm.wasm').then(response =>
-    response.arrayBuffer()
-  ).then(bytes =>
-    WebAssembly.compile(bytes)
-  )
-  var lastRuby = "";
+(() => {
+  const output = document.getElementById('output');
+  const ansiUp = new AnsiUp();
+  const sorbetWasm = fetch('sorbet-wasm.wasm')
+    .then((response) => response.arrayBuffer())
+    .then((bytes) => WebAssembly.compile(bytes));
 
-  var stdout = []
-  var print = function(line) {
+  let runId = 0;
+  let curId = 0;
+  let stdout = [];
+  const print = (line) => {
     if (runId != curId) {
       return;
     }
     stdout.push(line);
   };
-  var flush = function() {
+  const flush = () => {
     gtag('event', 'typecheck', {
-      'event_category': 'error_lines',
-      'event_label': stdout.length,
+      event_category: 'error_lines',
+      event_label: stdout.length,
     });
-    var errorLines = stdout.join("\n").match(/^[^ ]/mg);
+    const errorLines = stdout.join('\n').match(/^[^ ]/gm);
     gtag('event', 'typecheck', {
-      'event_category': 'errors',
-      'event_label': errorLines ? errorLines.length : 0,
+      event_category: 'errors',
+      event_label: errorLines ? errorLines.length : 0,
     });
-    output.innerHTML = ansi_up.ansi_to_html(stdout.join("\n"));
+    output.innerHTML = ansiUp.ansi_to_html(stdout.join('\n'));
     stdout = [];
-  }
-  var sorbet = null;
+  };
 
-  function compile() {
+  let sorbet = null;
+  const compile = () => {
     if (sorbet) {
       // Already compiling or compiled
       return sorbet;
     }
     // For some unkonwn reason this varible has to be new everytime, and can't
     // be out of the closure
-    var opts = {
-      print: function(line) {
+    const opts = {
+      print,
+      printErr: (line) => {
+        line = line.replace(/.*\[error\] /, '');
+        line = line.replace(/http:\/\/[^ ]*/, '');
+        line = line.replace(
+          'git.corp.stripe.com/stripe-internal',
+          'github.com/stripe'
+        );
         print(line);
       },
-      printErr: function(line) {
-        line = line.replace(/.*\[error\] /, '')
-        line = line.replace(/http:\/\/[^ ]*/, '')
-        line = line.replace('git.corp.stripe.com/stripe-internal', 'github.com/stripe')
-        print(line);
-      },
-      onAbort: function() {
+      onAbort: () => {
         // On abort, throw away our WebAssembly instance and create a
         // new one. This can happen due to out-of-memory, C++ exceptions,
         // or other reasons; Throwing away and restarting should get us to a healthy state.
         sorbet = null;
         flush();
       },
-      instantiateWasm: function(info, realRecieveInstanceCallBack) {
-        sorbetModuleCompile
-        .then(module =>
-          WebAssembly.instantiate(module, info)
-          .then(instance => realRecieveInstanceCallBack(instance, module))
-          .catch(error => console.log(error))
-        ).catch(function(error) {
-            output.innerText = "Error loading sorbet.wasm. Maybe your adblock blocked it? Some of them are pretty aggressive on github.io domains. We promise we aren't mining crypto currencies on your computer."
-        });
+      instantiateWasm: (info, realRecieveInstanceCallBack) => {
+        sorbetWasm
+          .then((module) =>
+            WebAssembly.instantiate(module, info)
+              .then((instance) => realRecieveInstanceCallBack(instance, module))
+              .catch((error) => console.log(error))
+          )
+          .catch((error) => {
+            output.innerText =
+              "Error loading sorbet.wasm. Maybe your adblock blocked it? Some of them are pretty aggressive on github.io domains. We promise we aren't mining crypto currencies on your computer.";
+          });
         return {}; // indicates lazy initialization
       },
     };
 
     sorbet = Sorbet(opts);
     return sorbet;
-  }
+  };
 
-  function typecheck() {
-    setTimeout(function() {
-      compile().then(runCPP);
-    }, 1);
-  }
-
-  function runCPP(Module) {
-    var ruby = editor.getValue();
+  let lastRuby = '';
+  const runCpp = (Module) => {
+    const ruby = editor.getValue();
     if (lastRuby == ruby) {
       return;
     }
@@ -88,44 +83,50 @@
     runId += 1;
     curId = runId;
 
-    var t0 = performance.now();
-    var f = Module.cwrap('typecheck', null, ['string']);
-    f(ruby + "\n");
-    var t1 = performance.now();
+    const t0 = performance.now();
+    const f = Module.cwrap('typecheck', null, ['string']);
+    f(ruby + '\n');
+    const t1 = performance.now();
 
     gtag('event', 'timing_complete', {
-      'event_category' : 'typecheck_time',
-      'event_label' : t1 - t0,
-      'name': 'typecheck_time',
-      'value' : t1 - t0,
+      event_category: 'typecheck_time',
+      event_label: t1 - t0,
+      name: 'typecheck_time',
+      value: t1 - t0,
     });
 
     flush();
-  }
+  };
 
-  function updateURL() {
-    var ruby = editor.getValue();
+  const typecheck = () => {
+    setTimeout(() => {
+      compile().then(runCpp);
+    }, 1);
+  };
+
+  const updateURL = () => {
+    const ruby = editor.getValue();
     window.location.hash = '#' + encodeURIComponent(ruby);
-  }
-  window.addEventListener('hashchange', function() {
-    var ruby = window.location.hash;
-    ruby = decodeURIComponent(ruby);
-    ruby = ruby.substr(1); // Cut off the #
+  };
+  window.addEventListener('hashchange', () => {
+    // Remove leading '#'
+    const hash = window.location.hash.substr(1);
+    const ruby = decodeURIComponent(hash);
     if (editor.getValue() != ruby) {
       editor.setValue(ruby);
       editor.clearSelection();
     }
   });
 
-  var shown;
-  document.getElementById('menu').addEventListener("click", function() {
-    var e = document.getElementById('examples');
-    if (shown) {
-      e.style.display = "none";
+  let showing = false;
+  document.getElementById('menu').addEventListener('click', () => {
+    const examples = document.getElementById('examples');
+    if (showing) {
+      examples.style.display = 'none';
     } else {
-      e.style.display = "block";
+      examples.style.display = 'block';
     }
-    shown = !shown;
+    showing = !showing;
   });
 
   typecheck();

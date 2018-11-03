@@ -1,38 +1,33 @@
-(function() {
-  var ruby = window.location.hash;
-  if (ruby) {
-    ruby = decodeURIComponent(ruby);
-    ruby = ruby.substr(1); // Cut off the #
-  } else {
-    ruby = document.getElementById('editor').innerHTML;
-  }
+(() => {
+  // Remove leading '#'
+  const hash = window.location.hash.slice(1);
+  const ruby = hash
+    ? decodeURIComponent(hash)
+    : document.getElementById('editor').innerHTML;
 
-  var editor = ace.edit("editor", {
+  const editor = ace.edit('editor', {
     printMargin: false,
     value: ruby,
     tabSize: 2,
     fontSize: 16,
   });
-  editor.setTheme("ace/theme/monokai");
-  editor.session.setMode("ace/mode/ruby");
-  editor.session.on("change", function() {
+  editor.setTheme('ace/theme/monokai');
+  editor.session.setMode('ace/mode/ruby');
+  editor.session.on('change', () => {
     gtag('event', 'typecheck', {
-      'event_category': 'editor',
-      'event_label': editor.getValue(),
+      event_category: 'editor',
+      event_label: editor.getValue(),
     });
     typecheck();
     updateURL();
   });
-  editor.session.on("load", function() {
-    loadFromURL();
-  });
-  editor.commands.removeCommands(["gotoline"]);
+  editor.commands.removeCommands(['gotoline']);
   editor.focus();
 
-  var vimButton = document.getElementById('vim-button');
+  const vimButton = document.getElementById('vim-button');
   vimButton.addEventListener('click', (ev) => {
     ev.preventDefault();
-    editor.setKeyboardHandler("ace/keyboard/vim");
+    editor.setKeyboardHandler('ace/keyboard/vim');
   });
 
   window.editor = editor;
