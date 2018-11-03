@@ -1,0 +1,28 @@
+---
+extends:
+  - airbnb
+  # overwrite any rules that may conflict with prettier
+  - "prettier"
+env:
+  browser: true
+rules:
+  no-duplicate-imports: 2
+  no-console: 0
+  arrow-body-style: 0
+  no-else-return: 0
+  prefer-destructuring: 0
+  import/prefer-default-export: 0
+  no-param-reassign:
+    - 2
+    - props: false
+  func-style: 2
+  consistent-return: 2
+  prefer-arrow-callback:
+    - 2
+    - allowNamedFunctions: false
+      allowUnboundThis: false
+  prefer-const: 2
+  no-unused-vars:
+    - 2
+    - args: 'none'
+      ignoreRestSiblings: true
