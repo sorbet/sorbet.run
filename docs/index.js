@@ -1,3 +1,5 @@
+/* global AnsiUp, gtag, Sorbet, editor */
+
 (() => {
   const output = document.getElementById('output');
   const ansiUp = new AnsiUp();
@@ -9,7 +11,7 @@
   let curId = 0;
   let stdout = [];
   const print = (line) => {
-    if (runId != curId) {
+    if (runId !== curId) {
       return;
     }
     stdout.push(line);
@@ -39,13 +41,11 @@
     const opts = {
       print,
       printErr: (line) => {
-        line = line.replace(/.*\[error\] /, '');
-        line = line.replace(/http:\/\/[^ ]*/, '');
-        line = line.replace(
-          'git.corp.stripe.com/stripe-internal',
-          'github.com/stripe'
-        );
-        print(line);
+        const replaced = line
+          .replace(/.*\[error\] /, '')
+          .replace(/http:\/\/[^ ]*/, '')
+          .replace('git.corp.stripe.com/stripe-internal', 'github.com/stripe');
+        print(replaced);
       },
       onAbort: () => {
         // On abort, throw away our WebAssembly instance and create a
@@ -76,7 +76,7 @@
   let lastRuby = '';
   const runCpp = (Module) => {
     const ruby = editor.getValue();
-    if (lastRuby == ruby) {
+    if (lastRuby === ruby) {
       return;
     }
     lastRuby = ruby;
@@ -85,7 +85,7 @@
 
     const t0 = performance.now();
     const f = Module.cwrap('typecheck', null, ['string']);
-    f(ruby + '\n');
+    f(`${ruby}\n`);
     const t1 = performance.now();
 
     gtag('event', 'timing_complete', {
@@ -106,13 +106,13 @@
 
   const updateURL = () => {
     const ruby = editor.getValue();
-    window.location.hash = '#' + encodeURIComponent(ruby);
+    window.location.hash = `#${encodeURIComponent(ruby)}`;
   };
   window.addEventListener('hashchange', () => {
     // Remove leading '#'
     const hash = window.location.hash.substr(1);
     const ruby = decodeURIComponent(hash);
-    if (editor.getValue() != ruby) {
+    if (editor.getValue() !== ruby) {
       editor.setValue(ruby);
       editor.clearSelection();
     }
