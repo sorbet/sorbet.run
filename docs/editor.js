@@ -1,3 +1,5 @@
+/* global ace, gtag, typecheck, updateURL */
+
 (() => {
   // Remove leading '#'
   const hash = window.location.hash.slice(1);
