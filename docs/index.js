@@ -104,16 +104,13 @@
     }, 1);
   };
 
-  const updateURL = () => {
-    const ruby = editor.getValue();
-    window.location.hash = `#${encodeURIComponent(ruby)}`;
-  };
   window.addEventListener('hashchange', () => {
     // Remove leading '#'
     const hash = window.location.hash.substr(1);
     const ruby = decodeURIComponent(hash);
     if (editor.getValue() !== ruby) {
       editor.setValue(ruby);
+      window.localStorage.setItem('lastContents', ruby);
       editor.clearSelection();
     }
   });
@@ -132,5 +129,4 @@
   typecheck();
 
   window.typecheck = typecheck;
-  window.updateURL = updateURL;
 })();
