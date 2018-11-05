@@ -91,6 +91,8 @@ html, body {
 <div id="menu">Examples &#x2630;
   <ul id="examples">
     <li>
+      <a href="#class%20A%0A%20%20extend%20T%3A%3AHelpers%0A%20%20%0A%20%20sig%20%7Bparams(x%3A%20Integer).returns(String)%7D%0A%20%20def%20foo(x)%0A%20%20%20%20x.to_s%0A%20%20end%0Aend">Basic sig</a>
+    </li><li>
       <a href="#([1,%202].count%20+%203).next">Standard library</a>
     </li><li>
       <a href="#'str'%20+%20:sym">String + Symbol</a>
@@ -137,15 +139,16 @@ html, body {
 
 <div id="editor">class A
   extend T::Helpers
-  sig {params(foo: Integer).returns(String)}
-  def bar(foo)
-    foo.to_s
+
+  sig {params(x: Integer).returns(String)}
+  def bar(x)
+    x.to_s
   end
 end
 
 def main
-  A.new.barr(91)
-  A.new.bar("91")
+  A.new.barr(91)   # error: Typo!
+  A.new.bar("91")  # error: Type mismatch!
 end</div>
 
 <pre id="output">
