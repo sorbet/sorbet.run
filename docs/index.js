@@ -115,15 +115,8 @@
     }
   });
 
-  let showing = false;
-  document.getElementById('menu').addEventListener('click', () => {
-    const examples = document.getElementById('examples');
-    if (showing) {
-      examples.style.display = 'none';
-    } else {
-      examples.style.display = 'block';
-    }
-    showing = !showing;
+  document.getElementById('menu').addEventListener('click', (ev) => {
+    ev.target.classList.toggle('is-showing');
   });
 
   typecheck();
