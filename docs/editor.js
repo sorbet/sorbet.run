@@ -8,11 +8,6 @@
       return decodeURIComponent(hash);
     }
 
-    const lastContents = window.localStorage.getItem('lastContents');
-    if (lastContents) {
-      return lastContents;
-    }
-
     return document.getElementById('editor').innerHTML;
   };
 
@@ -31,7 +26,6 @@
   const updateAfterChange = () => {
     const contents = editor.getValue();
     window.location.hash = `#${encodeURIComponent(contents)}`;
-    window.localStorage.setItem('lastContents', contents);
   };
 
   editor.session.on('change', () => {

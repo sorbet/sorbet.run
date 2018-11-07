@@ -110,7 +110,6 @@
     const ruby = decodeURIComponent(hash);
     if (editor.getValue() !== ruby) {
       editor.setValue(ruby);
-      window.localStorage.setItem('lastContents', ruby);
       editor.clearSelection();
     }
   });
