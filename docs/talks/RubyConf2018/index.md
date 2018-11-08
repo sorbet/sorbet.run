@@ -3,7 +3,7 @@
 - **Dmitry**: PhD Compiler architecture & a bit of type theory @ next major version of Scala Compiler(3.0)
 - **Nelson**: MIT grad, One of the longest tenured engineers at Stripe. Great knowledge of Ruby and MRI internals.
 - **Paul**: Stanford grad, Previously at Facebook on HHVM and Hack
-- **Jake**: joined team in August, a lot of experience with Flow and TypeScript
+- **Jake**: CMU grad, joined team in August, a lot of experience with Flow
 - we are currently hiring for this team.
 
 ---
