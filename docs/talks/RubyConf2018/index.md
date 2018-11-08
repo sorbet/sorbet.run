@@ -20,7 +20,7 @@
 # Assumptions that Sorbet is developped under
 
 Note: 
- - Sorbet is build with those constraints in mind.
+ - Sorbet is built with these constraints in mind.
  - Removing any of those constraints would have led us to different choices.
 
 ---
@@ -29,19 +29,19 @@ Note:
 
  - Stripe runs on MRI and we value it
  - We do not intend to put effort into replacing it
- - Nor do we want to run a patched version.
+ - Nor do we want to run a patched version
 
 ---
 ## Assumptions: untyped code is here to stay
 
- - We do not intend to type early prototypes
+ - We do not intend to force early prototypes to be typed
  - We intend to interoperate with gems
  - We do not enforce typing on our users: they choose
 
 ---
 ## Assumptions: users choose strictness level
 
-One of levels is "shut up". And it's the default.
+One of our levels is "shut up". And it's the default.
 
 Thus in order to get internal adoption, we needed to be useful with minimal initial investment effort
 
@@ -51,7 +51,7 @@ Thus in order to get internal adoption, we needed to be useful with minimal init
    - a very scalable way to collaborate and type the ecosystem
 
 ---
-## Assumptions
+## Assumptions: Recap
 - We could have got some of them wrong. We likely did.
 - We already know a couple of areas where we plan to just let you tell us what to do:
   - we plan to implement structural types based on your asks
@@ -102,8 +102,8 @@ And that's not because we told them to, but because they find it easier to achiv
 
 ---
 ## State of Sorbet at Stripe: Typed files
- - we have build ability to indicate what files can be typed into Sorbet
- - we have sent PRs to type all files to our users and allowed them to accept/reject it.
+ - we have built ability to indicate what files can be typed into Sorbet
+ - we have sent PRs to our users to type files in bulk and allowed them to accept/reject them.
 
 ---
 ## State of Sorbet at Stripe: Typed files
@@ -112,11 +112,11 @@ And that's not because we told them to, but because they find it easier to achiv
 
 ---
 ## State of Sorbet at Stripe: Typed callsites
- - we've build a mode into sorbet that tells most impactful methods to type.
+ - we've built a mode into sorbet that tells most impactful methods to type.
     - we typed a few hundred of most commonly used functions manually
  - (currently) we are building tools to type the long tail
     - dynamic type profiling
-    - static analysis(see demo later)
+    - static analysis (see demo later)
 
 ---
 ## State of Sorbet at Stripe: Typed callsites
@@ -137,7 +137,7 @@ Over last 6 month, Sorbet was rapidly adopted at Stipe:
 ---
 ## What principles did we start with
 
-Take the minimal thing, and start adding features based on patters that we see in our codebase.
+Take the minimal thing, and start adding features based on patterns that we see in our codebase.
 
 ---
 ## First pattern: control flow sensitivity
@@ -158,7 +158,7 @@ simple case:
 
 more contrieved example:
 ```ruby
-def orZero(a)
+def or_zero(a)
   b = !a.is_a?(Integer)
   if b
     0
@@ -181,7 +181,7 @@ Array["1", "2", "3"].each{|s| some_method(s)}
 ## Generic system that we chose:
 
 - I worked on Scala generics before. Though they didn't fit.
-- Amoung generic systems, I feel like the one in C# first Ruby best
+- Among generic systems, I feel like the one in C# fits Ruby best
 - We went with C#-ish generics, but with runtime erasure
 - We support co-, contra- and in- variance
 - We support reducing kindness (e.g. `File` is a `IO<String>` and thus has different kind than parent)
@@ -224,7 +224,7 @@ We've built a script that finds all metaprogrammed classes and functions:
 
 ---
 
-```
+```ruby
 foo[0]
 ```
 
@@ -243,10 +243,10 @@ does not exist on `NilClass` component of `T.nilable(String)`
 
 ## AutoLoader
 
-- 3 years ago Stripe has given a talk on How to Load 1m Lines of Ruby in 5s:  https://www.youtube.com/watch?v=lKMOETQAdzs
+- 3 years ago Stripe gave a talk on How to Load 1M Lines of Ruby in 5s:  https://www.youtube.com/watch?v=lKMOETQAdzs
 - It is was based on pre-computation of dependencies in Ruby
-- In order for this precoputation to run in ~1m it had a lot of atrisinal caching and optimizations
-- Sorbet  replaced old static analysis, generating the same data in mere seconds
+- In order for this precoputation to run in ~1m it had a lot of artisanal caching and optimizations
+- Sorbet replaced old static analysis, generating the same data in mere seconds
 
 
 ---
@@ -255,7 +255,7 @@ does not exist on `NilClass` component of `T.nilable(String)`
 
 ---
 
-```
+```ruby
 class A
  extend T::Helpers
  sig(b: B).returns(B) # NameError: forward reference to B. 
@@ -271,7 +271,7 @@ end
 
 ---
 
-```
+```ruby
 class A
  extend T::Helpers
  sig{params(b: B).returns(B)} # safe!
@@ -301,8 +301,8 @@ Idea: Instrument code in production, see what types are passed, log them, aggreg
 ## Suggesting signatures: type profiling
 
 - Pros: can ascribe some time to every function that was ever executed
-- Cons: builds over-precise types. e.g  for 
-```
+- Cons: builds over-precise types. e.g  for
+```ruby
 def isChristmas; ...; end
 ```
 
@@ -318,7 +318,7 @@ Idea: see what _could_ be returned from the method, and what requirements should
 - Pros: is conservative. The types that it retuns are correct. Currently, can 3x number of signatures that we have.
 - Cons: could be more general than the actual usage of method. e.g. for
 ```
-def addStrings(a, b); a + b; end;
+def add_strings(a, b); a + b; end;
 ```
 
 ---
@@ -328,7 +328,7 @@ def addStrings(a, b); a + b; end;
 - We're currently building both
 - The plan is to:
    - use runtime profiling and manually verify some singatures
-   - and the propagate them with static analys.
+   - then the propagate them with static analysis
 
 ---
 
