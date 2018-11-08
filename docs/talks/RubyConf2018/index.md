@@ -28,7 +28,7 @@ Note:
 ## Assumptions: MRI
 
  - Stripe runs on MRI and we value it
- - we do not intend to put effort into replacing it
+ - We do not intend to put effort into replacing it
  - Nor do we want to run a patched version.
 
 ---
@@ -66,7 +66,7 @@ Thus in order to get internal adoption, we needed to be useful with minimal init
 ---
 ## State of Sorbet at Stripe: Users
 
-- hundreds of users, who voluntarily use us every day.
+- Hundreds of users, who voluntarily use us every day.
 - Different use-cases
 
 ---
@@ -112,7 +112,7 @@ And that's not because we told them to, but because they find it easier to achiv
 
 ---
 ## State of Sorbet at Stripe: Typed callsites
- - We've build a mode into sorbet that tells most impactful methods to type.
+ - we've build a mode into sorbet that tells most impactful methods to type.
     - we typed a few hundred of most commonly used functions manually
  - (currently) we are building tools to type the long tail
     - dynamic type profiling
