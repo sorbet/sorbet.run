@@ -1,6 +1,6 @@
 # Team effort
 
-- **Dmitry**: PhD Compiler architecture & a bit of type theory @ next major version of Scala Compiler(3.0)
+- **Dmitry**: PhD Compiler architecture & a bit of type theory @ next major version of Scala Compiler (3.0)
 - **Nelson**: One of the longest tenured engineers at Stripe. Great knowledge of Ruby and MRI internals
 - **Paul**: Previously at Facebook on HHVM and Hack
 - **Jake**: Joined team in August, a lot of experience with Flow
@@ -48,7 +48,7 @@ Note:
 
 ---
 ## Assumptions: gems exist
- - We support a way to add external signatures for gems, similar to one used by Typescript
+ - We support a way to add external signatures for gems, similar to that used by Typescript
  - A scalable way to collaborate and type the ecosystem
 
 Notes:
@@ -56,7 +56,7 @@ Notes:
  
 ---
 ## Assumptions: Recap
-- We could have got some of them wrong. We likely did.
+- We could have gotten some of them wrong. We likely did.
 - We already know a couple of areas where we plan to just let you tell us what to do:
   - we plan to implement structural types based on your asks
   - syntax: Matz, just tell us what you want - we'll support it.
@@ -92,11 +92,11 @@ Notes:
 ---
 ## Users
 At this point:
- - Many people learn what code does by adding types;
- - Before modifying any existing code they add types.
+ - Many people learn what code does by adding types
+ - Before modifying any existing code, they add types
 
 
-And that's not because we told them to, but because they find it easier to achive their goal with Sorbet as a tool.
+And that's not because we told them to, but because they find it easier to achieve their goal with Sorbet as a tool.
 
 
 ---
@@ -113,7 +113,7 @@ And that's not because we told them to, but because they find it easier to achiv
 enables typechecking in that file.
 ---
 ## State of Sorbet at Stripe: Typed files
- - we have built ability to indicate what files can be typed into Sorbet
+ - we have built the ability to indicate what files can be typed into Sorbet
  - we have sent PRs to our users to type files in bulk and allowed them to accept/reject them.
 
 ---
@@ -124,7 +124,7 @@ enables typechecking in that file.
 ---
 ## State of Sorbet at Stripe: Typed callsites
  - we've built a mode into sorbet that tells most impactful methods to type.
-    - we typed a few hundred of most commonly used functions manually
+    - we typed a few hundred of most commonly-used functions manually
  - (currently) we are building tools to type the long tail
     - dynamic type profiling
     - static analysis (see demo later)
@@ -137,7 +137,7 @@ enables typechecking in that file.
 ---
 ## State of Sorbet at Stripe
 
-Over last 6 month, Sorbet was rapidly adopted at Stipe:
+Over last 6 month, Sorbet was rapidly adopted at Stripe:
  - users are happy and feel that it's useful for them
  - \>74% of files are being typechecked
  - \>50% of callsites in those files are checked for correctness
@@ -198,7 +198,7 @@ end
 - We went with C#-ish generics, but with runtime erasure
 - We support co-, contra- and in- variance
 - We support reducing kindness (e.g. `File` is a `IO<String>` and thus has different kind than parent)
-- Users don't need to think about this: it "just works".
+- Users don't need to think about this: it "just works"
 
 ---
 
@@ -211,8 +211,8 @@ end
 ---
 ## Generic system that we chose:
  - type variables & type constraints for upper & lower bounds
- - minimal constraint solver tuned for our usafe of Ruby library
- - "just works" in experience of our users: having huge number of examples helped tremendously. 
+ - minimal constraint solver tuned for our use of Ruby library
+ - "just works" in experience of our users: having huge number of examples helped tremendously
 
 ---
 ## Self types
@@ -227,10 +227,10 @@ end
 
 We've built a script that finds all metaprogrammed classes and functions:
 
-- we load all code into MRI
-- we use runtime introspection to see what classes exist & what method they define
-- will store those definitions in a shim file
-- will substract set of files that Sorbet sees from this shim file.
+- load all code into MRI
+- use runtime introspection to see what classes exist & what methods they define
+- store those definitions in a shim file
+- substract set of files that Sorbet sees from this shim file
 
 ---
 
@@ -261,9 +261,9 @@ Note:
 ## AutoLoader
 
 - 3 years ago Stripe gave a talk on How to Load 1M Lines of Ruby in 5s:  https://www.youtube.com/watch?v=lKMOETQAdzs
-- It is was based on pre-computation of dependencies in Ruby
-- In order for this precoputation to run in ~1m it had a lot of artisanal caching and optimizations
-- Sorbet replaced old static analysis, generating the same data in mere seconds
+- It was based on pre-computation of dependencies in Ruby
+- In order for this pre-computation to run in ~1m it had a lot of artisanal caching and optimizations
+- Sorbet replaced this old static analysis, generating the same data in mere seconds
 
 
 ---
@@ -291,13 +291,13 @@ end
 ```ruby
 class A
  extend T::Helpers
- sig{params(b: B).returns(B)} # safe!
+ sig {params(b: B).returns(B)} # safe!
  def foo(b); b; end
 end
 
 class B
  extend T::Helpers
- sig{params(a: A).returns(A)}
+ sig {params(a: A).returns(A)}
  def bar(a); a; end
 end
 ```
@@ -332,7 +332,7 @@ Idea: see what _could_ be returned from the method, and what requirements should
 ---
 ## Suggesting signatures: static analysis
 
-- Pros: is conservative. The types that it retuns are correct. Currently, can 3x number of signatures that we have.
+- Pros: is conservative. The types that it returns are correct. Currently, can 3x number of signatures that we have.
 - Cons: could be more general than the actual usage of method. e.g. for
 ```
 def add_strings(a, b); a + b; end; # could take String, Integer, Time, Float, Rational, Complex,...
@@ -344,8 +344,8 @@ def add_strings(a, b); a + b; end; # could take String, Integer, Time, Float, Ra
 - Neither approach is perfect
 - We're currently building both
 - The plan is to:
-   - use runtime profiling and manually verify some singatures
-   - then the propagate them with static analysis
+   - use runtime profiling and manually verify some signatures
+   - then propagate them with static analysis
 
 ---
 
@@ -357,7 +357,7 @@ def add_strings(a, b); a + b; end; # could take String, Integer, Time, Float, Ra
 ## Our Questions:
 
   - Do our decisions looks reasonable? 
-  - What do you think we should change to fit requirements your requirements better?
+  - What do you think we should change to fit your requirements better?
 
 ---
 
