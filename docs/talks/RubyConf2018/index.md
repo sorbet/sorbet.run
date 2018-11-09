@@ -1,23 +1,24 @@
 # Team effort
 
 - **Dmitry**: PhD Compiler architecture & a bit of type theory @ next major version of Scala Compiler(3.0)
-- **Nelson**: MIT grad, One of the longest tenured engineers at Stripe. Great knowledge of Ruby and MRI internals.
-- **Paul**: Stanford grad, Previously at Facebook on HHVM and Hack
-- **Jake**: CMU grad, joined team in August, a lot of experience with Flow
-- we are currently hiring for this team.
+- **Nelson**: One of the longest tenured engineers at Stripe. Great knowledge of Ruby and MRI internals
+- **Paul**: Previously at Facebook on HHVM and Hack
+- **Jake**: Joined team in August, a lot of experience with Flow
+- **James**: developed Salesforce Apex and worked on the Scala compiler 
+- We are currently hiring for this team
 
 ---
 
 ## Outline
 
-- Assumptions that Sorbet is developped under
+- Assumptions that Sorbet is developed under
 - State of Sorbet at Stripe
 - Evolution of Sorbet type system
 - New things in Sorbet since last meeting
 
 ---
 
-# Assumptions that Sorbet is developped under
+# Assumptions
 
 Note: 
  - Sorbet is built with these constraints in mind.
@@ -27,29 +28,32 @@ Note:
 
 ## Assumptions: MRI
 
- - Stripe runs on MRI and we value it
- - We do not intend to put effort into replacing it
+ - Stripe runs on MRI
+ - MRI is great and we don't want to replace it
  - Nor do we want to run a patched version
 
 ---
 ## Assumptions: untyped code is here to stay
 
- - We do not intend to force early prototypes to be typed
+ - We do not intend to force prototype-grade code to be typed
  - We intend to interoperate with gems
  - We do not enforce typing on our users: they choose
 
 ---
 ## Assumptions: users choose strictness level
 
-One of our levels is "shut up". And it's the default.
-
-Thus in order to get internal adoption, we needed to be useful with minimal initial investment effort
+  - One of our levels is "disabled". 
+  - And it's the default.
+  - Thus in order to get internal adoption, we needed to be useful with minimal initial investment effort
 
 ---
-## Assumptions: gems exist and 
- - We allow building typed shims for gems, similar to ones used by Typescript
-   - a very scalable way to collaborate and type the ecosystem
+## Assumptions: gems exist
+ - We support a way to add external signatures for gems, similar to one used by Typescript
+ - A scalable way to collaborate and type the ecosystem
 
+Notes:
+ - DefinitelyTyped is the 9th repo in github by number of commiters per month
+ 
 ---
 ## Assumptions: Recap
 - We could have got some of them wrong. We likely did.
@@ -78,7 +82,7 @@ Thus in order to get internal adoption, we needed to be useful with minimal init
 <img src="img/interfacing.png"></img>
 
 ---
-## Use-cases: exploration
+## Use-cases: understanding
 <img src="img/exploration.png"></img> 
 
 ---
@@ -88,8 +92,8 @@ Thus in order to get internal adoption, we needed to be useful with minimal init
 ---
 ## Users
 At this point:
- - the way many people expore code is: they type it;
- - before they modify existing code: they type it.
+ - Many people learn what code does by adding types;
+ - Before modifying any existing code they add types.
 
 
 And that's not because we told them to, but because they find it easier to achive their goal with Sorbet as a tool.
@@ -100,6 +104,13 @@ And that's not because we told them to, but because they find it easier to achiv
 
 <img src="img/human-sigs.png"></img>
 
+---
+## Typed files
+
+```
+# typed: true
+```
+enables typechecking in that file.
 ---
 ## State of Sorbet at Stripe: Typed files
  - we have built ability to indicate what files can be typed into Sorbet
@@ -128,7 +139,7 @@ And that's not because we told them to, but because they find it easier to achiv
 
 Over last 6 month, Sorbet was rapidly adopted at Stipe:
  - users are happy and feel that it's useful for them
- - \>75% of files are being typechecked
+ - \>74% of files are being typechecked
  - \>50% of callsites in those files are checked for correctness
 
 ---
@@ -153,6 +164,8 @@ simple case:
   end
 ```
 
+Most typesystems can't typecheck this
+
 ---
 ## Control flow sensitivity
 
@@ -173,7 +186,7 @@ end
 ## Second pattern: generic classes
 
 ```ruby
-Array["1", "2", "3"].each{|s| some_method(s)}
+["1", "2", "3"].each{|s| takes_string(s)}
 ```
 
 ---
@@ -185,19 +198,20 @@ Array["1", "2", "3"].each{|s| some_method(s)}
 - We went with C#-ish generics, but with runtime erasure
 - We support co-, contra- and in- variance
 - We support reducing kindness (e.g. `File` is a `IO<String>` and thus has different kind than parent)
+- Users don't need to think about this: it "just works".
 
 ---
 
 ## Generic methods
 
 ```ruby
-Array["1", "2", "3"].map{|s| Integer(s) }
+["1", "2", "3"].map{|s| Integer(s) }.map { |i| i + 1}
 ```
 
 ---
 ## Generic system that we chose:
  - type variables & type constraints for upper & lower bounds
- - minimal constraint solver tried on our usage of Ruby library
+ - minimal constraint solver tuned for our usafe of Ruby library
  - "just works" in experience of our users: having huge number of examples helped tremendously. 
 
 ---
@@ -206,7 +220,7 @@ Array["1", "2", "3"].map{|s| Integer(s) }
 
 ---
 
-# Major changes since last meeting
+# Major changes in last 6 months
 
 ---
 ## Supporting (most) metaprogramming
@@ -234,10 +248,13 @@ does not exist on `NilClass` component of `T.nilable(String)`
      4 |foo[0]
         ^^^^^^
   Autocorrect: Use `-a` to autocorrect
-    test/	suggest_t_must.rb:4: Replace with `T.must(foo)`
+    test/suggest_t_must.rb:4: Replace with `T.must(foo)`
      4 |foo[0]
         ^^^
 ```
+
+Note: 
+  - T.must(a) strips `nil` from the type.
 
 ---
 
@@ -259,13 +276,13 @@ does not exist on `NilClass` component of `T.nilable(String)`
 class A
  extend T::Helpers
  sig(b: B).returns(B) # NameError: forward reference to B. 
- def foo(b); b; end;
+ def foo(b); b; end
 end
 
 class B
  extend T::Helpers
  sig(a: A).returns(A)
- def bar(a); a; end;
+ def bar(a); a; end
 end
 ```
 
@@ -275,13 +292,13 @@ end
 class A
  extend T::Helpers
  sig{params(b: B).returns(B)} # safe!
- def foo(b); b; end;
+ def foo(b); b; end
 end
 
 class B
  extend T::Helpers
  sig{params(a: A).returns(A)}
- def bar(a); a; end;
+ def bar(a); a; end
 end
 ```
 
@@ -295,7 +312,7 @@ end
 
 ## Suggesting signatures: type profiling
 
-Idea: Instrument code in production, see what types are passed, log them, aggregate them.
+Idea: Instrument code in production or tests, see what types are passed, log them, aggregate them.
 
 ---
 ## Suggesting signatures: type profiling
@@ -303,7 +320,7 @@ Idea: Instrument code in production, see what types are passed, log them, aggreg
 - Pros: can ascribe some time to every function that was ever executed
 - Cons: builds over-precise types. e.g  for
 ```ruby
-def isChristmas; ...; end
+def is_christmas?; ...; end # we observe FalseClass
 ```
 
 ---
@@ -318,7 +335,7 @@ Idea: see what _could_ be returned from the method, and what requirements should
 - Pros: is conservative. The types that it retuns are correct. Currently, can 3x number of signatures that we have.
 - Cons: could be more general than the actual usage of method. e.g. for
 ```
-def add_strings(a, b); a + b; end;
+def add_strings(a, b); a + b; end; # could take String, Integer, Time, Float, Rational, Complex,...
 ```
 
 ---
@@ -340,7 +357,7 @@ def add_strings(a, b); a + b; end;
 ## Our Questions:
 
   - Do our decisions looks reasonable? 
-  - What do you think we should change to fit requirements that you have better?
+  - What do you think we should change to fit requirements your requirements better?
 
 ---
 
