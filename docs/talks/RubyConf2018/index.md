@@ -1,20 +1,22 @@
 # Team effort
 
-- **Dmitry**: PhD Compiler architecture & a bit of type theory @ next major version of Scala Compiler (3.0)
-- **Nelson**: One of the longest tenured engineers at Stripe. Great knowledge of Ruby and MRI internals
-- **Paul**: Previously at Facebook on HHVM and Hack
-- **Jake**: Joined team in August, a lot of experience with Flow
-- **James**: developed Salesforce Apex and worked on the Scala compiler 
+- ***Dmitry*** : PhD Compiler architecture &  type theory @ next major version of Scala Compiler (3.0)
+- ***Nelson*** : One of the longest tenured engineers at Stripe. Great knowledge of Ruby and MRI internals
+- ***Paul*** : Previously at Facebook on HHVM and Hack
+- ***Jake*** : Joined team in August, a lot of experience with Flow
+- ***James*** : worked on Salesforce Apex & the Scala compiler 
 - We are currently hiring for this team
+- <div class="fragment">*** John & Suzan & Ainsley*** : working on IDE support</div>
+
 
 ---
 
 ## Outline
 
-- Assumptions that Sorbet is developed under
-- State of Sorbet at Stripe
-- Evolution of Sorbet type system
-- New things in Sorbet since last meeting
+1. Assumptions that Sorbet is developed under
+2. State of Sorbet at Stripe
+3. Evolution of Sorbet type system
+4. New things in Sorbet since last meeting
 
 ---
 
@@ -36,6 +38,7 @@ Note:
 ## Assumptions: untyped code is here to stay
 
  - We do not intend to force prototype-grade code to be typed
+ - Untyped code allows for better experimentation
  - We intend to interoperate with gems
  - We do not enforce typing on our users: they choose
 
@@ -51,9 +54,9 @@ Note:
  - We support a way to add external signatures for gems, similar to that used by Typescript
  - A scalable way to collaborate and type the ecosystem
 
-Notes:
+Note:
  - DefinitelyTyped is the 9th repo in github by number of commiters per month
- 
+
 ---
 ## Assumptions: Recap
 - We could have gotten some of them wrong. We likely did.
@@ -98,7 +101,6 @@ At this point:
 
 And that's not because we told them to, but because they find it easier to achieve their goal with Sorbet as a tool.
 
-
 ---
 ## Users
 
@@ -107,10 +109,11 @@ And that's not because we told them to, but because they find it easier to achie
 ---
 ## Typed files
 
-```
+```ruby
 # typed: true
 ```
 enables typechecking in that file.
+
 ---
 ## State of Sorbet at Stripe: Typed files
  - we have built the ability to indicate what files can be typed into Sorbet
@@ -148,7 +151,8 @@ Over last 6 month, Sorbet was rapidly adopted at Stripe:
 ---
 ## What principles did we start with
 
-Take the minimal thing, and start adding features based on patterns that we see in our codebase.
+ - Take the minimal thing, 
+ - add features based on patterns that we see in existing Ruby codebase
 
 ---
 ## First pattern: control flow sensitivity
@@ -199,6 +203,13 @@ end
 - We support co-, contra- and in- variance
 - We support reducing kindness (e.g. `File` is a `IO<String>` and thus has different kind than parent)
 - Users don't need to think about this: it "just works"
+
+---
+
+## Why does it "Just work"?
+
+- it was built to work on millions of lines of pre-existing code
+- this code was written years before Sorbet existed
 
 ---
 
@@ -264,7 +275,6 @@ Note:
 - It was based on pre-computation of dependencies in Ruby
 - In order for this pre-computation to run in ~1m it had a lot of artisanal caching and optimizations
 - Sorbet replaced this old static analysis, generating the same data in mere seconds
-
 
 ---
 
@@ -373,3 +383,21 @@ Note:
 - Thanks Ruby for the great language that we all build on.
 - With that, thank you so much for listening to us and taking that.
 - Arigatou gozaimasu
+
+---
+
+## Pros & Cons(user visible)
+| Pros                                                         | Cons                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| - Works for existing Ruby<br />- Non-intrusive gradual experience<br />- Easy learning curve <br />- Blazingly fast<br />- supports metaprogramming<br />- Tooling support(IDE, SourceGraph, refactorings) is actively developed<br /> | - Does not yet model `require` order<br />- Needs pre-computation to support metaprograming<br /> - Does not yet have the syntax that Matz wants<br>(let us know what shell we do) |
+
+
+
+---
+
+
+
+## Pros & Cons(implementation
+| Pros | Cons |
+| ----------------------------------------- | ---- |
+| - Minimal, easy to extend implementation. 34K lines of C++, 4Mbytes as a statically linked binary<br /> - Contemporary C++17(no manual memory management, smart pointers & etc)<br />- clean design that is easy to understand and get involved(40 contributors)<br />- short spinup times for people joining the team(a month or so) | - C++<br /> |
