@@ -240,8 +240,8 @@ We've built a script that finds all metaprogrammed classes and functions:
 
 - load all code into MRI
 - use runtime introspection to see what classes exist & what methods they define
-- store those definitions in a shim file
-- substract set of files that Sorbet sees from this shim file
+- store those definitions in a external file
+- substract set of files that Sorbet sees from this external file
 
 ---
 
