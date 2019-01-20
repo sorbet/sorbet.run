@@ -4,13 +4,12 @@
   const output = document.getElementById('output');
   const ansiUp = new AnsiUp();
   const sorbetWasmFile = fetch('sorbet-wasm.wasm');
-  const sorbetWasmModule = if (typeof WebAssembly.compileStreaming == "function") {
-    WebAssembly.compileStreaming(sorbetWasmFile);
-  } else {
+
+ const sorbetWasmModule = (typeof WebAssembly.compileStreaming == "function") ?
+    WebAssembly.compileStreaming(sorbetWasmFile) :
     sorbetWasmFile
       .then((response) => response.arrayBuffer())
       .then((bytes) => WebAssembly.compile(bytes));
-  }
 
   let runId = 0;
   let curId = 0;
