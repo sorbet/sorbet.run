@@ -3,9 +3,14 @@
 (() => {
   const output = document.getElementById('output');
   const ansiUp = new AnsiUp();
-  const sorbetWasm = fetch('sorbet-wasm.wasm')
-    .then((response) => response.arrayBuffer())
-    .then((bytes) => WebAssembly.compile(bytes));
+  const sorbetWasmFile = fetch('sorbet-wasm.wasm');
+  const sorbetWasmModule = if (typeof WebAssembly.compileStreaming == "function") {
+    WebAssembly.compileStreaming(sorbetWasmFile);
+  } else {
+    sorbetWasmFile
+      .then((response) => response.arrayBuffer())
+      .then((bytes) => WebAssembly.compile(bytes));
+  }
 
   let runId = 0;
   let curId = 0;
@@ -55,7 +60,7 @@
         flush();
       },
       instantiateWasm: (info, realRecieveInstanceCallBack) => {
-        sorbetWasm
+        sorbetWasmModule
           .then((module) =>
             WebAssembly.instantiate(module, info)
               .then((instance) => realRecieveInstanceCallBack(instance, module))
