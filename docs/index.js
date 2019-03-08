@@ -63,7 +63,10 @@
           .then((module) =>
             WebAssembly.instantiate(module, info)
               .then((instance) => realRecieveInstanceCallBack(instance, module))
-              .catch((error) => console.log(error))
+              .catch((error) => {
+                console.log(error);
+                output.innerText = error;
+              })
           )
           .catch((error) => {
             output.innerText =
