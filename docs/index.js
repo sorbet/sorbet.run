@@ -67,7 +67,7 @@
           )
           .catch((error) => {
             output.innerText =
-              "Error loading sorbet.wasm. Maybe your adblock blocked it? Some of them are pretty aggressive on github.io domains. We promise we aren't mining crypto currencies on your computer.";
+              "Error loading sorbet.wasm. Maybe your adblock blocked it? Some of them are pretty aggressive on github.io domains. We promise we aren't mining crypto currencies on your computer.\n" + error;
           });
         return {}; // indicates lazy initialization
       },
