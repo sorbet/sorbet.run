@@ -14,5 +14,8 @@
   "scripts": {
     "lint": "eslint docs/index.js docs/editor.js",
     "prettier": "prettier --write docs/index.js docs/editor.js"
+  },
+  "dependencies": {
+    "monaco-editor": "^0.16.1"
   }
 }
