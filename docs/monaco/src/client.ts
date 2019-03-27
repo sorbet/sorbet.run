@@ -1,12 +1,19 @@
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 import {
-    MonacoLanguageClient, CloseAction, ErrorAction,
-    MonacoServices, createConnection
+  MonacoLanguageClient, CloseAction, ErrorAction,
+  MonacoServices, createConnection
 } from 'monaco-languageclient';
 import { WebSocket, Server } from 'mock-socket';
 import { compile } from './sorbet';
 
 const element = document.getElementById('editor')!;
+
+monaco.languages.register({
+  id: 'ruby',
+  extensions: ['.rb', '.rbi'],
+  aliases: ['RUBY', 'rb', 'sorbet', 'srb'],
+  mimetypes: ['text/plain'],
+});
 
 // create Monaco editor
 const initialValue = () => {
@@ -15,7 +22,6 @@ const initialValue = () => {
   if (hash) {
     return decodeURIComponent(hash);
   }
-
   return element.innerHTML;
 };
 
@@ -33,7 +39,7 @@ var editor = monaco.editor.create(element, {
   formatOnType: true,
   autoIndent: true,
   lightbulb: {
-      enabled: true
+    enabled: true
   },
 });
 
@@ -46,6 +52,12 @@ window.addEventListener('hashchange', () => {
   }
 });
 
+editor.onDidChangeModelContent((event) => {
+  const contents = editor.getValue();
+  window.location.hash = `#${encodeURIComponent(contents)}`;
+});
+
+
 // install Monaco language client services
 MonacoServices.install(editor);
 
@@ -53,34 +65,34 @@ MonacoServices.install(editor);
 const webSocket = createFakeWebSocket();
 // listen when the web socket is opened
 listen({
-    webSocket,
-    onConnection: connection => {
-        // create and start the language client
-        const languageClient = createLanguageClient(connection);
-        const disposable = languageClient.start();
-        connection.onClose(() => disposable.dispose());
-    }
+  webSocket,
+  onConnection: connection => {
+    // create and start the language client
+    const languageClient = createLanguageClient(connection);
+    const disposable = languageClient.start();
+    connection.onClose(() => disposable.dispose());
+  }
 });
 
 function createLanguageClient(connection: MessageConnection): MonacoLanguageClient {
-    return new MonacoLanguageClient({
-        name: "Sample Language Client",
-        clientOptions: {
-            // use a language id as a document selector
-            documentSelector: ['json'],
-            // disable the default error handler
-            errorHandler: {
-                error: () => ErrorAction.Continue,
-                closed: () => CloseAction.DoNotRestart
-            }
-        },
-        // create a language client connection from the JSON RPC connection on demand
-        connectionProvider: {
-            get: (errorHandler, closeHandler) => {
-                return Promise.resolve(createConnection(connection, errorHandler, closeHandler))
-            }
-        }
-    });
+  return new MonacoLanguageClient({
+    name: "Sample Language Client",
+    clientOptions: {
+      // use a language id as a document selector
+      documentSelector: ['ruby'],
+      // disable the default error handler
+      errorHandler: {
+        error: () => ErrorAction.Continue,
+        closed: () => CloseAction.DoNotRestart
+      }
+    },
+    // create a language client connection from the JSON RPC connection on demand
+    connectionProvider: {
+      get: (errorHandler, closeHandler) => {
+        return Promise.resolve(createConnection(connection, errorHandler, closeHandler))
+      }
+    }
+  });
 }
 
 function createFakeWebSocket(): WebSocket {
@@ -89,12 +101,11 @@ function createFakeWebSocket(): WebSocket {
 
   mockServer.on('connection', (socket : any) => {
     socket.on('message', (message : string) => {
-      console.log('compiling');
       compile(response => {
-        console.log('receved ' + response);
+        console.log('Write: ' + response);
         socket.send(response)
       }).then((send) => {
-        console.log('sending ' + message);
+        console.log('Read: ' + message);
         send(message)
       });
     });

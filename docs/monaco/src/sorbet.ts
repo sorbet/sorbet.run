@@ -37,6 +37,7 @@ export const compile = (cb: (message: string) => void) => {
         // new one. This can happen due to out-of-memory, C++ exceptions,
         // or other reasons; Throwing away and restarting should get us to a healthy state.
         sorbet = null;
+        reservedFunction = null;
       },
       instantiateWasm: (info: any, realRecieveInstanceCallBack: any) => {
         sorbetWasmModule
@@ -53,7 +54,7 @@ export const compile = (cb: (message: string) => void) => {
         return {}; // indicates lazy initialization
       },
       onRuntimeInitialized: () => {
-        reservedFunction = sorbet.addFunction((arg: number) => {cb(sorbet.Pointer_stringify(arg))}, "vi");
+        reservedFunction = sorbet.addFunction((arg: any) => {cb(sorbet.Pointer_stringify(arg))}, "vi");
         resolve(send);
       }
     };
