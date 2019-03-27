@@ -16,6 +16,7 @@
     "prettier": "prettier --write docs/index.js docs/editor.js"
   },
   "dependencies": {
+    "mock-socket": "^8.0.5",
     "monaco-editor": "^0.16.1"
   }
 }
