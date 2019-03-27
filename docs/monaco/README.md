@@ -5,6 +5,6 @@ All the code is in `src/`. When you want to compile the bundle run `npm run buil
 If you are doing more than just one-off compiling, you want to have 3 terminal
 windows open, with these three things:
 
-* `python3 server.py`
+* `cd ..; python3 server.py`
 * `npm run watch`
 * `webpack -w`
