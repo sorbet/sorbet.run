@@ -4,13 +4,7 @@ import {
     MonacoServices, createConnection
 } from 'monaco-languageclient';
 import { WebSocket, Server } from 'mock-socket';
-
-declare global {
-  interface Window {
-    lspCallback: (message : string) => void;
-    callLSP(message: string) : void;
-  }
-}
+import { compile } from './sorbet';
 
 const element = document.getElementById('editor')!;
 
@@ -95,9 +89,14 @@ function createFakeWebSocket(): WebSocket {
 
   mockServer.on('connection', (socket : any) => {
     socket.on('message', (message : string) => {
-      debugger;
-      window.callLSP(message);
-      window.lspCallback = response => socket.send(response);
+      console.log('compiling');
+      compile(response => {
+        console.log('receved ' + response);
+        socket.send(response)
+      }).then((send) => {
+        console.log('sending ' + message);
+        send(message)
+      });
     });
   });
 

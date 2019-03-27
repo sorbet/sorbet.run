@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var vscode_ws_jsonrpc_1 = require("vscode-ws-jsonrpc");
 var monaco_languageclient_1 = require("monaco-languageclient");
 var mock_socket_1 = require("mock-socket");
+var sorbet_1 = require("./sorbet");
 var element = document.getElementById('editor');
 // create Monaco editor
 var initialValue = function () {
@@ -76,9 +77,14 @@ function createFakeWebSocket() {
     var mockServer = new mock_socket_1.Server(url);
     mockServer.on('connection', function (socket) {
         socket.on('message', function (message) {
-            debugger;
-            window.callLSP(message);
-            window.lspCallback = function (response) { return socket.send(response); };
+            console.log('compiling');
+            sorbet_1.compile(function (response) {
+                console.log('receved ' + response);
+                socket.send(response);
+            }).then(function (send) {
+                console.log('sending ' + message);
+                send(message);
+            });
         });
     });
     return new mock_socket_1.WebSocket(url);
