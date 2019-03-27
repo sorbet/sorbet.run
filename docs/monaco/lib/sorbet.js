@@ -31,6 +31,7 @@ exports.compile = function (cb) {
                 // new one. This can happen due to out-of-memory, C++ exceptions,
                 // or other reasons; Throwing away and restarting should get us to a healthy state.
                 sorbet = null;
+                reservedFunction = null;
             },
             instantiateWasm: function (info, realRecieveInstanceCallBack) {
                 sorbetWasmModule

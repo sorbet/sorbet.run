@@ -5,6 +5,12 @@ var monaco_languageclient_1 = require("monaco-languageclient");
 var mock_socket_1 = require("mock-socket");
 var sorbet_1 = require("./sorbet");
 var element = document.getElementById('editor');
+monaco.languages.register({
+    id: 'ruby',
+    extensions: ['.rb', '.rbi'],
+    aliases: ['RUBY', 'rb', 'sorbet', 'srb'],
+    mimetypes: ['text/plain'],
+});
 // create Monaco editor
 var initialValue = function () {
     // Remove leading '#'
@@ -38,6 +44,10 @@ window.addEventListener('hashchange', function () {
         editor.setValue(ruby);
     }
 });
+editor.onDidChangeModelContent(function (event) {
+    var contents = editor.getValue();
+    window.location.hash = "#" + encodeURIComponent(contents);
+});
 // install Monaco language client services
 monaco_languageclient_1.MonacoServices.install(editor);
 // create the web socket
@@ -57,7 +67,7 @@ function createLanguageClient(connection) {
         name: "Sample Language Client",
         clientOptions: {
             // use a language id as a document selector
-            documentSelector: ['json'],
+            documentSelector: ['ruby'],
             // disable the default error handler
             errorHandler: {
                 error: function () { return monaco_languageclient_1.ErrorAction.Continue; },
@@ -77,12 +87,11 @@ function createFakeWebSocket() {
     var mockServer = new mock_socket_1.Server(url);
     mockServer.on('connection', function (socket) {
         socket.on('message', function (message) {
-            console.log('compiling');
             sorbet_1.compile(function (response) {
-                console.log('receved ' + response);
+                console.log('Write: ' + response);
                 socket.send(response);
             }).then(function (send) {
-                console.log('sending ' + message);
+                console.log('Read: ' + message);
                 send(message);
             });
         });
