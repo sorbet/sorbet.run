@@ -8,6 +8,10 @@ var sorbetWasmModule = (typeof WebAssembly.compileStreaming == "function") ?
         .then(function (bytes) { return WebAssembly.compile(bytes); });
 var sorbet = null;
 var reservedFunction = null;
+var destroySorbet = function () {
+    sorbet = null;
+    reservedFunction = null;
+};
 exports.compile = function (cb) {
     var send = function (message) {
         sorbet.ccall('lsp', null, ['number', 'string'], [reservedFunction, message]);
@@ -22,16 +26,17 @@ exports.compile = function (cb) {
         var opts = {
             print: function (line) {
                 console.log(line);
+                destroySorbet();
             },
             printErr: function (line) {
                 console.log(line);
+                destroySorbet();
             },
             onAbort: function () {
                 // On abort, throw away our WebAssembly instance and create a
                 // new one. This can happen due to out-of-memory, C++ exceptions,
                 // or other reasons; Throwing away and restarting should get us to a healthy state.
-                sorbet = null;
-                reservedFunction = null;
+                destroySorbet();
             },
             instantiateWasm: function (info, realRecieveInstanceCallBack) {
                 sorbetWasmModule
