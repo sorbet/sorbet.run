@@ -12,9 +12,16 @@ const sorbetWasmModule = (typeof WebAssembly.compileStreaming == "function") ?
 
 let sorbet : any = null;
 let reservedFunction : any = null;
+let restartCallback : any = null;
+export function setRestartCallback(cb: () => void) {
+  restartCallback = cb;
+}
 const destroySorbet = () => {
   sorbet = null;
   reservedFunction = null;
+  if (restartCallback) {
+    restartCallback();
+  }
 }
 export const compile = (cb: (message: string) => void) => {
   const send = (message: string) => {

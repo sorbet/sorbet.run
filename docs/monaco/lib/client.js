@@ -18,21 +18,26 @@ var initialValue = function () {
 };
 var value = initialValue();
 element.innerHTML = '';
-var editor = monaco.editor.create(element, {
-    value: value,
-    language: 'ruby',
-    theme: 'vs-dark',
-    minimap: {
-        enabled: false,
-    },
-    scrollBeyondLastLine: false,
-    formatOnType: true,
-    autoIndent: true,
-    lightbulb: {
-        enabled: true
-    },
-    fontSize: 16,
-});
+var editor = null;
+function createEditor() {
+    editor = monaco.editor.create(element, {
+        value: value,
+        language: 'ruby',
+        theme: 'vs-dark',
+        minimap: {
+            enabled: false,
+        },
+        scrollBeyondLastLine: false,
+        formatOnType: true,
+        autoIndent: true,
+        lightbulb: {
+            enabled: true
+        },
+        fontSize: 16,
+    });
+}
+sorbet_1.setRestartCallback(createEditor);
+createEditor();
 window.addEventListener('hashchange', function () {
     // Remove leading '#'
     var hash = window.location.hash.substr(1);

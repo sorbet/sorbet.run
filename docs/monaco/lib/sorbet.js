@@ -8,9 +8,17 @@ var sorbetWasmModule = (typeof WebAssembly.compileStreaming == "function") ?
         .then(function (bytes) { return WebAssembly.compile(bytes); });
 var sorbet = null;
 var reservedFunction = null;
+var restartCallback = null;
+function setRestartCallback(cb) {
+    restartCallback = cb;
+}
+exports.setRestartCallback = setRestartCallback;
 var destroySorbet = function () {
     sorbet = null;
     reservedFunction = null;
+    if (restartCallback) {
+        restartCallback();
+    }
 };
 exports.compile = function (cb) {
     var send = function (message) {
