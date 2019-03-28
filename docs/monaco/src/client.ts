@@ -69,7 +69,7 @@ listen({
   
 
 setRestartCallback(() => {
-  console.log('Somehow restart LSP');
+  window.location.reload();
 });
 
 function createLanguageClient(connection: MessageConnection): MonacoLanguageClient {
