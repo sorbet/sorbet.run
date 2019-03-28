@@ -4,7 +4,7 @@ import {
   MonacoServices, createConnection
 } from 'monaco-languageclient';
 import { WebSocket, Server } from 'mock-socket';
-import { compile } from './sorbet';
+import { compile, setRestartCallback } from './sorbet';
 import { register } from './ruby';
 
 register();
@@ -24,21 +24,26 @@ const initialValue = () => {
 const value = initialValue();
 element.innerHTML = '';
 
-var editor = monaco.editor.create(element, {
-  value: value,
-  language: 'ruby',
-  theme: 'vs-dark',
-  minimap : {
-    enabled: false,
-  },
-  scrollBeyondLastLine: false,
-  formatOnType: true,
-  autoIndent: true,
-  lightbulb: {
-    enabled: true
-  },
-  fontSize: 16,
-});
+let editor : any = null;
+function createEditor() {
+  editor = monaco.editor.create(element, {
+    value: value,
+    language: 'ruby',
+    theme: 'vs-dark',
+    minimap : {
+      enabled: false,
+    },
+    scrollBeyondLastLine: false,
+    formatOnType: true,
+    autoIndent: true,
+    lightbulb: {
+      enabled: true
+    },
+    fontSize: 16,
+  });
+}
+setRestartCallback(createEditor);
+createEditor();
 
 window.addEventListener('hashchange', () => {
   // Remove leading '#'
@@ -49,7 +54,7 @@ window.addEventListener('hashchange', () => {
   }
 });
 
-editor.onDidChangeModelContent((event) => {
+editor.onDidChangeModelContent((event : any) => {
   const contents = editor.getValue();
   window.location.hash = `#${encodeURIComponent(contents)}`;
 });
