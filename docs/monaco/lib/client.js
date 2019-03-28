@@ -4,13 +4,9 @@ var vscode_ws_jsonrpc_1 = require("vscode-ws-jsonrpc");
 var monaco_languageclient_1 = require("monaco-languageclient");
 var mock_socket_1 = require("mock-socket");
 var sorbet_1 = require("./sorbet");
+var ruby_1 = require("./ruby");
+ruby_1.register();
 var element = document.getElementById('editor');
-monaco.languages.register({
-    id: 'ruby',
-    extensions: ['.rb', '.rbi'],
-    aliases: ['RUBY', 'rb', 'sorbet', 'srb'],
-    mimetypes: ['text/plain'],
-});
 // create Monaco editor
 var initialValue = function () {
     // Remove leading '#'

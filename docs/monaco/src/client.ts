@@ -5,15 +5,11 @@ import {
 } from 'monaco-languageclient';
 import { WebSocket, Server } from 'mock-socket';
 import { compile } from './sorbet';
+import { register } from './ruby';
+
+register();
 
 const element = document.getElementById('editor')!;
-
-monaco.languages.register({
-  id: 'ruby',
-  extensions: ['.rb', '.rbi'],
-  aliases: ['RUBY', 'rb', 'sorbet', 'srb'],
-  mimetypes: ['text/plain'],
-});
 
 // create Monaco editor
 const initialValue = () => {
