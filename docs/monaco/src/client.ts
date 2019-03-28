@@ -1,8 +1,5 @@
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
-import {
-  MonacoLanguageClient, CloseAction, ErrorAction,
-  MonacoServices, createConnection
-} from 'monaco-languageclient';
+import { MonacoLanguageClient, MonacoServices, createConnection } from 'monaco-languageclient';
 import { WebSocket, Server } from 'mock-socket';
 import { compile, setRestartCallback } from './sorbet';
 import { register } from './ruby';
@@ -21,29 +18,23 @@ const initialValue = () => {
   return element.innerHTML;
 };
 
-const value = initialValue();
 element.innerHTML = '';
 
-let editor : any = null;
-function createEditor() {
-  editor = monaco.editor.create(element, {
-    value: value,
-    language: 'ruby',
-    theme: 'vs-dark',
-    minimap : {
-      enabled: false,
-    },
-    scrollBeyondLastLine: false,
-    formatOnType: true,
-    autoIndent: true,
-    lightbulb: {
-      enabled: true
-    },
-    fontSize: 16,
-  });
-}
-setRestartCallback(createEditor);
-createEditor();
+const editor = monaco.editor.create(element, {
+  value: initialValue(),
+  language: 'ruby',
+  theme: 'vs-dark',
+  minimap : {
+    enabled: false,
+  },
+  scrollBeyondLastLine: false,
+  formatOnType: true,
+  autoIndent: true,
+  lightbulb: {
+    enabled: true
+  },
+  fontSize: 16,
+});
 
 window.addEventListener('hashchange', () => {
   // Remove leading '#'
@@ -76,17 +67,16 @@ listen({
   }
 });
 
+setRestartCallback(() => {
+  console.log('Somehow restart LSP');
+});
+
 function createLanguageClient(connection: MessageConnection): MonacoLanguageClient {
   return new MonacoLanguageClient({
     name: "Sample Language Client",
     clientOptions: {
       // use a language id as a document selector
       documentSelector: ['ruby'],
-      // disable the default error handler
-      errorHandler: {
-        error: () => ErrorAction.Continue,
-        closed: () => CloseAction.DoNotRestart
-      }
     },
     // create a language client connection from the JSON RPC connection on demand
     connectionProvider: {
