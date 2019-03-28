@@ -59,7 +59,7 @@ vscode_ws_jsonrpc_1.listen({
     }
 });
 sorbet_1.setRestartCallback(function () {
-    console.log('Somehow restart LSP');
+    window.location.reload();
 });
 function createLanguageClient(connection) {
     return new monaco_languageclient_1.MonacoLanguageClient({
