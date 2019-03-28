@@ -12,9 +12,9 @@ var hash = window.location.hash.slice(1);
 var initialValue = hash ? decodeURIComponent(hash) : element.innerHTML;
 element.innerHTML = '';
 // create Monaco editor
+var model = monaco.editor.createModel(initialValue, 'ruby', monaco.Uri.parse('inmemory://model/default'));
 var editor = monaco.editor.create(element, {
-    value: initialValue,
-    language: 'ruby',
+    model: model,
     theme: 'vs-dark',
     minimap: {
         enabled: false,
