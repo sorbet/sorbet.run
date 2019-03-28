@@ -16,28 +16,22 @@ var initialValue = function () {
     }
     return element.innerHTML;
 };
-var value = initialValue();
 element.innerHTML = '';
-var editor = null;
-function createEditor() {
-    editor = monaco.editor.create(element, {
-        value: value,
-        language: 'ruby',
-        theme: 'vs-dark',
-        minimap: {
-            enabled: false,
-        },
-        scrollBeyondLastLine: false,
-        formatOnType: true,
-        autoIndent: true,
-        lightbulb: {
-            enabled: true
-        },
-        fontSize: 16,
-    });
-}
-sorbet_1.setRestartCallback(createEditor);
-createEditor();
+var editor = monaco.editor.create(element, {
+    value: initialValue(),
+    language: 'ruby',
+    theme: 'vs-dark',
+    minimap: {
+        enabled: false,
+    },
+    scrollBeyondLastLine: false,
+    formatOnType: true,
+    autoIndent: true,
+    lightbulb: {
+        enabled: true
+    },
+    fontSize: 16,
+});
 window.addEventListener('hashchange', function () {
     // Remove leading '#'
     var hash = window.location.hash.substr(1);
@@ -64,17 +58,15 @@ vscode_ws_jsonrpc_1.listen({
         connection.onClose(function () { return disposable.dispose(); });
     }
 });
+sorbet_1.setRestartCallback(function () {
+    console.log('Somehow restart LSP');
+});
 function createLanguageClient(connection) {
     return new monaco_languageclient_1.MonacoLanguageClient({
         name: "Sample Language Client",
         clientOptions: {
             // use a language id as a document selector
             documentSelector: ['ruby'],
-            // disable the default error handler
-            errorHandler: {
-                error: function () { return monaco_languageclient_1.ErrorAction.Continue; },
-                closed: function () { return monaco_languageclient_1.CloseAction.DoNotRestart; }
-            }
         },
         // create a language client connection from the JSON RPC connection on demand
         connectionProvider: {
