@@ -66,6 +66,7 @@ listen({
     connection.onClose(() => disposable.dispose());
   }
 });
+  
 
 setRestartCallback(() => {
   console.log('Somehow restart LSP');
