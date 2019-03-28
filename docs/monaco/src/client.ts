@@ -14,9 +14,9 @@ const initialValue = hash ? decodeURIComponent(hash) : element.innerHTML;
 element.innerHTML = '';
 
 // create Monaco editor
+const model = monaco.editor.createModel(initialValue, 'ruby', monaco.Uri.parse('inmemory://model/default'));
 const editor = monaco.editor.create(element, {
-  value: initialValue,
-  language: 'ruby',
+  model: model,
   theme: 'vs-dark',
   minimap : {
     enabled: false,
