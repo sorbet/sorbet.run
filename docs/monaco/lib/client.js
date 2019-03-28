@@ -7,18 +7,13 @@ var sorbet_1 = require("./sorbet");
 var ruby_1 = require("./ruby");
 ruby_1.register();
 var element = document.getElementById('editor');
-// create Monaco editor
-var initialValue = function () {
-    // Remove leading '#'
-    var hash = window.location.hash.slice(1);
-    if (hash) {
-        return decodeURIComponent(hash);
-    }
-    return element.innerHTML;
-};
+// Remove leading '#'
+var hash = window.location.hash.slice(1);
+var initialValue = hash ? decodeURIComponent(hash) : element.innerHTML;
 element.innerHTML = '';
+// create Monaco editor
 var editor = monaco.editor.create(element, {
-    value: initialValue(),
+    value: initialValue,
     language: 'ruby',
     theme: 'vs-dark',
     minimap: {

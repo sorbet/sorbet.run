@@ -8,20 +8,14 @@ register();
 
 const element = document.getElementById('editor')!;
 
-// create Monaco editor
-const initialValue = () => {
-  // Remove leading '#'
-  const hash = window.location.hash.slice(1);
-  if (hash) {
-    return decodeURIComponent(hash);
-  }
-  return element.innerHTML;
-};
-
+// Remove leading '#'
+const hash = window.location.hash.slice(1);
+const initialValue = hash ? decodeURIComponent(hash) : element.innerHTML;
 element.innerHTML = '';
 
+// create Monaco editor
 const editor = monaco.editor.create(element, {
-  value: initialValue(),
+  value: initialValue,
   language: 'ruby',
   theme: 'vs-dark',
   minimap : {
