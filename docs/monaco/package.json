@@ -35,8 +35,7 @@
     "compile": "tsc",
     "watch": "tsc -w",
     "clean": "rimraf lib",
-    "copy": "cp src/index.html lib/index.html",
-    "build": "npm run compile && webpack && npm run copy",
+    "build": "npm run compile && webpack",
     "start": "node lib/server.js",
     "start:ext": "node lib/server.js --external"
   }
