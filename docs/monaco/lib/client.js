@@ -31,6 +31,7 @@ var editor = monaco.editor.create(element, {
     lightbulb: {
         enabled: true
     },
+    fontSize: 16,
 });
 window.addEventListener('hashchange', function () {
     // Remove leading '#'
