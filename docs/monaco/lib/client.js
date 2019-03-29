@@ -54,13 +54,6 @@ var editor = monaco.editor.create(element, {
     scrollBeyondLastLine: false,
     formatOnType: true,
     autoIndent: true,
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    lightbulb: { enabled: true },
->>>>>>> Restart Sorbet when it dies.
-=======
->>>>>>> Address review feedback.
     fontSize: 16,
 });
 window.addEventListener('hashchange', function () {
