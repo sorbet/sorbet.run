@@ -5,6 +5,7 @@ declare var gtag: any;
 
 const output = document.getElementById('output')!;
 const ansiUp = new AnsiUp();
+ansiUp.use_classes = true;
 
 let runId = 0;
 let curId = 0;

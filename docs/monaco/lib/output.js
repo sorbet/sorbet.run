@@ -39,6 +39,7 @@ var sorbet_1 = require("./sorbet");
 var ansi_up_1 = require("ansi_up");
 var output = document.getElementById('output');
 var ansiUp = new ansi_up_1.default();
+ansiUp.use_classes = true;
 var runId = 0;
 var curId = 0;
 var stdout = [];
