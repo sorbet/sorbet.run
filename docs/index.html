@@ -21,8 +21,12 @@ html, body {
   height: 100%;
   color: #d4d4d4;
   background: #1e1e1e;
-  font-family: Menlo, Monaco, source-code-pro, monospace;
+  font-family: Menlo, Monaco, "Courier New", monospace;
   font-size: 16px;
+}
+
+pre {
+  font-family: Menlo, Monaco, "Courier New", monospace;
 }
 
 body {
@@ -42,7 +46,7 @@ header .item {
 }
 
 header .item:hover, header .item li:hover{
-  background: #666;
+  background: #4f4397;
 }
 
 main {
@@ -53,14 +57,17 @@ main {
   float: left;
   height: 100%;
   width: 50%;
+  box-sizing: border-box;
 }
 
 #output {
   margin: 0;
+  padding: 0 10px;
   background-color: #002b36;
   color: #e4e4e4;
   overflow-y: auto;
   white-space: pre-wrap;
+  line-height: 24px;
 }
 
 @media (max-width: 800px) {
@@ -72,7 +79,7 @@ main {
 
 #logo {
   box-sizing: border-box;
-  padding: 4px 13px;
+  padding: 4px 8px;
   float: left;
 }
 
@@ -116,7 +123,7 @@ main {
 
 #email {
   color: #d4d4d4;
-  padding: 13px 0;
+  padding: 13px 5px;
   float: left;
   font-size: 12px;
 }
