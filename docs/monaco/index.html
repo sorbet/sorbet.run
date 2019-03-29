@@ -21,6 +21,7 @@ html, body {
   color: #d4d4d4;
   background: #1e1e1e;
   font-family: Menlo, Monaco, source-code-pro, monospace;
+  font-size: 16px;
 }
 
 body {
@@ -47,10 +48,16 @@ main {
   height: calc(100% - 40px);
 }
 
-#editor {
-  width: 100%;
+#editor, #output {
+  float: left;
   height: 100%;
-  overflow: hidden;
+  width: 50%;
+}
+
+#output {
+  margin: 0;
+  overflow-y: auto;
+  white-space: pre-wrap;
 }
 
 @media (max-width: 800px) {
@@ -183,6 +190,7 @@ def main
   A.new.barr(91)   # error: Typo!
   A.new.bar("91")  # error: Type mismatch!
 end</div>
+      <pre id="output">Loading...</pre>
     </main>
 
 <a id="email" href="mailto:sorbet@stripe.com">sorbet@stripe.com</a>

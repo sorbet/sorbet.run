@@ -5,6 +5,7 @@ import {listen, MessageConnection} from 'vscode-ws-jsonrpc';
 import {createSorbet} from './sorbet';
 
 import {register} from './ruby';
+import {typecheck} from './output';
 
 register();
 
@@ -39,7 +40,9 @@ window.addEventListener('hashchange', () => {
 editor.onDidChangeModelContent((event: any) => {
   const contents = editor.getValue();
   window.location.hash = `#${encodeURIComponent(contents)}`;
+  typecheck(contents);
 });
+typecheck(editor.getValue());
 
 
 // install Monaco language client services
@@ -108,7 +111,7 @@ let socket: any = null;
 
 async function instantiateSorbet() {
   let errorCalled = false;
-  ({sorbet} = await createSorbet(() => {
+  const onError = () => {
      // If Sorbet crashes, try creating Sorbet again.
      // Avoid acting on multiple errors from the same Sorbet instance.
      if (errorCalled) {
@@ -123,7 +126,8 @@ async function instantiateSorbet() {
      }
      sorbet = null;
      instantiateSorbet();
-   }));
+  };
+  ({sorbet} = await createSorbet(onError, onError));
   startLanguageServer();
 }
 

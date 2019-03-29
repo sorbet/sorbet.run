@@ -1,4 +1,3 @@
-
 declare var WebAssembly: any;
 declare var Sorbet: any;
 
@@ -30,27 +29,27 @@ async function instantiateWasmImpl(
  * Creates a new Sorbet instances. Calls errorCallback if Sorbet quits or
  * fails to start up.
  */
-export function createSorbet(errorCallback: (error: any) => any):
+export function createSorbet(onPrint: (line: string) => void, onError: (error: any) => void):
     Promise<{sorbet: any}> {
   let sorbet: any;
   return new Promise<any>((resolve) => {
     const opts = {
       print: (line: string) => {
         console.log(line);
-        errorCallback(line);
+        onPrint(line);
       },
       printErr: (line: string) => {
         console.log(line);
-        errorCallback(line);
+        onPrint(line);
       },
       // On abort, throw away our WebAssembly instance and create a
       // new one. This can happen due to out-of-memory, C++ exceptions,
       // or other reasons; Throwing away and restarting should get us to a
       // healthy state.
-      onAbort: errorCallback,
+      onAbort: onError,
       instantiateWasm: (info: any, realReceiveInstanceCallBack: any) => {
         instantiateWasmImpl(info, realReceiveInstanceCallBack)
-            .catch(errorCallback);
+            .catch(onError);
         return {};  // indicates lazy initialization
       },
       onRuntimeInitialized: () => {
