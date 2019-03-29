@@ -91,7 +91,8 @@ function instantiateSorbet() {
             switch (_a.label) {
                 case 0:
                     errorCalled = false;
-                    onError = function () {
+                    onError = function (event) {
+                        console.log(event);
                         // If Sorbet crashes, try creating Sorbet again.
                         // Avoid acting on multiple errors from the same Sorbet instance.
                         if (errorCalled) {

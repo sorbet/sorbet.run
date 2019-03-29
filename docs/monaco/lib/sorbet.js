@@ -77,11 +77,9 @@ function createSorbet(onPrint, onError) {
     return new Promise(function (resolve) {
         var opts = {
             print: function (line) {
-                console.log(line);
                 onPrint(line);
             },
             printErr: function (line) {
-                console.log(line);
                 onPrint(line);
             },
             // On abort, throw away our WebAssembly instance and create a

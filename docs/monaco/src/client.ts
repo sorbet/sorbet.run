@@ -27,6 +27,7 @@ const editor = monaco.editor.create(element, {
   autoIndent: true,
   fontSize: 16,
   minimap: {enabled: false},
+  automaticLayout: true,
 });
 
 window.addEventListener('hashchange', () => {
@@ -112,7 +113,8 @@ let socket: any = null;
 
 async function instantiateSorbet() {
   let errorCalled = false;
-  const onError = () => {
+  const onError = (event: any) => {
+    console.log(event);
      // If Sorbet crashes, try creating Sorbet again.
      // Avoid acting on multiple errors from the same Sorbet instance.
      if (errorCalled) {

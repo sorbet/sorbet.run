@@ -59,16 +59,17 @@ export const typecheck = (ruby: string) => {
 let sorbet: any = null;
 async function instantiateSorbet() {
   let errorCalled = false;
-  const onError = () => {
-     // If Sorbet crashes, try creating Sorbet again.
-     // Avoid acting on multiple errors from the same Sorbet instance.
-     if (errorCalled) {
-       return;
-     }
+  const onError = (event: any) => {
+    console.log(event);
+    // If Sorbet crashes, try creating Sorbet again.
+    // Avoid acting on multiple errors from the same Sorbet instance.
+    if (errorCalled) {
+      return;
+    }
 
-     errorCalled = true;
-     sorbet = null;
-     instantiateSorbet();
+    errorCalled = true;
+    sorbet = null;
+    instantiateSorbet();
   };
   const onPrint = (line: string) => {
     if (runId !== curId) {

@@ -57,6 +57,7 @@ var editor = monaco.editor.create(element, {
     autoIndent: true,
     fontSize: 16,
     minimap: { enabled: false },
+    automaticLayout: true,
 });
 window.addEventListener('hashchange', function () {
     // Remove leading '#'
@@ -136,7 +137,8 @@ function instantiateSorbet() {
             switch (_a.label) {
                 case 0:
                     errorCalled = false;
-                    onError = function () {
+                    onError = function (event) {
+                        console.log(event);
                         // If Sorbet crashes, try creating Sorbet again.
                         // Avoid acting on multiple errors from the same Sorbet instance.
                         if (errorCalled) {
