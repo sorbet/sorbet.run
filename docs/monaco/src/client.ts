@@ -13,8 +13,20 @@ const element = document.getElementById('editor')!;
 
 // Remove leading '#'
 const hash = window.location.hash.slice(1);
-const initialValue = hash ? decodeURIComponent(hash) : element.innerHTML;
-element.innerHTML = '';
+const initialValue = hash ? decodeURIComponent(hash) : `# typed: true
+class A
+  extend T::Sig
+
+  sig {params(x: Integer).returns(String)}
+  def bar(x)
+    x.to_s
+  end
+end
+
+def main
+  A.new.barr(91)   # error: Typo!
+  A.new.bar("91")  # error: Type mismatch!
+end`;
 
 // create Monaco editor
 const model = monaco.editor.createModel(
