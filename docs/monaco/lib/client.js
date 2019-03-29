@@ -40,6 +40,7 @@ var monaco_languageclient_1 = require("monaco-languageclient");
 var vscode_ws_jsonrpc_1 = require("vscode-ws-jsonrpc");
 var sorbet_1 = require("./sorbet");
 var ruby_1 = require("./ruby");
+var output_1 = require("./output");
 ruby_1.register();
 var element = document.getElementById('editor');
 // Remove leading '#'
@@ -67,7 +68,9 @@ window.addEventListener('hashchange', function () {
 editor.onDidChangeModelContent(function (event) {
     var contents = editor.getValue();
     window.location.hash = "#" + encodeURIComponent(contents);
+    output_1.typecheck(contents);
 });
+output_1.typecheck(editor.getValue());
 // install Monaco language client services
 monaco_languageclient_1.MonacoServices.install(editor);
 function startLanguageServer() {
@@ -127,26 +130,27 @@ var sorbet = null;
 var socket = null;
 function instantiateSorbet() {
     return __awaiter(this, void 0, void 0, function () {
-        var errorCalled;
+        var errorCalled, onError;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     errorCalled = false;
-                    return [4 /*yield*/, sorbet_1.createSorbet(function () {
-                            // If Sorbet crashes, try creating Sorbet again.
-                            // Avoid acting on multiple errors from the same Sorbet instance.
-                            if (errorCalled) {
-                                return;
-                            }
-                            errorCalled = true;
-                            if (socket) {
-                                // Tell the language client + server to shut down.
-                                socket.close();
-                                socket = null;
-                            }
-                            sorbet = null;
-                            instantiateSorbet();
-                        })];
+                    onError = function () {
+                        // If Sorbet crashes, try creating Sorbet again.
+                        // Avoid acting on multiple errors from the same Sorbet instance.
+                        if (errorCalled) {
+                            return;
+                        }
+                        errorCalled = true;
+                        if (socket) {
+                            // Tell the language client + server to shut down.
+                            socket.close();
+                            socket = null;
+                        }
+                        sorbet = null;
+                        instantiateSorbet();
+                    };
+                    return [4 /*yield*/, sorbet_1.createSorbet(onError, onError)];
                 case 1:
                     (sorbet = (_a.sent()).sorbet);
                     startLanguageServer();

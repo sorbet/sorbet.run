@@ -72,26 +72,26 @@ function instantiateWasmImpl(info, realReceiveInstanceCallBack) {
  * Creates a new Sorbet instances. Calls errorCallback if Sorbet quits or
  * fails to start up.
  */
-function createSorbet(errorCallback) {
+function createSorbet(onPrint, onError) {
     var sorbet;
     return new Promise(function (resolve) {
         var opts = {
             print: function (line) {
                 console.log(line);
-                errorCallback(line);
+                onPrint(line);
             },
             printErr: function (line) {
                 console.log(line);
-                errorCallback(line);
+                onPrint(line);
             },
             // On abort, throw away our WebAssembly instance and create a
             // new one. This can happen due to out-of-memory, C++ exceptions,
             // or other reasons; Throwing away and restarting should get us to a
             // healthy state.
-            onAbort: errorCallback,
+            onAbort: onError,
             instantiateWasm: function (info, realReceiveInstanceCallBack) {
                 instantiateWasmImpl(info, realReceiveInstanceCallBack)
-                    .catch(errorCallback);
+                    .catch(onError);
                 return {}; // indicates lazy initialization
             },
             onRuntimeInitialized: function () {
