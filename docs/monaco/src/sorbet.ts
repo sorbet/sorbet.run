@@ -63,7 +63,3 @@ export function createSorbet(onPrint: (line: string) => void, onError: (error: a
     sorbet = Sorbet(opts);
   });
 }
-
-document.getElementById('menu')!.addEventListener('click', (ev: any) => {
-  ev.target.classList.toggle('is-showing');
-});

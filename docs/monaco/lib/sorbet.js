@@ -105,7 +105,4 @@ function createSorbet(onPrint, onError) {
     });
 }
 exports.createSorbet = createSorbet;
-document.getElementById('menu').addEventListener('click', function (ev) {
-    ev.target.classList.toggle('is-showing');
-});
 //# sourceMappingURL=sorbet.js.map

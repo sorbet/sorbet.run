@@ -28,6 +28,7 @@ const editor = monaco.editor.create(element, {
   fontSize: 16,
   minimap: {enabled: false},
   automaticLayout: true,
+  lineNumbersMinChars: 0
 });
 
 window.addEventListener('hashchange', () => {
