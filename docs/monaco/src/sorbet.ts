@@ -35,11 +35,9 @@ export function createSorbet(onPrint: (line: string) => void, onError: (error: a
   return new Promise<any>((resolve) => {
     const opts = {
       print: (line: string) => {
-        console.log(line);
         onPrint(line);
       },
       printErr: (line: string) => {
-        console.log(line);
         onPrint(line);
       },
       // On abort, throw away our WebAssembly instance and create a
