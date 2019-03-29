@@ -1,14 +1,8 @@
-export default class SorbetServer {
-    static create(responseCallback: (response: string) => any, errorCallback: (error: any) => any): Promise<SorbetServer>;
-    private _destroyed;
-    private _sorbet;
-    onResponse: (response: string) => any;
-    onError: (error: any) => any;
-    private _onResponseEmscripten;
-    private constructor();
-    private _print;
-    private _printErr;
-    private _destroy;
-    sendMessage(msg: string): void;
-}
+/**
+ * Creates a new Sorbet instances. Calls errorCallback if Sorbet quits or
+ * fails to start up.
+ */
+export declare function createSorbet(errorCallback: (error: any) => any): Promise<{
+    sorbet: any;
+}>;
 //# sourceMappingURL=sorbet.d.ts.map
