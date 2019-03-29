@@ -13,6 +13,7 @@
 <meta property="og:image" content="https://sorbet.run/android-chrome-512x512.png" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<link rel="stylesheet" href="ansi.css">
 
 <style>
 html, body {
@@ -51,16 +52,13 @@ main {
 #editor, #output {
   float: left;
   height: 100%;
-  width: 49%;
-}
-
-#editor {
-  margin-right: 2%;
-  margin-bottom: 2%;
+  width: 50%;
 }
 
 #output {
   margin: 0;
+  background-color: #002b36;
+  color: #e4e4e4;
   overflow-y: auto;
   white-space: pre-wrap;
 }
@@ -202,7 +200,7 @@ def main
   A.new.barr(91)   # error: Typo!
   A.new.bar("91")  # error: Type mismatch!
 end</div>
-      <pre id="output">Loading...</pre>
+      <pre id="output" class="solarized">Loading...</pre>
     </main>
 
 <a id="email" href="mailto:sorbet@stripe.com">sorbet@stripe.com</a>
