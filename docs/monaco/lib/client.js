@@ -42,9 +42,6 @@ var sorbet_1 = require("./sorbet");
 var ruby_1 = require("./ruby");
 ruby_1.register();
 var element = document.getElementById('editor');
-// NOTE: Important to define this variable up here due to function hoisting.
-// Persist the server in this variable so it does not get garbage collected.
-var mockServer = null;
 // Remove leading '#'
 var hash = window.location.hash.slice(1);
 var initialValue = hash ? decodeURIComponent(hash) : element.innerHTML;
@@ -58,9 +55,12 @@ var editor = monaco.editor.create(element, {
     formatOnType: true,
     autoIndent: true,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     lightbulb: { enabled: true },
 >>>>>>> Restart Sorbet when it dies.
+=======
+>>>>>>> Address review feedback.
     fontSize: 16,
 });
 window.addEventListener('hashchange', function () {
@@ -91,15 +91,13 @@ function startLanguageServer() {
             connection.onClose(function () {
                 // vscode-ws-jsonrpc will try to re-connect to the server,
                 // but it tries to talk over the closed WebSocket and fails.
-                // Thus, we dispose of the language client and start a new language
-                // client instead.
+                // Thus, we dispose of the language client, and let `instantiateSorbet`
+                // (below) create a new language client.
                 disposable.dispose();
-                startLanguageServer();
             });
         }
     });
 }
-startLanguageServer();
 function createLanguageClient(connection) {
     return new monaco_languageclient_1.MonacoLanguageClient({
         name: 'Sample Language Client',
@@ -116,54 +114,65 @@ function createLanguageClient(connection) {
         }
     });
 }
+var url = 'ws://sorbet.run:8080';
 function createFakeWebSocket() {
-    var _this = this;
-    var url = 'ws://sorbet.run:8080';
-    if (!mockServer) {
-        mockServer = new mock_socket_1.Server(url);
-        mockServer.on('connection', function (socket) { return __awaiter(_this, void 0, void 0, function () {
-            var sorbet_2, bufferedMessages_1, e_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        sorbet_2 = null;
-                        bufferedMessages_1 = [];
-                        // Socket doesn't buffer messages before a listener is attached.
-                        socket.on('message', function (message) {
-                            console.log('Read: ' + message);
-                            if (!sorbet_2) {
-                                // Sorbet is still initializing.
-                                bufferedMessages_1.push(message);
-                            }
-                            else {
-                                sorbet_2.sendMessage(message);
-                            }
-                        });
-                        return [4 /*yield*/, sorbet_1.default.create(function (response) {
-                                console.log('Write: ' + response);
-                                socket.send(response);
-                            }, function () {
-                                // Sorbet crashed.
-                                socket.close();
-                            })];
-                    case 1:
-                        sorbet_2 = _a.sent();
-                        // Send any messages that buffered during startup.
-                        while (bufferedMessages_1.length > 0) {
-                            sorbet_2.sendMessage(bufferedMessages_1.shift());
-                        }
-                        return [3 /*break*/, 3];
-                    case 2:
-                        e_1 = _a.sent();
-                        // Initialization failed. Close socket.
-                        socket.close();
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        }); });
-    }
     return new mock_socket_1.WebSocket(url);
 }
+/**
+ * Main procedure:
+ * 1. Create mock server.
+ * 2. Create Sorbet instance.
+ * 3. Create language server and client.
+ * If Sorbet crashes, close the socket to dispose of the language server and
+ * client and repeat 2 and 3.
+ */
+var mockServer = new mock_socket_1.Server(url);
+// Sorbet singleton.
+var sorbet = null;
+// Active socket. The language server communicates to the client via the
+// socket. Only one socket is active at a time.
+var socket = null;
+function instantiateSorbet() {
+    return __awaiter(this, void 0, void 0, function () {
+        var errorCalled;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    errorCalled = false;
+                    return [4 /*yield*/, sorbet_1.createSorbet(function () {
+                            // If Sorbet crashes, try creating Sorbet again.
+                            // Avoid acting on multiple errors from the same Sorbet instance.
+                            if (errorCalled) {
+                                return;
+                            }
+                            errorCalled = true;
+                            if (socket) {
+                                // Tell the language client + server to shut down.
+                                socket.close();
+                                socket = null;
+                            }
+                            sorbet = null;
+                            instantiateSorbet();
+                        })];
+                case 1:
+                    (sorbet = (_a.sent()).sorbet);
+                    startLanguageServer();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+mockServer.on('connection', function (s) {
+    socket = s;
+    var processLSPResponse = sorbet.addFunction(function (arg) {
+        var message = sorbet.Pointer_stringify(arg);
+        console.log('Write: ' + message);
+        socket.send(message);
+    }, 'vi');
+    socket.on('message', function (message) {
+        console.log('Read: ' + message);
+        sorbet.ccall('lsp', null, ['number', 'string'], [processLSPResponse, message]);
+    });
+});
+instantiateSorbet();
 //# sourceMappingURL=client.js.map

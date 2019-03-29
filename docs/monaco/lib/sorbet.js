@@ -40,99 +40,73 @@ var sorbetWasmModule = (typeof WebAssembly.compileStreaming == 'function') ?
     WebAssembly.compileStreaming(sorbetWasmFile) :
     sorbetWasmFile.then(function (response) { return response.arrayBuffer(); })
         .then(function (bytes) { return WebAssembly.compile(bytes); });
-function NOP() { }
-var SorbetServer = /** @class */ (function () {
-    // Enforce construction via the static function.
-    function SorbetServer() {
-        this._destroyed = false;
-        this.onResponse = NOP;
-        this.onError = NOP;
-    }
-    SorbetServer.create = function (responseCallback, errorCallback) {
-        return __awaiter(this, void 0, void 0, function () {
-            var sorbetServer;
-            return __generator(this, function (_a) {
-                sorbetServer = new SorbetServer();
-                sorbetServer.onResponse = responseCallback;
-                sorbetServer.onError = errorCallback;
-                return [2 /*return*/, new Promise(function (resolve, reject) {
-                        var opts = {
-                            print: sorbetServer._print.bind(sorbetServer),
-                            printErr: sorbetServer._printErr.bind(sorbetServer),
-                            // On abort, throw away our WebAssembly instance and create a
-                            // new one. This can happen due to out-of-memory, C++ exceptions,
-                            // or other reasons; Throwing away and restarting should get us to a
-                            // healthy state.
-                            onAbort: sorbetServer._destroy.bind(sorbetServer),
-                            instantiateWasm: function (info, realReceiveInstanceCallBack) {
-                                instantiateWasmImpl(info, realReceiveInstanceCallBack).catch(reject);
-                                return {}; // indicates lazy initialization
-                            },
-                            onRuntimeInitialized: function () {
-                                resolve(sorbetServer);
-                            }
-                        };
-                        // Since instantiateWasm requires an empty object as a return value,
-                        // we can't make it async. So, instead, we put the async stuff here
-                        // so we an use nice async/await syntax.
-                        function instantiateWasmImpl(info, realReceiveInstanceCallBack) {
-                            return __awaiter(this, void 0, void 0, function () {
-                                var mod, instance, error_1;
-                                return __generator(this, function (_a) {
-                                    switch (_a.label) {
-                                        case 0:
-                                            _a.trys.push([0, 3, , 4]);
-                                            return [4 /*yield*/, sorbetWasmModule];
-                                        case 1:
-                                            mod = _a.sent();
-                                            return [4 /*yield*/, WebAssembly.instantiate(mod, info)];
-                                        case 2:
-                                            instance = _a.sent();
-                                            realReceiveInstanceCallBack(instance, mod);
-                                            return [3 /*break*/, 4];
-                                        case 3:
-                                            error_1 = _a.sent();
-                                            console.log('Error loading sorbet.wasm. Maybe your adblock blocked it? Some of them are pretty aggressive on github.io domains. We promise we aren\'t mining crypto currencies on your computer.\n' +
-                                                error_1);
-                                            throw error_1;
-                                        case 4: return [2 /*return*/];
-                                    }
-                                });
-                            });
-                        }
-                        sorbetServer._sorbet = Sorbet(opts);
-                    })];
-            });
+// Since instantiateWasm requires an empty object as a return value,
+// we can't make it async. So, instead, we put the async stuff here
+// so we can use nice async/await syntax.
+function instantiateWasmImpl(info, realReceiveInstanceCallBack) {
+    return __awaiter(this, void 0, void 0, function () {
+        var mod, instance, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 3, , 4]);
+                    return [4 /*yield*/, sorbetWasmModule];
+                case 1:
+                    mod = _a.sent();
+                    return [4 /*yield*/, WebAssembly.instantiate(mod, info)];
+                case 2:
+                    instance = _a.sent();
+                    realReceiveInstanceCallBack(instance, mod);
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_1 = _a.sent();
+                    console.log('Error loading sorbet.wasm. Maybe your adblock blocked it? Some of them are pretty aggressive on github.io domains. We promise we aren\'t mining crypto currencies on your computer.\n' +
+                        error_1);
+                    throw error_1;
+                case 4: return [2 /*return*/];
+            }
         });
-    };
-    SorbetServer.prototype._print = function (line) {
-        console.log(line);
-        this._destroy();
-    };
-    SorbetServer.prototype._printErr = function (line) {
-        console.log(line);
-        this._destroy();
-    };
-    SorbetServer.prototype._destroy = function () {
-        if (!this._destroyed) {
-            this._destroyed = true;
-            this.onError('Sorbet shut down.');
-        }
-    };
-    SorbetServer.prototype.sendMessage = function (msg) {
-        var _this = this;
-        if (this._destroyed) {
-            throw new Error('Sorbet server is not running.');
-        }
-        // Lazily initialize Emscripten-side of the response callback.
-        if (!this._onResponseEmscripten) {
-            this._onResponseEmscripten = this._sorbet.addFunction(function (arg) { _this.onResponse(_this._sorbet.Pointer_stringify(arg)); }, 'vi');
-        }
-        this._sorbet.ccall('lsp', null, ['number', 'string'], [this._onResponseEmscripten, msg]);
-    };
-    return SorbetServer;
-}());
-exports.default = SorbetServer;
+    });
+}
+/**
+ * Creates a new Sorbet instances. Calls errorCallback if Sorbet quits or
+ * fails to start up.
+ */
+function createSorbet(errorCallback) {
+    var sorbet;
+    return new Promise(function (resolve) {
+        var opts = {
+            print: function (line) {
+                console.log(line);
+                errorCallback(line);
+            },
+            printErr: function (line) {
+                console.log(line);
+                errorCallback(line);
+            },
+            // On abort, throw away our WebAssembly instance and create a
+            // new one. This can happen due to out-of-memory, C++ exceptions,
+            // or other reasons; Throwing away and restarting should get us to a
+            // healthy state.
+            onAbort: errorCallback,
+            instantiateWasm: function (info, realReceiveInstanceCallBack) {
+                instantiateWasmImpl(info, realReceiveInstanceCallBack)
+                    .catch(errorCallback);
+                return {}; // indicates lazy initialization
+            },
+            onRuntimeInitialized: function () {
+                // NOTE: DO *NOT* `resolve(sorbet)`!
+                // You will cause an infinite asynchronous loop. It will not be
+                // debuggable, and will lock up the browser. See:
+                // https://github.com/emscripten-core/emscripten/issues/5820
+                // We wrap it in an object to be safe.
+                resolve({ sorbet: sorbet });
+            }
+        };
+        sorbet = Sorbet(opts);
+    });
+}
+exports.createSorbet = createSorbet;
 document.getElementById('menu').addEventListener('click', function (ev) {
     ev.target.classList.toggle('is-showing');
 });
