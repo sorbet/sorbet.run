@@ -26,6 +26,7 @@ const editor = monaco.editor.create(element, {
   formatOnType: true,
   autoIndent: true,
   fontSize: 16,
+  minimap: {enabled: false},
 });
 
 window.addEventListener('hashchange', () => {
