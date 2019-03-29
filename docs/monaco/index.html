@@ -116,15 +116,12 @@ main {
 
 #email {
   color: #d4d4d4;
-  position: fixed;
-  bottom: 5px;
-  right: 5px;
+  padding: 13px 0;
+  float: left;
+  font-size: 12px;
 }
 
 .iframe header {
-  display: none;
-}
-.iframe #email {
   display: none;
 }
 
@@ -183,6 +180,7 @@ main {
           </li>
         </ul>
       </div>
+      <a id="email" href="mailto:sorbet@stripe.com">sorbet@stripe.com</a>
     </header>
 
     <main>
@@ -202,8 +200,6 @@ def main
 end</div>
       <pre id="output" class="solarized">Loading...</pre>
     </main>
-
-<a id="email" href="mailto:sorbet@stripe.com">sorbet@stripe.com</a>
 
 <script src="../sorbet-wasm.js"></script>
 <script src="lib/main.bundle.js"></script>
