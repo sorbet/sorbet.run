@@ -3,7 +3,7 @@
 (() => {
   const output = document.getElementById('output');
   const ansiUp = new AnsiUp();
-  const sorbetWasmFile = fetch('sorbet-wasm.wasm');
+  const sorbetWasmFile = fetch('../sorbet-wasm.wasm');
 
  const sorbetWasmModule = (typeof WebAssembly.compileStreaming == "function") ?
     WebAssembly.compileStreaming(sorbetWasmFile) :
