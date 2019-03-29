@@ -52,6 +52,9 @@ header .item:hover, header .item li:hover{
 main {
   height: calc(100% - 40px);
 }
+.iframe main {
+  height: 100%;
+}
 
 #editor, #output {
   float: left;
@@ -72,7 +75,7 @@ main {
 
 @media (max-width: 800px) {
     #editor, #output {
-      height: 49%;
+      height: 50%;
       width: 100%;
     }
 }
@@ -207,6 +210,12 @@ def main
 end</div>
       <pre id="output" class="solarized">Loading...</pre>
     </main>
+
+<script>
+if (window.top != window.self) {
+  document.body.classList.add('iframe');
+}
+</script>
 
 <script src="sorbet-wasm.js"></script>
 <script src="monaco/lib/main.bundle.js"></script>
