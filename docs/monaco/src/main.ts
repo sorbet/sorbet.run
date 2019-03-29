@@ -5,6 +5,6 @@
 require('./page');
 require('monaco-editor-core');
 (self as any).MonacoEnvironment = {
-    getWorkerUrl: () => './lib/editor.worker.bundle.js'
+    getWorkerUrl: () => './monaco/lib/editor.worker.bundle.js'
 }
 require('./client');
