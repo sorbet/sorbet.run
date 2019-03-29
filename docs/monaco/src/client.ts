@@ -21,9 +21,6 @@ const model = monaco.editor.createModel(
 const editor = monaco.editor.create(element, {
   model: model,
   theme: 'vs-dark',
-  minimap: {
-    enabled: false,
-  },
   scrollBeyondLastLine: false,
   formatOnType: true,
   autoIndent: true,
