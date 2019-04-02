@@ -76,7 +76,11 @@ async function instantiateSorbet() {
     if (runId !== curId) {
       return;
     }
-    stdout.push(line);
+    const replaced = line
+      .replace(/http:\/\/[^ ]*/, '')
+//      .replace(/http:\/\/go\/e\//, 'https://stripe.dev/sorbet/docs/error-reference#%s')
+      .replace('git.corp.stripe.com/stripe-internal', 'github.com/stripe');
+    stdout.push(replaced);
   };
   ({sorbet} = await createSorbet(onPrint, onError));
   typecheck(monaco.editor.getModels()[0].getValue());
