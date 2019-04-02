@@ -107,7 +107,11 @@ function instantiateSorbet() {
                         if (runId !== curId) {
                             return;
                         }
-                        stdout.push(line);
+                        var replaced = line
+                            .replace(/http:\/\/[^ ]*/, '')
+                            //      .replace(/http:\/\/go\/e\//, 'https://stripe.dev/sorbet/docs/error-reference#%s')
+                            .replace('git.corp.stripe.com/stripe-internal', 'github.com/stripe');
+                        stdout.push(replaced);
                     };
                     return [4 /*yield*/, sorbet_1.createSorbet(onPrint, onError)];
                 case 1:
