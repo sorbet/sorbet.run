@@ -73,10 +73,21 @@ main {
   line-height: 24px;
 }
 
+.iframe #editor {
+  width: 100%;
+}
+.iframe #output {
+  display: none;
+}
+
 @media (max-width: 800px) {
     #editor, #output {
       height: 50%;
       width: 100%;
+    }
+
+    .iframe #editor {
+      height: 100%;
     }
 }
 
