@@ -12,6 +12,7 @@
     "prettier": "^1.14.3"
   },
   "scripts": {
+    "start": "cd docs && python3 server.py",
     "lint": "eslint docs/index.js docs/editor.js",
     "prettier": "prettier --write docs/index.js docs/editor.js"
   },
