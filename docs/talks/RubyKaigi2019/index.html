@@ -23,11 +23,39 @@
         </script>
         <!-- Dmitry's tunning to the theme -->
         <style>
+@font-face {
+  font-family: CamphorPro;
+  src: url(fonts/camphor/300-light.woff);
+}
+
+@font-face {
+  font-family: CamphorPro;
+  src: url(fonts/camphor/500-medium.woff);
+  font-weight: bold;
+}
+
 body {
     background: url( 'img/background.png' );
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-color: #42486d;
+}
+
+.reveal {
+  font-family: CamphorPro;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  font-family: CamphorPro;
+}
+
+.reveal h1 {
+  font-size: 2.9em;
 }
 
 .reveal ol ol {
@@ -80,6 +108,10 @@ body {
 .reveal strong,
 .reveal a {
     color: #68d4f8;
+}
+
+.reveal code {
+    font-family: Menlo, Monaco, monospace;
 }
 
 .reveal .logo {
