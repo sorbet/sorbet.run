@@ -86,7 +86,7 @@ Note:
 
 - Diamondback Ruby
 - RDL Jeff Foster Maryland
-- Charlie Somerville at Github
+- Charlie Somerville at GitHub
 
 ---
 
