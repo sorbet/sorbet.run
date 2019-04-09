@@ -207,7 +207,7 @@ The alternative to this would be to ignore the file entirely.
 
 ---
 
-## What we learned
+### What we learned
 
 - Sorbet is powerful enough to fit many needs
 - Stripe engineers want even faster feedback cycles
@@ -221,25 +221,25 @@ Jan 2018 – ···
 
 ---
 
-## VSCode
+### VSCode
 
 ![](img/vscode.png)
 
 ---
 
-## Typo
+### Typo
 
 ![](img/typo.gif)
 
 ---
 
-## Jump To Definition
+### Jump To Definition
 
 ![](img/jump2Def.gif)
 
 ---
 
-## Autocomplete and Docs
+### Autocomplete and Docs
 
 ![](img/autocompleteAndDocs1.gif)
 
@@ -255,7 +255,7 @@ https://sorbet.run
 
 ---
 
-## Code Browsing (by Sourcegraph)
+### Code Browsing (by Sourcegraph)
 
 ![](img/sourcegraph.gif)
 
