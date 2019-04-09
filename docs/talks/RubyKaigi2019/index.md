@@ -13,8 +13,10 @@ PT starts talking here
 ---
 ## Stripe
 - Platform that developers use to accept payments
-- 25 countries, 100,000 business worldwide
-- 84% of people in US have used it in the last year
+- 32 countries, millions of business worldwide
+- Billions of dollars of processing volume annually
+- 80% of adults in US bought something on Stripe last year
+- 1,700 people in 10 offices around the world
 - If you're running an internet business, check us out
 - stripe.com/jobs
 
@@ -22,8 +24,6 @@ Note:
 
 ---
 ## Developer Productivity
-
-Large dedicated team
 
 - Testing
 - Code
