@@ -136,9 +136,12 @@ The alternative to this would be to ignore the file entirely.
 ### `# typed: false`
 
 ```ruby
-  # typed: false
+# typed: false
 
+def main
   [].to_hash
+
+end
 ```
 
 ---
@@ -146,10 +149,12 @@ The alternative to this would be to ignore the file entirely.
 ### `# typed: true`
 
 ```ruby
-  # typed: true
+# typed: true
 
+def main
   [].to_hash
 # ^^^^^^^^^^ error: Method `to_hash` does not exist
+end
 ```
 
 ---
@@ -157,10 +162,12 @@ The alternative to this would be to ignore the file entirely.
 ### 80% of files report method-related errors
 
 ```ruby
-  # typed: true
+# typed: true
 
+def main
   [].to_hash
 # ^^^^^^^^^^ error: Method `to_hash` does not exist
+end
 ```
 
 ---
