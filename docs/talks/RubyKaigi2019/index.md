@@ -12,7 +12,7 @@ PT starts talking here
 
 - Adopting Sorbet at Stripe
 
-- Editor tools for Sorbet
+- Editor Tools for Sorbet
 
 - The Road to Open Source
 
@@ -99,7 +99,7 @@ Note:
 
 - **Adopting Sorbet at Stripe**
 
-- Editor tools for Sorbet
+- Editor Tools for Sorbet
 
 - The Road to Open Source
 
@@ -225,7 +225,7 @@ end
 
 - Adopting Sorbet at Stripe
 
-- **Editor tools for Sorbet**
+- **Editor Tools for Sorbet**
 
 - The Road to Open Source
 
@@ -284,7 +284,7 @@ Note:
 
 - Adopting Sorbet at Stripe
 
-- Editor tools for Sorbet
+- Editor Tools for Sorbet
 
 - **The Road to Open Source**
 
