@@ -332,9 +332,9 @@ Note:
 
 ---
 
-## Announcement: Docs!
+## http://sorbet.org
 
-http://sorbet.org
+We have docs now!
 
 ---
 
