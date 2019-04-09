@@ -142,13 +142,23 @@ http://sorbet.org
 
 ![](img/vscode.png)
 
-Note:
+---
 
-- Real looking code
-- Fix a typo
-- Jump to definition
-- Autocomplete
-- Documentation
+## Typo
+
+![](img/typo.gif)
+
+---
+
+## Jump To Definition
+
+![](img/jump2Def2.gif)
+
+---
+
+## Autocomplete and Docs
+
+![](img/autocompleteAndDocs1.gif)
 
 ---
 
@@ -184,7 +194,7 @@ Note:
 
 ---
 
-## `srb init` (by Coinbase)
+## `srb init`
 
 ```bash
 ❯ srb init
@@ -199,11 +209,19 @@ This project is now set up for use with Sorbet.
 ```
 
 ---
+## `srb`
 
 ```bash
 ❯ srb
 No errors! Great job.
 ```
+
+---
+## `sorbet-typed` (by Coinbase)
+
+https://github.com/sorbet/sorbet-typed/
+
+> A central repository for sharing type defintions for Ruby gems
 
 ---
 
