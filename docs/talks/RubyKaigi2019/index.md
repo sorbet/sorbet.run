@@ -245,9 +245,11 @@ Jan 2018 – ···
 
 ---
 
-### By the way, this is live
+### Try it yourself!
 
 https://sorbet.run
+
+(Works best on desktop)
 
 <div style="height: 400px">
 ![](img/qrcode.png)
@@ -287,7 +289,7 @@ Note:
 
 ---
 
-## Srobet open source?
+## Sorbet open source?
 
 - Yes! Soon.
 - Already in Private Beta
