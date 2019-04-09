@@ -305,10 +305,20 @@ Note:
 
 - Yes! Soon.
 - Already in Private Beta
-  - 3 other companies contributed code
+  - 3 other core companies contributed code
   - 5 testing it as users
 - Want in?
   - sorbet@stripe.com
+  - Tell us about your LOC and number of contributors
+
+---
+
+## Open Source Plan
+
+- Add more beta folks in batches
+- Mix of small, medium, and large codebases
+- Once the experience is good for a batch, ship it
+- https://stripe.com/blog
 
 ---
 
@@ -462,18 +472,13 @@ end
 
 ---
 
-## Roadmap
-
-TODO
-
----
-
 ## Closing
 
 - Already in private beta
 - Open sourcing RealSoonNow
+- `srb`
 - Editors under active development
-- Roadmap
+- Rails works
 
 ---
 
