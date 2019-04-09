@@ -101,7 +101,123 @@ Note:
 
 ---
 
-## LSP
+## Adopting Sorbet as much as possible
+
+June 2018 – December 2018
+
+---
+
+### Usage stats at Stripe
+
+- 100% of files report constant-related errors
+- 80% of files report method-related errors
+- 63% of call sites have a type
+
+---
+
+### 100% of files report constant-related errors
+
+```ruby
+  # typed: false
+
+  class Hello; end
+
+  Helo.new
+# ^^^^ error: Unable to resolve constant: `Helo`
+```
+
+<!--
+Notes:
+The alternative to this would be to ignore the file entirely.
+-->
+
+---
+
+### `# typed: false`
+
+```ruby
+  # typed: false
+
+  [].to_hash
+```
+
+---
+
+### `# typed: true`
+
+```ruby
+  # typed: true
+
+  [].to_hash
+# ^^^^^^^^^^ error: Method `to_hash` does not exist
+```
+
+---
+
+### 80% of files report method-related errors
+
+```ruby
+  # typed: true
+
+  [].to_hash
+# ^^^^^^^^^^ error: Method `to_hash` does not exist
+```
+
+---
+
+### Untyped call sites
+
+```ruby
+  # typed: true
+
+
+  def foo(x)
+    x.to_hash
+
+  end
+```
+
+---
+
+### Typed call sites
+
+```ruby
+  # typed: true
+
+  sig {params(x: T::Array[[Symbol, String]])}
+  def foo(x)
+    x.to_hash
+  # ^^^^^^^^^ error: Method `to_hash` does not exist
+  end
+```
+
+---
+
+### 63% of call sites have a type
+
+```ruby
+  # typed: true
+
+  sig {params(x: T::Array[[Symbol, String]])}
+  def foo(x)
+    x.to_hash
+  # ^^^^^^^^^ error: Method `to_hash` does not exist
+  end
+```
+
+---
+
+## What we learned
+
+- Sorbet is powerful enough to fit many needs
+- Stripe engineers want even faster feedback cycles
+- Adding types to a codebase takes time
+
+---
+
+## Building editor tools for Sorbet
+
+Jan 2018 – ···
 
 ---
 
