@@ -51,11 +51,14 @@ Note:
 ## Ruby at Stripe
 
 - Ruby is the primary programming language
-  - No Rails
-  - Enforced subset of Ruby
+
+  - Enforced subset of Ruby (Rubocop!)
+  - Not using Rails
+
 - Most product code is in a monorepo (intentionally!)
-- ~10 macroservices with a few microservices
-- New code mostly goes into an existing service
+
+  - ~10 macroservices with a few microservices
+  - New code mostly goes into an existing service
 
 Note:
 
@@ -128,7 +131,7 @@ Note:
 
 # By the way, this is live
 
-http://sorbet.run
+https://sorbet.run
 
 <div style="height: 400px">
 ![](img/qrcode.png)
