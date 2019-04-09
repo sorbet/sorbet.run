@@ -115,25 +115,6 @@ http://sorbet.org
 
 ---
 
-### Background
-
-### State of Sorbet at Stripe
-
-# The Road to Open Source
-
----
-
-## Ruby 3 will have Types!
-
-- We are very happy to be a part of its development
-- See Matz’s, Satourosan’s and Endosan’s talks
-- Will not have inline definitions
-- Will have have side `.rbi` files
-- Close to but not quite Ruby format
-- Sorbet will understand both `.rbi` formats
-
----
-
 ## LSP
 
 ---
@@ -182,6 +163,25 @@ Note:
 - Our friends over at Sourcegraph already have LSP support
 - We gave them access to the Sorbet sourcecode and they took our webasm pipeline
   and exposed our `--lsp` mode and magically it worked!
+
+---
+
+### Background
+
+### State of Sorbet at Stripe
+
+# The Road to Open Source
+
+---
+
+## Ruby 3 will have Types!
+
+- We are very happy to be a part of its development
+- See Matz’s, Satourosan’s and Endosan’s talks
+- Will not have inline definitions
+- Will have have side `.rbi` files
+- Close to but not quite Ruby format
+- Sorbet will understand both `.rbi` formats
 
 ---
 
