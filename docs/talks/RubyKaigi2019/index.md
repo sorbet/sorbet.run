@@ -90,23 +90,6 @@ Note:
 
 ---
 
-## Open source?
-
-- Yes! Soon.
-- Already in Private Beta
-  - 3 other companies contributed code
-  - 5 testing it as users
-- Want in?
-  - sorbet@stripe.com
-
----
-
-## Announcement: Docs!
-
-http://sorbet.org
-
----
-
 ### Background
 
 # State of Sorbet at Stripe
@@ -182,6 +165,23 @@ Note:
 - Will have have side `.rbi` files
 - Close to but not quite Ruby format
 - Sorbet will understand both `.rbi` formats
+
+---
+
+## Srobet open source?
+
+- Yes! Soon.
+- Already in Private Beta
+  - 3 other companies contributed code
+  - 5 testing it as users
+- Want in?
+  - sorbet@stripe.com
+
+---
+
+## Announcement: Docs!
+
+http://sorbet.org
 
 ---
 
