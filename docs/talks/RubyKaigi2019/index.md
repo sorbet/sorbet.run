@@ -101,6 +101,12 @@ Note:
 
 ---
 
+## Announcement: Docs!
+
+http://sorbet.org
+
+---
+
 ### Background
 
 # Why Gradual Typing
