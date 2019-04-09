@@ -81,16 +81,6 @@ Note:
 - Want in? 
   - sorbet@stripe.com
 
-Note:
-
-Now open: https://sorbet.run/#%221%22%20%2B%202
-
----
-Try it ↓
-
-https://sorbet.run
-
-
 ---
 ### Background
 # Why Gradual Typing
