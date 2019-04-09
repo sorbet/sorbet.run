@@ -226,7 +226,10 @@ https://github.com/sorbet/sorbet-typed/
 ---
 
 ## DSL Extension (by Shopify)
-
+```ruby
+attribute my_id, :integer
+```
+becomes
 ```ruby
 sig { returns(T.nilable(::Integer)) }
 def my_id; end
@@ -239,7 +242,7 @@ def my_id=(new_value); end
 ```
 
 ---
-
+## Rails ActiveRecord
 ```ruby
 class Product < ApplicationRecord
   attribute :shop_id, :big_integer
@@ -254,7 +257,7 @@ end
 
 ---
 
-## Rails
+## Typechecking Rails
 
 ```
 ❯ rails new blog
@@ -318,6 +321,6 @@ TODO
 
 ---
 
-Thank you!
+# Thank you!
 
 sorbet@stripe.com
