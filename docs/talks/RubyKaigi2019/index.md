@@ -133,7 +133,7 @@ http://sorbet.org
 
 ## Jump To Definition
 
-![](img/jump2Def2.gif)
+![](img/jump2Def.gif)
 
 ---
 
