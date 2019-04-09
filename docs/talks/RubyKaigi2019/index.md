@@ -8,6 +8,16 @@ PT starts talking here
 
 ---
 
+- About Stripe
+
+- Adopting Sorbet at Stripe
+
+- Editor Tools for Sorbet
+
+- The Road to Open Source
+
+---
+
 - **About Stripe**
 
 - Adopting Sorbet at Stripe
