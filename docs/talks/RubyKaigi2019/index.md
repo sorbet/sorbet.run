@@ -10,9 +10,9 @@ PT starts talking here
 
 # Background
 
-### Why Gradual Typing
+### State of Sorbet at Stripe
 
-### State of Sorbet
+### The Road to Open Source
 
 ---
 
@@ -109,17 +109,17 @@ http://sorbet.org
 
 ### Background
 
-# Why Gradual Typing
+# State of Sorbet at Stripe
 
-### State of Sorbet
+### The Road to Open Source
 
 ---
 
 ### Background
 
-### Why Gradual Typing
+### State of Sorbet at Stripe
 
-# State of Sorbet
+# The Road to Open Source
 
 ---
 
