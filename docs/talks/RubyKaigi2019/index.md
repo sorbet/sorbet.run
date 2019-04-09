@@ -177,7 +177,7 @@ Note:
 ## Ruby 3 will have Types!
 
 - We are very happy to be a part of its development
-- See Matz’s, Satourosan’s and Endosan’s talks
+- See talks by Matz, Soutarosan and Endosan
 - Will not have inline definitions
 - Will have have side `.rbi` files
 - Close to but not quite Ruby format
