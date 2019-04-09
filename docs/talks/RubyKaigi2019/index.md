@@ -245,7 +245,7 @@ Jan 2018 – ···
 
 ---
 
-# By the way, this is live
+### By the way, this is live
 
 https://sorbet.run
 
