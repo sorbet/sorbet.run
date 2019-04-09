@@ -8,11 +8,13 @@ PT starts talking here
 
 ---
 
-# Background
+- **About Stripe**
 
-### State of Sorbet at Stripe
+- Adopting Sorbet at Stripe
 
-### The Road to Open Source
+- Editor tools for Sorbet
+
+- The Road to Open Source
 
 ---
 
@@ -93,17 +95,13 @@ Note:
 
 ---
 
-### Background
+- About Stripe
 
-# State of Sorbet at Stripe
+- **Adopting Sorbet at Stripe**
 
-### The Road to Open Source
+- Editor tools for Sorbet
 
----
-
-## Adopting Sorbet as much as possible
-
-June 2018 – December 2018
+- The Road to Open Source
 
 ---
 
@@ -222,9 +220,13 @@ end
 
 ---
 
-## Building editor tools for Sorbet
+- About Stripe
 
-Jan 2018 – ···
+- Adopting Sorbet at Stripe
+
+- **Editor tools for Sorbet**
+
+- The Road to Open Source
 
 ---
 
@@ -277,11 +279,13 @@ Note:
 
 ---
 
-### Background
+- About Stripe
 
-### State of Sorbet at Stripe
+- Adopting Sorbet at Stripe
 
-# The Road to Open Source
+- Editor tools for Sorbet
+
+- **The Road to Open Source**
 
 ---
 
