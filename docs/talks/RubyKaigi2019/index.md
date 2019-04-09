@@ -126,11 +126,11 @@ Note:
 - Documentation
 - 
 ---
-By the way, this is live
+# By the way, this is live
 
 http://sorbet.run
 
-<div style="height: 500px">
+<div style="height: 400px">
 ![](img/qrcode.png)
 </div>
 
