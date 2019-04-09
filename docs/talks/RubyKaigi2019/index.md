@@ -68,7 +68,7 @@ Note:
 
 ---
 
-## Scale
+## Scale of Engineering at Stripe
 
 - Millions of lines of code
 - Hundreds of engineers
@@ -107,9 +107,10 @@ Note:
 
 ### Usage stats at Stripe
 
-- 100% of files report constant-related errors
-- 80% of files report method-related errors
-- 63% of call sites have a type
+- **7 month** roll out (June 2018 – December 2018)
+- **100%** of files report constant-related errors
+- **80%** of files report method-related errors
+- **63%** of call sites have a type
 
 ---
 
@@ -254,7 +255,7 @@ end
 
 ---
 
-### Try it yourself!
+## Try it yourself!
 
 https://sorbet.run
 
