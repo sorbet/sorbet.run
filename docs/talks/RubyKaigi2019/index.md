@@ -485,7 +485,7 @@ def my_id; end
 
 ```bash
 ❯ git grep -h typed: | sort | uniq -c
-   2 # typed: false
+    2 # typed: false
   120 # typed: true
 ```
 
