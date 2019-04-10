@@ -588,8 +588,8 @@ Note:
 
 ## 🎉 Ruby 3 & Types!
 
-- Ruby 3 stdlib will have ship with type definitions
-- We're collborating closely with the Ruby core team
+- Ruby 3 stdlib will ship with type definitions
+- We're collaborating closely with the Ruby core team
 - See talks by **@matz**, **@soutaro**, and **@mame**
 
 ---
