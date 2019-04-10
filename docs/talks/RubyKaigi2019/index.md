@@ -32,8 +32,6 @@ PT starts talking here
 - Customers report 59% more developer productivity after deploying Stripe
 - [stripe.com/jobs](http://stripe.com/jobs)
 
-Note:
-
 ---
 
 ## Developer Productivity
@@ -124,7 +122,7 @@ Note:
 ```
 
 <!--
-Note:
+Notes:
 The alternative to this would be to ignore the file entirely.
 -->
 
