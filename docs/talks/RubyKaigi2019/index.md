@@ -30,7 +30,7 @@ PT starts talking here
 - More than 80% of American adults bought something on Stripe in 2017
 - 1,700 people in 10 offices around the world
 - Customers report 59% more developer productivity after deploying Stripe
-- https://stripe.com/jobs
+- [stripe.com/jobs](https://stripe.com/jobs)
 
 ---
 
