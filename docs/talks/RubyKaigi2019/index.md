@@ -82,10 +82,10 @@ Note:
 
 ## Collaborators
 
-- Jeff Foster (PLUM): RDL (type annotations for stdlib!)
-- @charliesome (GitHub): Ruby parser
-- @soutaro: Steep
-- @mame: Type profiler
+- **Jeff Foster** (PLUM) – RDL (type annotations for stdlib!)
+- **@charliesome** (GitHub) – Ruby parser
+- **@soutaro** – Steep
+- **@mame** – Type profiler
 
 ---
 
