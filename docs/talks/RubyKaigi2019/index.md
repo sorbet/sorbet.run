@@ -30,7 +30,7 @@ PT starts talking here
 - More than 80% of American adults bought something on Stripe in 2017
 - 1,700 people in 10 offices around the world
 - Customers report 59% more developer productivity after deploying Stripe
-- [stripe.com/jobs](http://stripe.com/jobs)
+- https://stripe.com/jobs
 
 ---
 
@@ -331,7 +331,7 @@ have something else to announce :)
 
 ---
 
-## http://sorbet.org
+## https://sorbet.org
 
 We are releasing the docs today!
 
