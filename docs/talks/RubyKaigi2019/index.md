@@ -291,23 +291,22 @@ Note:
 
 ---
 
-## Ruby 3 will have Types!
+## 🎉 Ruby 3 & Types!
 
-- We are very happy to be a part of its development
-- See talks by Matz, Soutarosan and Endosan
-- Stdlib will have official type definitions
+- Ruby 3 stdlib will have ship with type definitions
+- We're collborating closely with the Ruby core team
+- See talks by **@matz**, **@soutaro**, and **@mame**
 
 ---
 
-## Sorbet open source?
+## 🎉 Open source soon!
 
-- Yes! Soon.
 - Already in Private Beta
   - 3 other core companies contributed code
   - 5 testing it as users
 - Want in?
-  - sorbet@stripe.com
-  - Tell us about your LOC and number of contributors
+  - <sorbet@stripe.com>
+  - Describe your setup (LOC? number of contributors?)
 
 Note:
 - Coinbase
@@ -318,11 +317,11 @@ Note:
 
 ## Why not open source yet?
 
-- Philosophy: Ship something good
-- Add more beta folks in batches
-- Mix of small, medium, and large codebases
-- Once the experience is good for a batch, ship it
-- This summer
+- Philosophy: Make experience great
+  - Slowly expand private beta
+  - Mix of small, medium, and large codebases
+  - Once the experience is good for a batch, ship it
+- Date: Summer 2019
 - https://stripe.com/blog
 
 Note:
@@ -331,17 +330,30 @@ have something else to announce :)
 
 ---
 
-## https://sorbet.org
+## 🎉 https://sorbet.org
 
 We are releasing the docs today!
 
 ---
 
-## Gemfile
+## 🎉 Open source tooling
+
+Sneak peak:
 
 ```ruby
+# Gemfile
 gem 'sorbet', :group => :development
 gem 'sorbet-runtime'
+```
+
+```bash
+❯ srb init
+...
+```
+
+```bash
+❯ srb
+No errors! Great job
 ```
 
 Note:
