@@ -101,111 +101,406 @@ Note:
 
 ---
 
-### Usage stats at Stripe
+### Sorbet at Stripe Breakdown
 
-- **7 month** roll out (June 2018 – December 2018)
-- **100%** of files report constant-related errors
-- **80%** of files report method-related errors
-- **63%** of call sites have a type
+- **8 months** building from scratch (Oct 2017 – May 2018)
+- **7 months** rolling out (Jun 2018 – Dec 2018)
+- **4+ months** on editor and OSS tooling (Jan 2019 – ···)
 
 ---
 
-### 100% of files report constant-related errors
+### Sorbet at Stripe Breakdown
+
+- <span style="visibility: hidden;">**8 months** building from scratch (Oct 2017 – May 2018)</span>
+- **7 months** rolling out (Jun 2018 – Dec 2018)
+- <span style="visibility: hidden;">**4+ months** on editor and OSS tooling (Jan 2019 – ···)</span>
+
+Note:
+
+When adopting Sorbet at Stripe, we focused on identifying errors, and then
+catching those errors in as many places as possible.
+
+Let's look at three (of them many) kinds of errors we caught.
+
+---
+
+### Uninitialized constant errors
 
 ```ruby
-  # typed: false
 
-  class Hello; end
+class Hello
 
-  Helo.new
-# ^^^^ error: Unable to resolve constant: `Helo`
+end
+
+def main
+  puts Helo.new
+end
+
+main
 ```
 
-<!--
-Notes:
-The alternative to this would be to ignore the file entirely.
--->
+```console
+
+
+
+❯
+```
 
 ---
 
-### `# typed: false`
+### Uninitialized constant errors
+
+```ruby
+
+class Hello
+
+end
+
+def main
+  puts Helo.new
+end
+
+main
+```
+
+```console
+❯ ruby hello.rb
+hello.rb:7:in `main': uninitialized constant Helo (NameError)
+Did you mean?  Hello
+        from hello.rb:12:in `<main>'
+```
+
+---
+
+### Uninitialized constant errors
 
 ```ruby
 # typed: false
-
-def main
-  [].to_hash
+class Hello
 
 end
+
+def main
+  puts Helo.new
+end
+
+main
+```
+
+```console
+❯ ruby hello.rb
+hello.rb:7:in `main': uninitialized constant Helo (NameError)
+Did you mean?  Hello
+        from hello.rb:12:in `<main>'
 ```
 
 ---
 
-### `# typed: true`
+### Uninitialized constant errors
+
+```ruby
+# typed: false
+class Hello
+
+end
+
+def main
+  puts Helo.new
+end
+
+main
+```
+
+```console
+❯ srb
+hello.rb:7: Unable to resolve constant `Helo`
+     7 |  puts Helo.new
+               ^^^^
+```
+
+---
+
+### 🎉 100% of Ruby files at Stripe!
+
+```ruby
+# typed: false
+class Hello
+
+end
+
+def main
+  puts Helo.new
+end
+
+main
+```
+
+```console
+❯ srb
+hello.rb:7: Unable to resolve constant `Helo`
+     7 |  puts Helo.new
+               ^^^^
+```
+
+---
+
+### Undefined method errors
+
+```ruby
+# typed: false
+class Hello
+  def greeting; 'Hello, world!'; end
+end
+
+def main
+  puts Hello.new.greet
+end
+
+main
+```
+
+```console
+
+
+
+❯
+```
+
+---
+
+### Undefined method errors
+
+```ruby
+# typed: false
+class Hello
+  def greeting; 'Hello, world!'; end
+end
+
+def main
+  puts Hello.new.greet
+end
+
+main
+```
+
+```console
+❯ ruby hello.rb
+hello.rb:7:in `main': undefined method `greet'
+Did you mean?  greeting
+        from hello.rb:10:in `<main>'
+```
+
+---
+
+### Undefined method errors
 
 ```ruby
 # typed: true
+class Hello
+  def greeting; 'Hello, world!'; end
+end
 
 def main
-  [].to_hash
-# ^^^^^^^^^^ error: Method `to_hash` does not exist
+  puts Hello.new.greet
 end
+
+main
+```
+
+```console
+❯ ruby hello.rb
+hello.rb:7:in `main': undefined method `greet'
+Did you mean?  greeting
+        from hello.rb:10:in `<main>'
 ```
 
 ---
 
-### 80% of files report method-related errors
+### Undefined method errors
 
 ```ruby
 # typed: true
+class Hello
+  def greeting; 'Hello, world!'; end
+end
 
 def main
-  [].to_hash
-# ^^^^^^^^^^ error: Method `to_hash` does not exist
+  puts Hello.new.greet
 end
+
+main
+```
+
+```console
+❯ srb
+hello.rb:7: Method greet does not exist on `Hello`
+     7 |  puts Hello.new.greet
+               ^^^^^^^^^^^^^^^
 ```
 
 ---
 
-### Untyped call sites
+### 🎉 80% of Ruby files at Stripe!
 
 ```ruby
-  # typed: true
+# typed: true
+class Hello
+  def greeting; 'Hello, world!'; end
+end
 
+def main
+  puts Hello.new.greet
+end
 
-  def foo(x)
-    x.to_hash
+main
+```
 
-  end
+```console
+❯ srb
+hello.rb:7: Method greet does not exist on `Hello`
+     7 |  puts Hello.new.greet
+               ^^^^^^^^^^^^^^^
 ```
 
 ---
 
-### Typed call sites
+### Types of method arguments
 
 ```ruby
-  # typed: true
+# typed: true
+class Hello
+  def greeting; 'Hello, world!'; end
+end
 
-  sig {params(x: T::Array[[Symbol, String]])}
-  def foo(x)
-    x.to_hash
-  # ^^^^^^^^^ error: Method `to_hash` does not exist
-  end
+def main(hello)
+  puts hello.greet
+end
+
+main(Hello.new)
+```
+
+```console
+
+
+
+❯
 ```
 
 ---
 
-### 63% of call sites have a type
+### Types of method arguments
 
 ```ruby
-  # typed: true
+# typed: true
+class Hello
+  def greeting; 'Hello, world!'; end
+end
 
-  sig {params(x: T::Array[[Symbol, String]])}
-  def foo(x)
-    x.to_hash
-  # ^^^^^^^^^ error: Method `to_hash` does not exist
-  end
+def main(hello)
+  puts hello.greet
+end
+
+main(Hello.new)
 ```
+
+```console
+❯ ruby hello.rb
+hello.rb:7:in `main': undefined method `greet'
+Did you mean?  greeting
+        from hello.rb:10:in `<main>'
+```
+
+---
+
+### Types of method arguments
+
+```ruby
+# typed: true
+class Hello
+  def greeting; 'Hello, world!'; end
+end
+sig {params(hello: Hello).void}
+def main(hello)
+  puts hello.greet
+end
+
+main(Hello.new)
+```
+
+```console
+❯ ruby hello.rb
+hello.rb:7:in `main': undefined method `greet'
+Did you mean?  greeting
+        from hello.rb:10:in `<main>'
+```
+
+---
+
+### Types of method arguments
+
+```ruby
+# typed: true
+class Hello
+  def greeting; 'Hello, world!'; end
+end
+sig {params(hello: Hello).void}
+def main(hello)
+  puts hello.greet
+end
+
+main(Hello.new)
+```
+
+```console
+❯ srb
+hello.rb:7: Method greet does not exist on `Hello`
+     7 |  puts hello.greet
+               ^^^^^^^^^^^
+```
+
+---
+
+### 🎉 63% of method call sites at Stripe!
+
+```ruby
+# typed: true
+class Hello
+  def greeting; 'Hello, world!'; end
+end
+sig {params(hello: Hello).void}
+def main(hello)
+  puts hello.greet
+end
+
+main(Hello.new)
+```
+
+```console
+❯ srb
+hello.rb:7: Method greet does not exist on `Hello`
+     7 |  puts hello.greet
+               ^^^^^^^^^^^
+```
+
+---
+
+### ⏪ Recap: What we achieved
+
+- **100%** of files: catch uninitialized constant errors
+- **80%** of files: potentially catch `NoMethodError`s
+  - **63%** of method call sites: definitely catch `NoMethodError`s
+
+Note:
+
+- ... and these are *only a subset* of the errors we can catch!
+- Proud of our progress, versus our peers, and how early stage we are
+- We like to think our progress is because of how well designed Sorbet is
+
+---
+
+### What our users said
+
+
 
 ---
 
