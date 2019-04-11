@@ -366,7 +366,7 @@ hello.rb:7: Method greet does not exist on `Hello`
 
 ### Even more errors
 
-- What types does a method take?
+- What types does this method take?
 - Could this thing be nil?
 
 ---
