@@ -364,151 +364,109 @@ hello.rb:7: Method greet does not exist on `Hello`
 
 ---
 
-### Types of method arguments
+### Even more errors
+
+- What types does a method take?
+- Could this thing be nil?
+
+---
+
+### &nbsp;
 
 ```ruby
-# typed: true
-class Hello
-  def greeting; 'Hello, world!'; end
+
+def do_thing(x)
+  # ...
 end
 
-def main(hello)
-  puts hello.greet
-end
-
-main(Hello.new)
-```
-
-```console
-
-
-
-❯
+do_thing(nil) # is this ok?
+do_thing('')  # is this ok?
 ```
 
 ---
 
-### Types of method arguments
+### &nbsp;
 
 ```ruby
-# typed: true
-class Hello
-  def greeting; 'Hello, world!'; end
+sig {params(x: String).void}
+def do_thing(x)
+  # ...
 end
 
-def main(hello)
-  puts hello.greet
-end
-
-main(Hello.new)
-```
-
-```console
-❯ ruby hello.rb
-hello.rb:7:in `main': undefined method `greet'
-Did you mean?  greeting
-        from hello.rb:10:in `<main>'
+do_thing(nil) # is this ok?
+do_thing('')  # is this ok?
 ```
 
 ---
 
-### Types of method arguments
+### 🎉 62% of methods at Stripe have a signature!
 
 ```ruby
-# typed: true
-class Hello
-  def greeting; 'Hello, world!'; end
-end
-sig {params(hello: Hello).void}
-def main(hello)
-  puts hello.greet
+sig {params(x: String).void}
+def do_thing(x)
+  # ...
 end
 
-main(Hello.new)
-```
-
-```console
-❯ ruby hello.rb
-hello.rb:7:in `main': undefined method `greet'
-Did you mean?  greeting
-        from hello.rb:10:in `<main>'
-```
-
----
-
-### Types of method arguments
-
-```ruby
-# typed: true
-class Hello
-  def greeting; 'Hello, world!'; end
-end
-sig {params(hello: Hello).void}
-def main(hello)
-  puts hello.greet
-end
-
-main(Hello.new)
-```
-
-```console
-❯ srb
-hello.rb:7: Method greet does not exist on `Hello`
-     7 |  puts hello.greet
-               ^^^^^^^^^^^
-```
-
----
-
-### 🎉 63% of method call sites at Stripe!
-
-```ruby
-# typed: true
-class Hello
-  def greeting; 'Hello, world!'; end
-end
-sig {params(hello: Hello).void}
-def main(hello)
-  puts hello.greet
-end
-
-main(Hello.new)
-```
-
-```console
-❯ srb
-hello.rb:7: Method greet does not exist on `Hello`
-     7 |  puts hello.greet
-               ^^^^^^^^^^^
+do_thing(nil) # is this ok?
+do_thing('')  # is this ok?
 ```
 
 ---
 
 ### ⏪ Recap: What we achieved
 
-- **100%** of files: catch uninitialized constant errors
-- **80%** of files: potentially catch `NoMethodError`s
-  - **63%** of method call sites: definitely catch `NoMethodError`s
+- **100%** of files: `# typed: false`
+  - Catch uninitialized constants!
+- **81%** of files: `# typed: true`
+  - Catch `NoMethodError`s!
+- **62%** of methods have signatures
+  - Catch no type errors!
 
 Note:
 
-- ... and these are *only a subset* of the errors we can catch!
 - Proud of our progress, versus our peers, and how early stage we are
 - We like to think our progress is because of how well designed Sorbet is
 
 ---
 
-### What our users said
-
-
+## What our users say
 
 ---
 
-### What we learned
+### A tool for understanding
+
+![](img/once-every-never.png)
+
+---
+
+### An interactive experience
+
+![](img/billing-loves-sorbet.png)
+
+---
+
+### Editor tooling
+
+![](img/pay-money.png)
+
+Note:
+
+Somewhere along the way we built a very rough IDE prototype.
+People loved it.
+
+---
+
+## What we learned
 
 - Sorbet is powerful enough to fit many needs
-- Stripe engineers want even faster feedback cycles
+- Stripe engineers want editor tooling!
 - Adding types to a codebase takes time
+  - ... but automated tooling can make it take less time
+
+Note:
+
+At first, we would have been ok with taking 20 minutes.
+Now, we're getting asked for *sub-second* response times.
 
 ---
 
@@ -555,7 +513,7 @@ Note:
 
 https://sorbet.run
 
-(Works best on desktop)
+(IDE features only work on desktop)
 
 ---
 
@@ -809,10 +767,10 @@ def my_id; end
 ## Closing
 
 - Editors under active development
-- Already in private beta with 8 folks
-- Open sourcing soon™
-- Using gems for deployment
-- Rails works
+- Open sourcing very soon!
+  - Already in private beta with 8 folks
+- Works with Rails
+- Check out [sorbet.org](https://sorbet.org)
 
 ---
 
