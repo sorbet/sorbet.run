@@ -473,7 +473,8 @@ People loved it.
 ## What we learned
 
 - Sorbet is powerful enough to fit many needs
-- Stripe engineers want editor tooling!
+- People like using Sorbet
+  - ... but they'd like it even more in their editor
 - Adding types to a codebase takes time
   - ... but automated tooling can make it take less time
 
@@ -496,7 +497,23 @@ Now, we're getting asked for *sub-second* response times.
 
 ---
 
-### VSCode
+### Sorbet at Stripe Breakdown
+
+- **8 months** building from scratch (Oct 2017 – May 2018)
+- **7 months** rolling out (Jun 2018 – Dec 2018)
+- **4+ months** on editor and OSS tooling (Jan 2019 – ···)
+
+---
+
+### Sorbet at Stripe Breakdown
+
+- <span style="visibility: hidden;">**8 months** building from scratch (Oct 2017 – May 2018)</span>
+- <span style="visibility: hidden;">**7 months** rolling out (Jun 2018 – Dec 2018)</span>
+- **4+ months** on editor and OSS tooling (Jan 2019 – ···)
+
+---
+
+### VS Code
 
 ![](img/vscode.png)
 
@@ -505,19 +522,19 @@ Note:
 
 ---
 
-### Typo
+### Errors & Hover
 
 ![](img/typo.gif)
 
 ---
 
-### Jump To Definition
+### Go To Definition
 
 ![](img/jump2Def.gif)
 
 ---
 
-### Autocomplete and Docs
+### Autocomplete + Docs
 
 ![](img/autocompleteAndDocs1.gif)
 
