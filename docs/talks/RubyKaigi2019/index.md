@@ -397,6 +397,8 @@ do_thing('')  # is this ok?
 do_thing(nil) # is this ok?
 ```
 
+---
+
 ### &nbsp;
 
 ```ruby
@@ -405,8 +407,8 @@ def do_thing(x)
   # ...
 end
 
-do_thing('')  # this is ok
-do_thing(nil) # this is not ok
+do_thing('')  # this is ok!
+do_thing(nil) # this is not ok!
 ```
 
 ---
@@ -419,8 +421,8 @@ def do_thing(x)
   # ...
 end
 
-do_thing('')  # this is ok
-do_thing(nil) # this is not ok
+do_thing('')  # this is ok!
+do_thing(nil) # this is not ok!
 ```
 
 ---
