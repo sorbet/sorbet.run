@@ -364,7 +364,7 @@ hello.rb:7: Method greet does not exist on `Hello`
 
 ---
 
-### Even more errors
+### More than just errors
 
 - What types does this method take?
 - Could this thing be nil?
@@ -473,10 +473,8 @@ People loved it.
 ## What we learned
 
 - Sorbet is powerful enough to fit many needs
-- People like using Sorbet
-  - ... but they'd like it even more in their editor
-- Adding types to a codebase takes time
-  - ... but automated tooling can make it take less time
+- People want Sorbet in their editor
+- Automated tooling can make adoption faster
 
 Note:
 
@@ -554,12 +552,7 @@ https://sorbet.run
 
 Note:
 
-- What website is this?
-- It is github!
-- Beauty of our backend is it is generic
-- Our friends over at Sourcegraph already have LSP support
-- We gave them access to the Sorbet sourcecode and they took our webasm pipeline
-  and exposed our `--lsp` mode and magically it worked!
+- Sourcegraph is a web-based code search and navigation tool for dev teams.
 
 ---
 
