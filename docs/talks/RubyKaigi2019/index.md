@@ -1,19 +1,3 @@
-# Introductions
-
-Note:
-
-- pt: Stanford grad, Previously at Facebook on HHVM and Hack
-
-- jez: I'm Jake. I've been at Stripe for 2 years, working on a bunch of things,
-  but most recently on the Sorbet team. Before Stripe, I was in school at
-  Carnegie Mellon, where I was studying programming languages.
-
-- Talk about the other 6 folks
-
-PT starts talking here
-
----
-
 - **About Stripe**
 
 - Adopting Sorbet at Stripe
@@ -52,6 +36,8 @@ PT starts talking here
 Note:
 
 - I'm the Tech Lead
+- Responsible from the moment you `git branch` until your code is in prod
+- If a Stripe developer is having a bad day, it is our problem
 
 ---
 
@@ -72,9 +58,9 @@ Note:
 
 ## Scale of Engineering at Stripe
 
-- Millions of lines of code
 - Hundreds of engineers
 - Thousands of commits per day
+- Millions of lines of code
 
 Note:
 
@@ -84,12 +70,20 @@ Note:
 
 ---
 
-## Collaborators
+## Collaboration
 
-- **Jeff Foster** (PLUM) – RDL (type annotations for stdlib!)
-- **@charliesome** (GitHub) – Ruby parser
+- **Jeff Foster** (PLUM/Tufts) – RDL
+- **@charliesome** (GitHub) – Ruby Parser
 - **@soutaro** – Steep
 - **@mame** – Type profiler
+- **Matz** – Ruby
+- **Shopify** – Core Sorbet contributor
+- **Coinbase** – Core Sorbet contributor
+- **Sourcegraph** – Core Sorbet contributor
+
+Note:
+- soutaro-san
+- mame-san
 
 ---
 
@@ -665,6 +659,9 @@ https://github.com/sorbet/sorbet-typed/
 
 > A central repository for sharing type defintions for Ruby gems
 
+Note:
+- A way to share type definitions for gems
+
 ---
 
 ## DSL Extension (by Shopify)
@@ -703,12 +700,12 @@ attribute my_id, :integer
 
 ```yaml
 # plugins.yaml
-attribute: my_id.rb
+attribute: attribute.rb
 ```
 
 ```ruby
-# my_id.rb
-prop, type = ARGV[5].gsub("attribute ", "").delete(":").split(",")
+# attribute.rb
+prop, type = STDIN.gsub("attribute ", "").delete(":").split(",")
 
 puts "sig {returns(T.nilable(#{type.upcase}))}"
 puts "def #{prop}; end"
@@ -743,6 +740,33 @@ def my_id; end
   120 # typed: true
 ```
 
+Note:
+- 98.3% of files are true
+
+---
+
+## RubyGems.org
+
+- Real codebase
+- 58% `typed: true` out of the box
+
+```bash
+❯ git grep -h typed: | sort | uniq -c
+ 189 # typed: false
+ 265 # typed: true
+```
+
+---
+
+## Gitlab
+
+- Big codebase
+- X% `typed: true` out of the box
+
+```bash
+❯ git grep -h typed: | sort | uniq -c
+```
+
 ---
 
 ## Typechecking Rails
@@ -759,10 +783,14 @@ def my_id; end
 - Open sourcing very soon!
   - Already in private beta with 8 folks
 - Works with Rails
-- Check out [sorbet.org](https://sorbet.org)
+- Docs are live at [sorbet.org](https://sorbet.org)
 
 ---
 
 # Thank you!
 
 Brace yourselves, Sorbet is coming
+
+[sorbet.org](https://sorbet.org)
+
+![](img//sorbet-logo-purple-sparkles.svg) <!-- .element: style="background: inherit; border: 0; box-shadow: none" -->
