@@ -762,12 +762,14 @@ Note:
 
 ```bash
 ❯ git grep -h typed: | sort | uniq -c
-  TODO # typed: false
-  TODO # typed: true
+    47 # typed: ignore
+  6516 # typed: false
+  1579 # typed: true
 ```
 
 - Big codebase
-- TODO% `typed: true` out of the box
+- 99% `typed: false` out of the box
+- 24% `typed: true` out of the box
 
 ---
 
