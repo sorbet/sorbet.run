@@ -2,8 +2,12 @@
 
 Note:
 
-- jez: Carnegie Mellon grad, previous experience rolling out Flow at Stripe.
 - pt: Stanford grad, Previously at Facebook on HHVM and Hack
+
+- jez: I'm Jake. I've been at Stripe for 2 years, working on a bunch of things,
+  but most recently on the Sorbet team. Before Stripe, I was in school at
+  Carnegie Mellon, where I was studying programming languages.
+
 - Talk about the other 6 folks
 
 PT starts talking here
@@ -30,7 +34,7 @@ PT starts talking here
 - More than 80% of American adults bought something on Stripe in 2017
 - 1,700 people in 10 offices around the world
 - Customers report 59% more developer productivity after deploying Stripe
-- [stripe.com/jobs](https://stripe.com/jobs)
+- We're hiring! → [stripe.com/jobs](https://stripe.com/jobs)
 
 ---
 
@@ -101,7 +105,7 @@ Note:
 
 ---
 
-### Sorbet at Stripe Breakdown
+## Adopting Sorbet at Stripe
 
 - **8 months** building from scratch (Oct 2017 – May 2018)
 - **7 months** rolling out (Jun 2018 – Dec 2018)
@@ -109,42 +113,46 @@ Note:
 
 ---
 
-### Sorbet at Stripe Breakdown
+## Adopting Sorbet at Stripe
 
-- <span style="visibility: hidden;">**8 months** building from scratch (Oct 2017 – May 2018)</span>
+- **8 months** building from scratch (Oct 2017 – May 2018)
+- <span style="opacity: 0.3;">**7 months** rolling out (Jun 2018 – Dec 2018)</span>
+- <span style="opacity: 0.3;">**4+ months** on editor and OSS tooling (Jan 2019 – ···)</span>
+
+---
+
+## Adopting Sorbet at Stripe
+
+- <span style="opacity: 0.3;">**8 months** building from scratch (Oct 2017 – May 2018)</span>
 - **7 months** rolling out (Jun 2018 – Dec 2018)
-- <span style="visibility: hidden;">**4+ months** on editor and OSS tooling (Jan 2019 – ···)</span>
+- <span style="opacity: 0.3;">**4+ months** on editor and OSS tooling (Jan 2019 – ···)</span>
+
+---
+
+### Uninitialized constant errors
+
+```ruby
+
+class Hello
+
+end
+
+def main
+  puts Helo.new
+end
+
+main
+```
+
+<pre><code>
+
+
+
+</code></pre>
 
 Note:
 
-When adopting Sorbet at Stripe, we focused on identifying errors, and then
-catching those errors in as many places as possible.
-
-Let's look at three (of them many) kinds of errors we caught.
-
----
-
-### Uninitialized constant errors
-
-```ruby
-
-class Hello
-
-end
-
-def main
-  puts Helo.new
-end
-
-main
-```
-
-```console
-
-
-
-❯
-```
+Focused on identifying then preventing errors.
 
 ---
 
@@ -175,31 +183,7 @@ Did you mean?  Hello
 ### Uninitialized constant errors
 
 ```ruby
-# typed: false
-class Hello
 
-end
-
-def main
-  puts Helo.new
-end
-
-main
-```
-
-```console
-❯ ruby hello.rb
-hello.rb:7:in `main': uninitialized constant Helo (NameError)
-Did you mean?  Hello
-        from hello.rb:12:in `<main>'
-```
-
----
-
-### Uninitialized constant errors
-
-```ruby
-# typed: false
 class Hello
 
 end
@@ -223,7 +207,7 @@ hello.rb:7: Unable to resolve constant `Helo`
 ### 🎉 100% of Ruby files at Stripe!
 
 ```ruby
-# typed: false
+
 class Hello
 
 end
@@ -247,7 +231,7 @@ hello.rb:7: Unable to resolve constant `Helo`
 ### Undefined method errors
 
 ```ruby
-# typed: false
+
 class Hello
   def greeting; 'Hello, world!'; end
 end
@@ -259,19 +243,18 @@ end
 main
 ```
 
-```console
+<pre><code>
 
 
 
-❯
-```
+</code></pre>
 
 ---
 
 ### Undefined method errors
 
 ```ruby
-# typed: false
+
 class Hello
   def greeting; 'Hello, world!'; end
 end
@@ -362,6 +345,13 @@ hello.rb:7: Method greet does not exist on `Hello`
                ^^^^^^^^^^^^^^^
 ```
 
+Note:
+
+Why only 80%?
+
+Getting files into `typed: true` means fixing a lot of errors!
+We built tools to automate the process, but it's still work.
+
 ---
 
 ### More than just errors
@@ -379,8 +369,8 @@ def do_thing(x)
   # ...
 end
 
-do_thing('')  # is this ok?
-do_thing(nil) # is this ok?
+do_thing('some string')  # is this ok?
+do_thing(nil)            # is this ok?
 ```
 
 ---
@@ -393,8 +383,8 @@ def do_thing(x)
   # ...
 end
 
-do_thing('')  # is this ok?
-do_thing(nil) # is this ok?
+do_thing('some string')  # is this ok?
+do_thing(nil)            # is this ok?
 ```
 
 ---
@@ -407,8 +397,8 @@ def do_thing(x)
   # ...
 end
 
-do_thing('')  # this is ok!
-do_thing(nil) # this is not ok!
+do_thing('some string')  # 😎 this is ok!
+do_thing(nil)            # ❌ this is not ok!
 ```
 
 ---
@@ -421,20 +411,17 @@ def do_thing(x)
   # ...
 end
 
-do_thing('')  # this is ok!
-do_thing(nil) # this is not ok!
+do_thing('some string')  # 😎 this is ok!
+do_thing(nil)            # ❌ this is not ok!
 ```
 
 ---
 
 ### ⏪ Recap: What we achieved
 
-- **100%** of files: `# typed: false`
-  - Catch uninitialized constants!
-- **81%** of files: `# typed: true`
-  - Catch `NoMethodError`s!
-- **62%** of methods have signatures
-  - Catch no type errors!
+- **100%** of files: catch uninitialized constants!
+- **81%** of files: catch NoMethodError's!
+- **62%** of methods have signatures!
 
 Note:
 
@@ -459,14 +446,13 @@ Note:
 
 ---
 
-### Editor tooling
+### Sorbet editor extension
 
 ![](img/pay-money.png)
 
 Note:
 
-Somewhere along the way we built a very rough IDE prototype.
-People loved it.
+One weekend, Dmitry built a prototype of an editor extension integrating Sorbet.
 
 ---
 
@@ -483,6 +469,22 @@ Now, we're getting asked for *sub-second* response times.
 
 ---
 
+## Adopting Sorbet at Stripe
+
+- <span style="opacity: 0.3;">**8 months** building from scratch (Oct 2017 – May 2018)</span>
+- **7 months** rolling out (Jun 2018 – Dec 2018)
+- <span style="opacity: 0.3;">**4+ months** on editor and OSS tooling (Jan 2019 – ···)</span>
+
+---
+
+## Adopting Sorbet at Stripe
+
+- <span style="opacity: 0.3;">**8 months** building from scratch (Oct 2017 – May 2018)</span>
+- <span style="opacity: 0.3;">**7 months** rolling out (Jun 2018 – Dec 2018)</span>
+- **4+ months** on editor and OSS tooling (Jan 2019 – ···)
+
+---
+
 - About Stripe
 
 - Adopting Sorbet at Stripe
@@ -492,22 +494,6 @@ Now, we're getting asked for *sub-second* response times.
 - Announcements
 
 - Sorbet Tooling
-
----
-
-### Sorbet at Stripe Breakdown
-
-- **8 months** building from scratch (Oct 2017 – May 2018)
-- **7 months** rolling out (Jun 2018 – Dec 2018)
-- **4+ months** on editor and OSS tooling (Jan 2019 – ···)
-
----
-
-### Sorbet at Stripe Breakdown
-
-- <span style="visibility: hidden;">**8 months** building from scratch (Oct 2017 – May 2018)</span>
-- <span style="visibility: hidden;">**7 months** rolling out (Jun 2018 – Dec 2018)</span>
-- **4+ months** on editor and OSS tooling (Jan 2019 – ···)
 
 ---
 
@@ -553,6 +539,10 @@ https://sorbet.run
 Note:
 
 - Sourcegraph is a web-based code search and navigation tool for dev teams.
+
+- After Sorbet is open sourced, tools like this will follow.
+
+- Get in touch!
 
 ---
 
