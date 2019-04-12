@@ -640,31 +640,6 @@ Note:
 
 ---
 
-## Intialize
-
-```bash
-❯ srb init
-👋 Hey there!
-This script will get this project ready to use with Sorbet by
-creating a `sorbet/` folder for your project. It will contain:
-
-...
-
-✅ Done!
-This project is now set up for use with Sorbet.
-```
-
----
-
-## Typechecking
-
-```bash
-❯ srb
-No errors! Great job.
-```
-
----
-
 ## An Initialized Project
 
 ```bash
