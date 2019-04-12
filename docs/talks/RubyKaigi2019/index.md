@@ -747,25 +747,27 @@ Note:
 
 ## RubyGems.org
 
-- Real codebase
-- 58% `typed: true` out of the box
-
 ```bash
 ❯ git grep -h typed: | sort | uniq -c
- 189 # typed: false
- 265 # typed: true
+  189 # typed: false
+  265 # typed: true
 ```
+
+- Real codebase
+- 58% `typed: true` out of the box
 
 ---
 
 ## Gitlab
 
-- Big codebase
-- X% `typed: true` out of the box
-
 ```bash
 ❯ git grep -h typed: | sort | uniq -c
+  TODO # typed: false
+  TODO # typed: true
 ```
+
+- Big codebase
+- TODO% `typed: true` out of the box
 
 ---
 
