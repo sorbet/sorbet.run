@@ -768,8 +768,8 @@ Note:
 ```
 
 - Big codebase
-- 99% `typed: false` out of the box
-- 24% `typed: true` out of the box
+- 99% `typed: false` or better
+- 19% `typed: true` out of the box
 
 ---
 
