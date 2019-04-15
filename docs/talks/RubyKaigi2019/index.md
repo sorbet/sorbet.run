@@ -657,7 +657,7 @@ sorbet/
 
 https://github.com/sorbet/sorbet-typed/
 
-> A central repository for sharing type defintions for Ruby gems
+> A central repository for sharing type definitions for Ruby gems
 
 Note:
 - A way to share type definitions for gems
