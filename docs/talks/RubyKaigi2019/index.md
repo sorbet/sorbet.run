@@ -172,6 +172,12 @@ Did you mean?  Hello
         from hello.rb:12:in `<main>'
 ```
 
+Note:
+
+- Maybe we'll hear about it in 15 minutes when the tests catch it
+- Maybe we'll hear about it later that day when we deploy the change
+- Maybe we'll hear about it Sunday night at 2:00 a.m. from a very upset user
+
 ---
 
 ### Uninitialized constant errors
@@ -195,6 +201,10 @@ hello.rb:7: Unable to resolve constant `Helo`
      7 |  puts Helo.new
                ^^^^
 ```
+
+Note:
+
+- Did we actually succeed in preventing these kinds of errors?
 
 ---
 
@@ -266,6 +276,11 @@ hello.rb:7:in `main': undefined method `greet'
 Did you mean?  greeting
         from hello.rb:10:in `<main>'
 ```
+
+Note:
+
+We'd like to be able to use Sorbet to gain even more confidence than tests
+alone.
 
 ---
 
