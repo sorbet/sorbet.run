@@ -806,10 +806,8 @@ Note:
 
 ---
 
-# Thank you!
+# 🙇‍♂️ Thank you
 
-Brace yourselves, Sorbet is coming
+Get ready, Sorbet is coming!
 
 [sorbet.org](https://sorbet.org)
-
-![](img//sorbet-logo-purple-sparkles.svg) <!-- .element: style="background: inherit; border: 0; box-shadow: none" -->
