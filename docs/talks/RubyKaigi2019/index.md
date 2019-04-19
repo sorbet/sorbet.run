@@ -76,7 +76,7 @@ Note:
 - **@charliesome** (GitHub) – Ruby Parser
 - **@soutaro** – Steep
 - **@mame** – Type profiler
-- **Matz** – Ruby
+- **@matz** – Ruby
 - **Shopify** – Core Sorbet contributor
 - **Coinbase** – Core Sorbet contributor
 - **Sourcegraph** – Core Sorbet contributor
@@ -174,9 +174,9 @@ Did you mean?  Hello
 
 Note:
 
-- Maybe we'll hear about it in 15 minutes when the tests catch it
-- Maybe we'll hear about it later that day when we deploy the change
-- Maybe we'll hear about it Sunday night at 2:00 a.m. from a very upset user
+- Maybe we'll hear about it in 5 to 15 minutes when the tests run
+- Maybe we'll hear about it later today when we deploy the change
+- Maybe we'll hear about it 4 in the morning from a very upset user
 
 ---
 
@@ -429,7 +429,7 @@ do_thing(nil)            # ❌ this is not ok!
 ### ⏪ Recap: What we achieved
 
 - **100%** of files: catch uninitialized constants!
-- **81%** of files: catch NoMethodError's!
+- **80%** of files: catch NoMethodError's!
 - **62%** of methods have signatures!
 
 Note:
@@ -465,16 +465,37 @@ One weekend, Dmitry built a prototype of an editor extension integrating Sorbet.
 
 ---
 
-## What we learned
+## And it's fast 💨
 
-- Sorbet is powerful enough to fit many needs
-- People want Sorbet in their editor
-- Automated tooling can make adoption faster
+&nbsp;
+
+&nbsp;
 
 Note:
 
 At first, we would have been ok with taking 20 minutes.
 Now, we're getting asked for *sub-second* response times.
+
+---
+
+## And it's fast 💨
+
+Millions of lines of code...
+
+... completes in seconds.
+
+Note:
+
+At first, we would have been ok with taking 20 minutes.
+Now, we're getting asked for *sub-second* response times.
+
+---
+
+## What we learned
+
+- Sorbet is powerful enough to fit many needs
+- People want Sorbet in their editor
+- Automated tooling can make adoption faster
 
 ---
 
