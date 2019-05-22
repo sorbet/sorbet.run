@@ -145,7 +145,7 @@ main {
           </li><li>
             <a href="#a%20%3D%205%0Aa%20%3D%20%3Asym%0A%0Ab%20%3D%20T.let('str'%2C%20String)%20%23%20Pinned%20to%20a%20String%0Ab%20%3D%20%3Asym">Pinning</a>
           </li><li>
-            <a href="#module%20Fooable%0A%20%20extend%20T%3A%3ASig%0A%20%20abstract!%0A%20%20sig%20%7Babstract.void%7D%0A%20%20def%20foo%0A%20%20end%0Aend%0A%0Aclass%20GoodFooable%0A%20%20include%20Fooable%0A%0A%20%20def%20foo%0A%20%20end%0Aend%0A%0Aclass%20BadFooable%0A%20%20include%20Fooable%0Aend">Interface</a>
+            <a href="#%23%20typed%3A%20true%0Amodule%20Fooable%0A%20%20extend%20T%3A%3ASig%0A%20%20extend%20T%3A%3AHelpers%0A%20%20abstract!%0A%20%20sig%20%7Babstract.void%7D%0A%20%20def%20foo%0A%20%20end%0Aend%0A%0Aclass%20GoodFooable%0A%20%20include%20Fooable%0A%0A%20%20def%20foo%0A%20%20end%0Aend%0A%0Aclass%20BadFooable%0A%20%20include%20Fooable%0Aend">Interface</a>
           </li><li>
             <a href="#if%20Random.rand%20>%200.5%0A%20%20arg%20%3D%201%0Aelse%0A%20%20arg%20%3D%20'1'%0Aend%0A%0Aarg%20%3D%20T.assert_type!(arg%2C%20T.any(Integer%2C%20String))%0A%0Acase%20arg%0Awhen%20Integer%0A%20%20arg%20%2B%202%0Awhen%20String%0A%20%20arg%20%2B%20'2'%0Aend">Union</a>
           </li><li>
