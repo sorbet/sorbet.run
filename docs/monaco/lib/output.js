@@ -109,7 +109,6 @@ function instantiateSorbet() {
                         }
                         var replaced = line
                             .replace(/http:\/\/[^ ]*/, '')
-                            //      .replace(/http:\/\/go\/e\//, 'https://stripe.dev/sorbet/docs/error-reference#%s')
                             .replace('git.corp.stripe.com/stripe-internal', 'github.com/stripe')
                             .replace('-e:', 'editor.rb:');
                         stdout.push(replaced);
