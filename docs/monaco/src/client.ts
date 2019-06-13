@@ -10,6 +10,12 @@ import {typecheck} from './output';
 register();
 
 const element = document.getElementById('editor')!;
+element.addEventListener('click', (e) => {
+  // Markdown links in editor tooltips use `#` as their target and use JS to open the actual link target,
+  // so clicking them will clear window.location.hash and thus the editor.
+  // Prevent that from happening.
+  e.preventDefault();
+});
 
 // Remove leading '#'
 const hash = window.location.hash.slice(1);
