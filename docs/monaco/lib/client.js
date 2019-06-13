@@ -43,6 +43,12 @@ var ruby_1 = require("./ruby");
 var output_1 = require("./output");
 ruby_1.register();
 var element = document.getElementById('editor');
+element.addEventListener('click', function (e) {
+    // Markdown links in editor tooltips use `#` as their target and use JS to open the actual link target,
+    // so clicking them will clear window.location.hash and thus the editor.
+    // Prevent that from happening.
+    e.preventDefault();
+});
 // Remove leading '#'
 var hash = window.location.hash.slice(1);
 var initialValue = hash ? decodeURIComponent(hash) : "# typed: true\nclass A\n  extend T::Sig\n\n  sig {params(x: Integer).returns(String)}\n  def bar(x)\n    x.to_s\n  end\nend\n\ndef main\n  A.new.barr(91)   # error: Typo!\n  A.new.bar(\"91\")  # error: Type mismatch!\nend";
