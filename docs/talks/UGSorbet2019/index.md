@@ -45,7 +45,7 @@ Note:
 
 Note:
 
-- Top languages
+- Top languages by order: Ruby, Yaml, JS, Python, Scala, Go
 - Most product engineers use Ruby.
 - Next language is 2% - bash
 
@@ -162,6 +162,7 @@ Note:   On all axes: in speed, team size, codebase size and time (not
 | `rubocop` | 1,000   |
 <!-- .element: class="fragment"  -->
 
+Note: (not to be spoken) we're actually much harder to measure now, as we have multiple layers of caching. we're somewhere in-between 60K l/s/core and 800M l/s/core
 ---
 
 ## 5. Compatible with Ruby
@@ -244,6 +245,7 @@ end
 foo("1")
 ```
 
+Note: in this example, untyped code violates the signature of written in typed code. This is the core reason we do runtime type validation.
 ---
 ## Why have runtime typechecking?
 
@@ -943,6 +945,42 @@ Note:
 
 # 🙇‍♂️ Thank you
 
-Get ready, Sorbet is coming!
+Sorbet is good! Try it!
 
 [sorbet.org](https://sorbet.org)
+
+Notes: FAQ:
+  How fast is it?
+    - static typechecker: ridiculously fast
+    - runtime one: less than 7% overhead on Stripe in production in practice
+  Is this a typesystem for Ruby3?
+    - We're part of Ruby3 Types working group that includes Matz and other ruby core contributors, as well as authours of Steep and RDL. If you use Sorbet syntax, you'll use the same tools as Stripe to do migration to Ruby3 types.
+  When will the IDE be open-sourced?
+    - When it has been stabilized at Stripe
+  I don't like types, why have types?
+    - We don't say everybody should have types, we know that with the way Stripe does development types help. Note that with gradual nature of Sorbet you can also have some parts of codebase typed and some parts untyped and have them coexist with each other!
+  Can it do "their_favorite_typesystem_feature"?
+    - Stripe adds typesystem feature based on needs of existing code. So far, experience of Stripe and a few other companies suggest that our typesystem has enough features to typecheck huge existing codebases. We believe that having less magic in typesystem is good and leads to better understandibility of code.
+  How does it model exceptions?
+    - they are not part of type system, experience in Java suggests didn't give a conclusive answer if it's worth it
+  Does it make my programs faster?
+    - no, your programm will still run on MRI. The goal of Sorbet was to make code better for people, not for machines.
+  Why not rewrite in Java/Scala/Go/etc instead of building thing thing?
+    - Building and adopting a typechecker for Ruby was a project for 3 people over a ~year. Rewriting into another language is much more effort, much more risk and thus is less optimal. Building languages&runtimes isn't that hard, there are well tried approaches that can be reused from Erlang, Java, Self, Smalltalk, HHVM, Go, etc. It's not a dark art.
+  What's next on your roadmap?
+    - Internally, we're building an IDE and coding abstractions used at Stripe(T::Struct).
+  How to get involved?
+    - Try it on your codebase!
+    - Go add `rbi`s for some gems!
+    - Contribute patches, we have "good first issue" tag for it!
+    - build tools on it!
+  Does this integrate with YARD?
+    - there are community integrations for Sorbet -> Yard dirrection
+    - Sorbet IDE also is aware of YARD comments and shows them in autocomplete
+  Do you support JRuby?
+    - Stripe doesn't run JRUby, we expect that it shouldn't be hard to support it, patches are welcome
+  Why use Bazel?
+    - Stripe uses bazel as we do builds across multiple languages. As a user of Sorbet it shouldn't affect you much what build system Sorbet uses.
+  Why download LLVM during build?
+    - Sorbet is built, tested and benchmarked using a specific version of LLVM. We use sanitizers and many advanced features that may not be present in your system compiler.
+ 
