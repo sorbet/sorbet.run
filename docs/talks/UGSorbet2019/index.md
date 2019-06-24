@@ -115,7 +115,8 @@ Note:
 
 ## 3. Simple but no simpler
 
-  - Nominal gradual typesystem
+Type system has grown by adding features needed to type existing code:
+  - Gradual typesystem
   - Union and intersection types
   - Local type inference
   - Control-flow dependent typechecking
@@ -224,6 +225,7 @@ Note:
 ## Why have runtime typechecking?
 
 - `A.rb`:
+
 ```ruby
 # typed: true
 sig {params(a: Integer).void}
@@ -236,6 +238,7 @@ end
 ```
 
 - `B.rb`:
+
 ```ruby
 # typed: false
 foo("1")
@@ -247,6 +250,7 @@ foo("1")
 - Untyped code can call into typed code
 - Untyped code can perform stores that are read by typed code
 - Typed code cannot protect itself because we will complain that the guard is dead
+- Even if all of your code is typed, your gems aren't
 
 ---
 
