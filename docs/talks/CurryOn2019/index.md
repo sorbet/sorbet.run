@@ -2,9 +2,6 @@
 
 Note:
 - dmitry: PhD Compiler architecture & a bit of type theory @ next major version of Scala Compiler(3.0)
-- pt: Stanford grad, Previously at Facebook on HHVM and Hack
-
-PT starts talking here
 
 ---
 
@@ -92,7 +89,7 @@ Note:
 ## Open source!
 
 - Yes!
-- After an extensive ~3 months long beta with 30 companies
+- After an extensive ~3 month long beta with 30 companies
 - https://sorbet.org
 
 
