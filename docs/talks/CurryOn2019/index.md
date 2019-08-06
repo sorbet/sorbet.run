@@ -1,7 +1,8 @@
 # Introductions
 
-Note:
-- dmitry: PhD Compiler architecture & a bit of type theory @ next major version of Scala Compiler(3.0)
+Dmitry
+- EPFL PhD graduate
+- Thesis on Design of Dotty(Scala 3)
 
 ---
 
@@ -78,7 +79,7 @@ Note:
 - **@soutaro** – Steep
 - **@mame** – Type profiler
 - **@matz** – Ruby
-- **Shopify** , **Coinbase**, **Sourcegraph**, **Kickstarter** – Sorbet contributors in open-source
+- **Shopify**, **Coinbase**, **Sourcegraph**, **Kickstarter** – Sorbet contributors in open-source
 
 Note:
 - soutaro-san

@@ -1,0 +1,48 @@
+digraph e{
+subgraph "cluster_::Object#gcd" {
+    label = "::Object#foo";
+    color = blue;
+    "bb::Object#foo_0" [shape = invhouse];
+    "bb::Object#foo_1" [shape = parallelogram];
+
+    "bb::Object#foo_0" [
+        label = "block[id=0]()\l<selfMethodTemp>$3 = self : Object\la = load_arg(<selfMethodTemp>$3#foo, 0) : Integer\lb = load_arg(<selfMethodTemp>$3#foo, 1) : Integer\l<unconditional>\l"
+    ];
+
+    "bb::Object#foo_0" -> "bb::Object#foo_2" [style="bold"];
+    "bb::Object#foo_1" [
+        label = "block[id=1](<returnMethodTemp>$2)\l<finalReturn> = return <returnMethodTemp>$2\l<unconditional>\l"
+    ];
+
+    "bb::Object#foo_1" -> "bb::Object#foo_1" [style="bold"];
+    "bb::Object#foo_2" [
+        label = "block[id=2](b, a)\louterLoops: 1\l<statTemp>$7 = 0 : Integer(0)\l<whileTemp>$5 = b.!=(<statTemp>$7) : TrueClass | FalseClass\l<whileTemp>$5\l"
+    ];
+
+    "bb::Object#foo_2" -> "bb::Object#foo_4" [style="bold"];
+    "bb::Object#foo_2" -> "bb::Object#foo_3" [style="tapered"];
+
+    "bb::Object#foo_3" [
+        label = "block[id=3](a)\l<returnMethodTemp>$2 = return a : <impossible>\l<unconditional>\l"
+    ];
+
+    "bb::Object#foo_3" -> "bb::Object#foo_1" [style="bold"];
+    "bb::Object#foo_4" [
+        label = "block[id=4](b, a)\louterLoops: 1\l<ifTemp>$9 = a.>(b) : TrueClass | FalseClass\l<ifTemp>$9\l"
+    ];
+
+    "bb::Object#foo_4" -> "bb::Object#foo_5" [style="bold"];
+    "bb::Object#foo_4" -> "bb::Object#foo_6" [style="tapered"];
+
+    "bb::Object#foo_5" [
+        label = "block[id=5](b, a)\louterLoops: 1\l<statTemp>$12 = a : Integer\la = <statTemp>$12.-(b) : Integer\l<unconditional>\l"
+    ];
+
+    "bb::Object#foo_5" -> "bb::Object#foo_2" [style="bold"];
+    "bb::Object#foo_6" [
+        label = "block[id=6](b, a)\louterLoops: 1\l<statTemp>$14 = b : Integer\lb = <statTemp>$14.-(a) : Integer\l<unconditional>\l"
+    ];
+
+    "bb::Object#foo_6" -> "bb::Object#foo_2" [style="bold"];
+}
+}
