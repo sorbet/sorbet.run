@@ -9,5 +9,8 @@
   "dependencies": {
     "mock-socket": "^8.0.5",
     "monaco-editor": "^0.16.1"
+  },
+  "devDependencies": {
+    "typescript": "^3.6.3"
   }
 }
