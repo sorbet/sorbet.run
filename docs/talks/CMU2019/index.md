@@ -6,10 +6,6 @@
 
 <br>
 
-Jake Zimmerman
-
-*(SCS Class of 2017)*
-
 Note:
 
 - Been at Stripe for 2 years
