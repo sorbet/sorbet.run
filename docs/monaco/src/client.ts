@@ -43,6 +43,7 @@ const editor = monaco.editor.create(element, {
   scrollBeyondLastLine: false,
   formatOnType: true,
   autoIndent: true,
+  tabSize: 2,
   fontSize: 16,
   minimap: {enabled: false},
   automaticLayout: true,
