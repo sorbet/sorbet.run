@@ -65,7 +65,6 @@ var editor = monaco.editor.create(element, {
     automaticLayout: true,
     lineNumbersMinChars: 0,
     wordBasedSuggestions: false,
-    acceptSuggestionOnEnter: "off",
     acceptSuggestionOnCommitCharacter: false,
 });
 window.addEventListener('hashchange', function () {
