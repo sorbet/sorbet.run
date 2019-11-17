@@ -391,43 +391,74 @@ Pro: Sorbet runs **fast** and on the **whole codebase**.
 
 ---
 
-Wrap up problems + solutions
+TODO Wrap up problems + solutions
 
 ---
 
-TODO fun extra stuff
+## Related projects
 
-- community projects
-  - sorbet-typed
-  - sorbet-rails
-  - sord (sorbet + yard)
-  - parlour (plugins for generating RBIs)
+- [sorbet-rails] – Harry Doan & CZI
+  - All-in-one support for Rails with Sorbet
+- [Sord] – Aaron Christiansen
+  - Generates Sorbet types from YARD annotations
+- [Parlour] – Aaron Christiansen
+  - Framework for writing Sorbet plugins
 
----
-
-TODO fun extra stuff
-
-- number of commits since open source
-  - number of non-stripe contributors
-  - number of RBI changes
+[sorbet-rails]: https://github.com/chanzuckerberg/sorbet-rails
+[Sord]: https://github.com/AaronC81/sord
+[Parlour]: https://github.com/AaronC81/parlour
 
 ---
 
-TODO fun extra stuff
+## Contributions
 
-- notable open source contributions?
-  - ruby 2.5 / 2.6 support
-  - docs for the standard library
-  - ...?
+- 800 total commits since open source
+
+- 90 total contributors
+  - 10: current / former sorbet team
+  - 30: stripe employees
+  - 50: non-stripe employees
 
 ---
 
-TODO fun extra stuff
+## Notable open source contributions
 
-- blogs
-- talks
-- companies
-- testimonials
+- @alexsnaps (Shopify)
+  - Parser support for Ruby 2.5
+- @iliabylich
+  - Parser support for Ruby 2.6
+- @univerio
+  - Docs for Ruby stdlib into Sorbet's RBIs
+
+... and many more!
+
+---
+
+## Gem support
+
+- 100+ commits to RBIs for Ruby stdlib
+
+- 100+ commits to RBIs for sorbet-typed for gems
+
+- 23 external contributors to sorbet-typed
+  - 85% of commits from community contributors!
+
+Note:
+
+fun fact: dmitry doesn't have a single commit to
+sorbet-typed :P
+
+---
+
+![](img/jmduke-kid-on-christmas-morning.png)
+
+---
+
+![](img/jerry-dude-types-are-so-amazing.png)
+
+---
+
+![](img/oss-malmberg-missed-it-so-much.png)
 
 ---
 
