@@ -12,7 +12,11 @@ TODO team members / contributors
 
 ---
 
-TODO agenda
+- **About Stripe**
+
+- Why we built a type checker for Ruby
+
+- The growing Sorbet community
 
 ---
 
@@ -83,31 +87,35 @@ Note:
 
 - Thousands of changes to the monorepo per day
 
-Note:
+---
 
-Compare Ruby to Python
+- About Stripe
+
+- **Why we built a type checker for Ruby**
+
+- The growing Sorbet community
 
 ---
 
-## 💡 ... breaking down obstacles?
+## 🗣 Context: Dev Productivity Survey
 
-- too long to get feedback
+Responses from biannual eng-wide survey:
 
-- Too long to grasp unfamiliar code
+1. Too long to get feedback
 
-- Too easy to accidentally break things
+2. Too long to grasp unfamiliar code
+
+3. Too easy to accidentally break things
 
 Note:
 
-Run surveys every 6 months to find common pain pointsu
+Run surveys every 6 months to find common pain points
 
 ---
 
-## Too long to get feedback
+## 1. Too long to get feedback
 
-- **One keystroke**: < 50 milliseconds
-- **Single test**: < 10 seconds
-- **Single test file**: < 2 minutes
+- **One keystroke**: ~50 milliseconds
 - **All tests, in CI**: 10 – 20 minutes
 - **All tests, locally**: days
 
@@ -115,17 +123,15 @@ Already have massively parallel distributed CI test runner
 
 Note:
 
-Biggest strength of a monorepo is confidence from running
-**all** the tests.
+If you know the tests that might fail, you can run those
+locally (~seconds – ~minutes).
 
-Can't run all locally, so have to create a branch and push
-for feedback (heavy weight).
+But a huge strength of a monorepo is confidence from running
+**all** the tests.
 
 ---
 
-## Too long to grasp unfamiliar code
-
-- Hundreds of engineers means ~all code is unfamiliar
+## 2. Too long to grasp unfamiliar code
 
 ```ruby
 def self.find_card_similarity(merchant:)
@@ -138,11 +144,12 @@ def self.find_card_similarity(merchant:)
 end
 ```
 
+Hundreds of engineers means ~all code is unfamiliar
+
+
 ---
 
-## Too long to grasp unfamiliar code
-
-- Hundreds of engineers means ~all code is unfamiliar
+## 2. Too long to grasp unfamiliar code
 
 ```ruby
 def self.find_card_similarity(merchant:)
@@ -155,11 +162,12 @@ def self.find_card_similarity(merchant:)
 end
 ```
 
+Hundreds of engineers means ~all code is unfamiliar
+
+
 ---
 
-## Too long to grasp unfamiliar code
-
-- Hundreds of engineers means ~all code is unfamiliar
+## 2. Too long to grasp unfamiliar code
 
 ```ruby
 def self.find_card_similarity(merchant:)
@@ -172,9 +180,11 @@ def self.find_card_similarity(merchant:)
 end
 ```
 
+Hundreds of engineers means ~all code is unfamiliar
+
 ---
 
-## Too easy to accidentally break things
+## 3. Too easy to break things
 
 "I want to delete this code!"
 
@@ -190,34 +200,20 @@ Some code paths only tested yearly! (Taxes)
 
 ---
 
-## &nbsp;
-
-- Too long to get feedback
-
-- Too long to grasp unfamiliar code
-
-- Too easy to accidentally break things
-
----
-
 ## 💡 The language is an obstacle
-
-- Too long to get feedback
-
-- Too long to grasp unfamiliar code
-
-- Too easy to accidentally break things
 
 Note:
 
-Could fix these things individually (faster tests, better
-docs, more guard rails), but opted to dig deeper.
+Sometimes the survey feedback is clearly Stripe-specific
+problems, but these weren't Stripe-specific.
 
 ---
 
 ## ➡️  What are our options?
 
 - **Do nothing**: Opportunity cost (productivity, breakages)
+
+- **Treat the symptoms**: New symptoms pop up
 
 - **Rewrite everything**: 100s of engineers, all-or-nothing
 
@@ -231,6 +227,8 @@ docs, more guard rails), but opted to dig deeper.
 
 - <span style="opacity: 0.3;">**Do nothing**: Opportunity cost (productivity, breakages)</span>
 
+- <span style="opacity: 0.3;">**Treat the symptoms**: New symptoms pop up</span>
+
 - <span style="opacity: 0.3;">**Rewrite everything**: 100s of engineers, all-or-nothing</span>
 
 - <span style="opacity: 0.3;">**Rewrite some things**: 10s(?) of engineers, partial impact</span>
@@ -239,64 +237,63 @@ docs, more guard rails), but opted to dig deeper.
 
 ---
 
-# open source! 🎉
+## ... so we built Sorbet 🎉
 
-<br>
+- **Oct 2017** – Kickoff
 
-In June 2019, we open sourced Sorbet!
+- **Feb 2018** – First typed code
 
-[sorbet.org](https://sorbet.org) – website & docs
+- **June 2018** – Enforced in CI for every Stripe engineer
 
-[github.com/sorbet/sorbet](https://github.com/sorbet/sorbet) – source code
+- <span style="opacity: 0.3;">... lots of other stuff ...</span>
 
----
+- **Jun 2019** – Open source!
 
-## Did we remove the obstacles?
+Note:
 
-- Too long to run the tests
+Incremental value in months with only 3 people.
 
-- Too long to grasp unfamiliar code
-
-- Too easy to accidentally break things
-
+Rest of company didn't have to change or stop using Ruby.
 
 ---
 
-## Did we remove the obstacles?
+## 🤔 How did Sorbet do?
 
-- **Too long to run the tests**
+Wanted to improve these things:
 
-- Too long to grasp unfamiliar code
+1. Too long to get feedback
 
-- Too easy to accidentally break things
+2. Too long to grasp unfamiliar code
 
+3. Too easy to accidentally break things
 
 ---
 
-## Sorbet is as fast as you can type
+## 1. Too long to get feedback?
+
+- **One keystroke**: < 50 milliseconds
+- **Sorbet, in editor**: 50ms – 80ms
+- **Sorbet, command line**: 20 seconds
+- **All tests, in CI**: 10 – 20 minutes
+- **All tests, locally**: days
+
+&nbsp;
+
+---
+
+## → Sorbet is as fast as you can type
 
 - <span style="opacity: 0.3;">**One keystroke**: < 50 milliseconds</span>
 - **Sorbet, in editor**: 50ms – 80ms
-- <span style="opacity: 0.3;">**Single test**: < 10 seconds</span>
 - **Sorbet, command line**: 20 seconds
-- <span style="opacity: 0.3;">**Single test file**: < 2 minutes</span>
 - <span style="opacity: 0.3;">**All tests, in CI**: 10 – 20 minutes</span>
 - <span style="opacity: 0.3;">**All tests, locally**: days</span>
 
----
-
-## Did we remove the obstacles?
-
-- Too long to run the tests
-
-- **Too long to grasp unfamiliar code**
-
-- Too easy to accidentally break things
+This is for Stripe's multi-million line Ruby monorepo!
 
 ---
 
-
-## It's quicker to grasp unfamiliar code
+## 2. Too long to grasp unfamiliar code?
 
 ```ruby
 
@@ -312,12 +309,12 @@ end
 
 ---
 
-## It's quicker to grasp unfamiliar code
+## → Types make code easier to grasp
 
 ```ruby
-sig {params(merchant: String).returns(SimilarityRecord)}
+sig {params(merchant: String).returns(SimilarityRecord)}  # <- it's a string 👍
 def self.find_card_similarity(merchant:)
-  # => `merchant` is a string ID
+  # Is `merchant` a string ID, or a Models::Merchant instance?
   similarity_data = SimilarityDB.fetch(merchant)
 
   similarity_data ||= []
@@ -328,12 +325,12 @@ end
 
 ---
 
-## It's quicker to grasp unfamiliar code
+## → Types make code easier to grasp
 
 ```ruby
 sig {params(merchant: String).returns(SimilarityRecord)}
 def self.find_card_similarity(merchant:)
-  # => `merchant` is a string ID
+  # Is `merchant` a string ID, or a Models::Merchant instance?
   similarity_data = SimilarityDB.fetch(merchant)
   # Is `similarity_data` ever actually falsy? Why?
   similarity_data ||= []
@@ -342,92 +339,114 @@ def self.find_card_similarity(merchant:)
 end
 ```
 
----
-
-<a href="https://sorbet.run/#%23%20typed%3A%20strict%0A%0Amodule%20Risk%3A%3AMerchantSimilarity%0A%0A%20%20sig%20%7Bparams(merchant%3A%20String).returns(SimilarityRecord)%7D%0A%20%20def%20self.find_card_similarity(merchant%3A)%0A%20%20%20%20%23%20Is%20%60merchant%60%20a%20string%20ID%2C%20or%20a%20Models%3A%3AMerchant%20instance%3F%0A%20%20%20%20similarity_data%20%3D%20SimilarityDB.fetch(merchant)%0A%20%20%20%20%23%20Is%20%60similarity_data%60%20ever%20actually%20falsy%3F%20Why%3F%0A%20%20%20%20similarity_data%20%7C%7C%3D%20%5B%5D%0A%0A%20%20%20%20result%20%3D%20process_similarity_data(similarity_data%2C%20merchant)%0A%20%20%20%20result%0A%20%20end%0A%0A%20%20sig%20do%0A%20%20%20%20params(%0A%20%20%20%20%20%20similarity_data%3A%20T%3A%3AArray%5BRawSimilarityData%5D%2C%0A%20%20%20%20%20%20merchant%3A%20String%0A%20%20%20%20)%0A%20%20%20%20.returns(SimilarityRecord)%0A%20%20end%0A%20%20def%20self.process_similarity_data(similarity_data%2C%20merchant)%0A%20%20%20%20raise%20%22Unimplemented%22%0A%20%20end%0Aend%0A%0Amodule%20Risk%3A%3AMerchantSimilarity%0A%20%20module%20SimilarityDB%0A%20%20%20%20%23%20Loads%20similarity%20data%20from%20the%20database%20for%20%60merchant%60%0A%20%20%20%20%23%0A%20%20%20%20%23%20Returns%20%60nil%60%20if%20no%20similarity%20data%20has%20been%20registered%20for%20this%20merchant%20yet.%0A%20%20%20%20sig%20%7Bparams(merchant%3A%20String).returns(T.nilable(T%3A%3AArray%5BRawSimilarityData%5D))%7D%0A%20%20%20%20def%20self.fetch(merchant)%0A%20%20%20%20%20%20raise%20%22Unimplemented%22%0A%20%20%20%20end%0A%20%20end%0Aend%0A%0A%0Amodule%20Risk%3A%3AMerchantSimilarity%0A%20%20class%20RawSimilarityData%20%3C%20T%3A%3AStruct%0A%20%20%20%20%23%20Unimplemented%0A%20%20end%0A%0A%20%20class%20SimilarityRecord%20%3C%20T%3A%3AStruct%0A%20%20%20%20prop%20%3Amerchant%2C%20Models%3A%3AMerchant%0A%20%20%20%20prop%20%3Aaccount_application%2C%20Models%3A%3AAccountApplication%0A%20%20%20%20prop%20%3Aintersection_count%2C%20Integer%0A%20%20end%0Aend%0A%0Aclass%20Models%3A%3AMerchant%0A%20%20%23%20Unimplemented%0Aend%0A%0Aclass%20Models%3A%3AAccountApplication%0A%20%20%23%20Unimplemented%0Aend%0A%0Aclass%20Module%0A%20%20include%20T%3A%3ASig%0Aend">→ Demo</a>
 
 ---
 
-![](img/hover-demo.gif)
+<a href="https://sorbet.run/#%23%20typed%3A%20strict%0A%0Amodule%20Risk%3A%3AMerchantSimilarity%0A%0A%20%20sig%20%7Bparams(merchant%3A%20String).returns(SimilarityRecord)%7D%0A%20%20def%20self.find_card_similarity(merchant%3A)%0A%20%20%20%20%23%20Is%20%60merchant%60%20a%20string%20ID%2C%20or%20a%20Models%3A%3AMerchant%20instance%3F%0A%20%20%20%20similarity_data%20%3D%20SimilarityDB.fetch(merchant)%0A%20%20%20%20%23%20Is%20%60similarity_data%60%20ever%20actually%20falsy%3F%20Why%3F%0A%20%20%20%20similarity_data%20%7C%7C%3D%20%5B%5D%0A%0A%20%20%20%20result%20%3D%20process_similarity_data(similarity_data%2C%20merchant)%0A%20%20%20%20result%0A%20%20end%0A%0A%20%20sig%20do%0A%20%20%20%20params(%0A%20%20%20%20%20%20similarity_data%3A%20T%3A%3AArray%5BRawSimilarityData%5D%2C%0A%20%20%20%20%20%20merchant%3A%20String%0A%20%20%20%20)%0A%20%20%20%20.returns(SimilarityRecord)%0A%20%20end%0A%20%20def%20self.process_similarity_data(similarity_data%2C%20merchant)%0A%20%20%20%20raise%20%22Unimplemented%22%0A%20%20end%0Aend%0A%0Amodule%20Risk%3A%3AMerchantSimilarity%0A%20%20module%20SimilarityDB%0A%20%20%20%20%23%20Loads%20similarity%20data%20from%20the%20database%20for%20%60merchant%60%0A%20%20%20%20%23%0A%20%20%20%20%23%20Returns%20%60nil%60%20if%20no%20similarity%20data%20has%20been%20registered%20for%20this%20merchant%20yet.%0A%20%20%20%20sig%20%7Bparams(merchant%3A%20String).returns(T.nilable(T%3A%3AArray%5BRawSimilarityData%5D))%7D%0A%20%20%20%20def%20self.fetch(merchant)%0A%20%20%20%20%20%20raise%20%22Unimplemented%22%0A%20%20%20%20end%0A%20%20end%0Aend%0A%0A%0Amodule%20Risk%3A%3AMerchantSimilarity%0A%20%20class%20RawSimilarityData%20%3C%20T%3A%3AStruct%0A%20%20%20%20%23%20Unimplemented%0A%20%20end%0A%0A%20%20class%20SimilarityRecord%20%3C%20T%3A%3AStruct%0A%20%20%20%20prop%20%3Amerchant%2C%20Models%3A%3AMerchant%0A%20%20%20%20prop%20%3Aaccount_application%2C%20Models%3A%3AAccountApplication%0A%20%20%20%20prop%20%3Aintersection_count%2C%20Integer%0A%20%20end%0Aend%0A%0Aclass%20Models%3A%3AMerchant%0A%20%20%23%20Unimplemented%0Aend%0A%0Aclass%20Models%3A%3AAccountApplication%0A%20%20%23%20Unimplemented%0Aend%0A%0Aclass%20Module%0A%20%20include%20T%3A%3ASig%0Aend">
+
+<img src="img/hover-demo.gif">
+
+</a>
+
+Note:
+
+Click for live demo
 
 ---
 
-TODO(jez) Go to Type Definition demo
+## → People think about their APIs
+
+```ruby
+sig {params(merchant: String).returns(SimilarityRecord)}
+def self.find_card_similarity(merchant:)
+  # Is `merchant` a string ID, or a Models::Merchant instance?
+  similarity_data = SimilarityDB.fetch(merchant)
+  # Is `similarity_data` ever actually falsy? Why?
+  similarity_data ||= []
+
+  process_similarity_data(similarity_data, merchant)
+end
+```
+
+- "Maybe I should take a `Merchant` instead of a `String`"
+
+- "Maybe I should return `[]` instead of `nil`"
 
 ---
 
-## Aside: People reconsider their interfaces
+## 3. Too easy to break things?
 
-- "Maybe I shouldn't take a `String`..."
+"I want to delete this code!"
 
-- "Maybe I shouldn't return `nil`"
+... is it enough if the **tests** pass?
 
----
+... is it enough if the QA / canary **deploys** have no errors?
 
-## Did we remove the obstacles?
-
-- Too long to run the tests
-
-- Too long to grasp unfamiliar code
-
-- **Too easy to accidentally break things**
+&nbsp;
 
 ---
 
-## It's harder to break the code accidentally
+## → Harder to break things
 
-- "I want to delete this code!"
+"I want to delete this code!"
 
-<span style="opacity: 0.3;">... is it enough if the **tests** pass?</span>
+... is it enough if the **tests** pass?
 
-<span style="opacity: 0.3;">... is it enough if the QA / canary **deploys** have no errors?</span>
+... is it enough if the QA / canary **deploys** have no errors?
 
 ... **also**: is it enough if it typechecks?
 
-→ One more safeguard to help give confidence.
+Note:
 
-Pro: Sorbet runs **fast** and on the **whole codebase**.
+Sorbet runs **fast** and on the **whole codebase**.
 
-
----
-
-TODO Wrap up problems + solutions
 
 ---
 
-## Related projects
+## Recap: Key benefits of Sorbet 💡
 
-- [sorbet-rails] – Harry Doan & CZI
-  - All-in-one support for Rails with Sorbet
-- [Sord] – Aaron Christiansen
-  - Generates Sorbet types from YARD annotations
-- [Parlour] – Aaron Christiansen
-  - Framework for writing Sorbet plugins
+1. Sorbet is as fast as you can type
 
-[sorbet-rails]: https://github.com/chanzuckerberg/sorbet-rails
-[Sord]: https://github.com/AaronC81/sord
-[Parlour]: https://github.com/AaronC81/parlour
+2. Types make code easier to grasp
+
+3. Harder to accidentally break things
 
 ---
 
-## Contributions
+- About Stripe
 
-- 800 total commits since open source
+- Why we built a type checker for Ruby
 
-- 90 total contributors
+- **The growing Sorbet community**
+
+---
+
+## 🎉 Ruby 3 & Types!
+
+- Ruby 3 stdlib will ship with type definitions
+
+- We're collaborating closely with the Ruby core team
+
+---
+
+## Contributions 📈
+
+- **800** total commits since open source
+
+- **90** total contributors
   - 10: current / former sorbet team
-  - 30: stripe employees
-  - 50: non-stripe employees
+  - 30: Stripe employees
+  - 50: non-Stripe employees
 
 ---
 
-## Notable open source contributions
+## Open source contributions
 
-- @alexsnaps (Shopify)
+- **@alexsnaps**
   - Parser support for Ruby 2.5
-- @iliabylich
+- **@iliabylich**
   - Parser support for Ruby 2.6
-- @univerio
+- **@univerio**
   - Docs for Ruby stdlib into Sorbet's RBIs
 
 ... and many more!
@@ -436,12 +455,14 @@ TODO Wrap up problems + solutions
 
 ## Gem support
 
-- 100+ commits to RBIs for Ruby stdlib
+- 117 commits: types for Ruby stdlib
 
-- 100+ commits to RBIs for sorbet-typed for gems
+- 114 commits: types for gems
 
-- 23 external contributors to sorbet-typed
+- 23 external contributors to [sorbet-typed]
   - 85% of commits from community contributors!
+
+[sorbet-typed]: https://github.com/sorbet/sorbet-typed
 
 Note:
 
@@ -450,7 +471,22 @@ sorbet-typed :P
 
 ---
 
-![](img/jmduke-kid-on-christmas-morning.png)
+## Related projects
+
+- [sorbet-rails]
+  - All-in-one support for Rails with Sorbet
+- [Sord]
+  - Generates Sorbet types from YARD annotations
+- [Parlour]
+  - Framework for writing Sorbet plugins
+
+[sorbet-rails]: https://github.com/chanzuckerberg/sorbet-rails
+[Sord]: https://github.com/AaronC81/sord
+[Parlour]: https://github.com/AaronC81/parlour
+
+---
+
+## What people say
 
 ---
 
@@ -459,6 +495,10 @@ sorbet-typed :P
 ---
 
 ![](img/oss-malmberg-missed-it-so-much.png)
+
+---
+
+![](img/jmduke-kid-on-christmas-morning.png)
 
 ---
 
