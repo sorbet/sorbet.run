@@ -61,6 +61,14 @@ Come chat with us after!
 
 ---
 
+- About Stripe
+
+- **Why we built a type checker for Ruby**
+
+- The growing Sorbet community
+
+---
+
 ## Context: Developer Productivity ✨
 
 - "Break down obstacles to getting things done"
@@ -86,14 +94,6 @@ Note:
 - Millions of lines of code
 
 - Thousands of changes to the monorepo per day
-
----
-
-- About Stripe
-
-- **Why we built a type checker for Ruby**
-
-- The growing Sorbet community
 
 ---
 
