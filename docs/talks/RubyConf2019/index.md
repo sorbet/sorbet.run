@@ -110,7 +110,7 @@ Run surveys every 6 months to find common pain points
 
 - **Do nothing**: Opportunity cost (productivity, breakages)
 
-- **Treat the symptoms**: New symptoms pop up
+- **Treat the symptoms of existing code**: New symptoms pop up
 
 - **Rewrite everything**: 100s of engineers, all-or-nothing
 
@@ -124,7 +124,7 @@ Run surveys every 6 months to find common pain points
 
 - <span style="opacity: 0.3;">**Do nothing**: Opportunity cost (productivity, breakages)</span>
 
-- <span style="opacity: 0.3;">**Treat the symptoms**: New symptoms pop up</span>
+- <span style="opacity: 0.3;">**Treat the symptoms of existing code**: New symptoms pop up</span>
 
 - <span style="opacity: 0.3;">**Rewrite everything**: 100s of engineers, all-or-nothing</span>
 
@@ -438,9 +438,11 @@ switch jez -> dmitry
 
 ## 🎉 Ruby 3 & Types!
 
-- Ruby 3 stdlib will ship with type definitions
+- Ruby 3 stdlib will ship with type definitions.
 
 - We're collaborating closely with the Ruby core team
+
+- See more details in talks by Matz, Yusuke Endoh and us @ RubyKaigi 2019
 
 ---
 
