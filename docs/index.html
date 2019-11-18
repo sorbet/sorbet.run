@@ -253,8 +253,8 @@ if (window.top != window.self) {
     var button = document.getElementById('toggle-editor-only');
     button.addEventListener('click', function(ev) {
       ev.preventDefault();
-      ev.getElementById('editor').classList.toggle('editor-only');
-      ev.getElementById('output').classList.toggle('editor-only');
+      document.getElementById('editor').classList.toggle('editor-only');
+      document.getElementById('output').classList.toggle('editor-only');
     });
   })();
 </script>
