@@ -6,9 +6,13 @@
 
 <br>
 
----
+Dmitry Petrashko – [@DarkDimius](https://twitter.com/DarkDimius)
 
-TODO team members / contributors
+Jake Zimmerman – [@jez_io](https://twitter.com/jez_io)
+
+Note:
+
+List of team members?
 
 ---
 
@@ -47,9 +51,6 @@ online.
 
 - More than **2,000 employees**
 
-- More than 250 million API requests per day<br>
-  (peak of **13,000 requests a second**)
-
 - Engineers in San Francisco, Seattle, Dublin, Singapore,
   and more...
 
@@ -61,19 +62,11 @@ Come chat with us after!
 
 ---
 
-- About Stripe
-
-- **Why we built a type checker for Ruby**
-
-- The growing Sorbet community
-
----
-
-## Context: Developer Productivity ✨
+## 🚀 Stripe prioritizes developer productivity
 
 - "Break down obstacles to getting things done"
 
-- Avoid thinking about incidental complexity
+- Let them focus on product
 
 Note:
 
@@ -85,15 +78,91 @@ Note:
 
 ---
 
-## Context: Ruby at Stripe 💎
+## Stripe uses Ruby extensively 💎
 
 - Ruby is our primary programming language
 
 - Hundreds of engineers
 
-- Millions of lines of code
+- Millions of lines of code (monorepo)
 
 - Thousands of changes to the monorepo per day
+
+---
+
+## 🗣 Context: Dev Productivity Survey
+
+Responses from biannual eng-wide survey:
+
+1. Too long to get feedback
+
+2. Too long to grasp unfamiliar code
+
+3. Too easy to accidentally break things
+
+Note:
+
+Run surveys every 6 months to find common pain points
+
+---
+
+## ➡️  What are our options?
+
+- **Do nothing**: Opportunity cost (productivity, breakages)
+
+- **Treat the symptoms**: New symptoms pop up
+
+- **Rewrite everything**: 100s of engineers, all-or-nothing
+
+- **Rewrite some things**: 10s(?) of engineers, partial impact
+
+- **Type checker**: 3 engineers, incremental value in months
+
+---
+
+## ➡️  What are our options?
+
+- <span style="opacity: 0.3;">**Do nothing**: Opportunity cost (productivity, breakages)</span>
+
+- <span style="opacity: 0.3;">**Treat the symptoms**: New symptoms pop up</span>
+
+- <span style="opacity: 0.3;">**Rewrite everything**: 100s of engineers, all-or-nothing</span>
+
+- <span style="opacity: 0.3;">**Rewrite some things**: 10s(?) of engineers, partial impact</span>
+
+- **Type checker**: 3 engineers, incremental value in months
+
+---
+
+## ... so we built Sorbet 🎉
+
+- **Oct 2017** – Kickoff
+
+- **Feb 2018** – First typed code
+
+- **June 2018** – Enforced in CI for every Stripe engineer
+
+- <span style="opacity: 0.3;">... lots of other stuff ...</span>
+
+- **Jun 2019** – Open source!
+
+Note:
+
+Incremental value in months with only 3 people.
+
+Rest of company didn't have to change or stop using Ruby.
+
+---
+
+- About Stripe
+
+- **Quick intro to Sorbet**
+
+- The growing Sorbet community
+
+Note:
+
+switch dmitry -> jez
 
 ---
 
@@ -200,63 +269,6 @@ Some code paths only tested yearly! (Taxes)
 
 ---
 
-## 💡 The language is an obstacle
-
-Note:
-
-Sometimes the survey feedback is clearly Stripe-specific
-problems, but these weren't Stripe-specific.
-
----
-
-## ➡️  What are our options?
-
-- **Do nothing**: Opportunity cost (productivity, breakages)
-
-- **Treat the symptoms**: New symptoms pop up
-
-- **Rewrite everything**: 100s of engineers, all-or-nothing
-
-- **Rewrite some things**: 10s(?) of engineers, partial impact
-
-- **Type checker**: 3 engineers, incremental value in months
-
----
-
-## ➡️  What are our options?
-
-- <span style="opacity: 0.3;">**Do nothing**: Opportunity cost (productivity, breakages)</span>
-
-- <span style="opacity: 0.3;">**Treat the symptoms**: New symptoms pop up</span>
-
-- <span style="opacity: 0.3;">**Rewrite everything**: 100s of engineers, all-or-nothing</span>
-
-- <span style="opacity: 0.3;">**Rewrite some things**: 10s(?) of engineers, partial impact</span>
-
-- **Type checker**: 3 engineers, incremental value in months
-
----
-
-## ... so we built Sorbet 🎉
-
-- **Oct 2017** – Kickoff
-
-- **Feb 2018** – First typed code
-
-- **June 2018** – Enforced in CI for every Stripe engineer
-
-- <span style="opacity: 0.3;">... lots of other stuff ...</span>
-
-- **Jun 2019** – Open source!
-
-Note:
-
-Incremental value in months with only 3 people.
-
-Rest of company didn't have to change or stop using Ruby.
-
----
-
 ## 🤔 How did Sorbet do?
 
 Wanted to improve these things:
@@ -339,14 +351,13 @@ def self.find_card_similarity(merchant:)
 end
 ```
 
+---
+
+<iframe style="position: fixed; top: 0; right: 0; left: 0; bottom: 0; width: 100%; height: 100%;" src="https://sorbet.run/#%23%20typed%3A%20true%0A%0Amodule%20Risk%3A%3AMerchantSimilarity%0A%0A%0A%0A%0A%20%20def%20self.find_card_similarity(merchant%3A)%0A%20%20%20%20similarity_data%20%3D%20SimilarityDB.fetch(merchant)%0A%20%20%20%20similarity_data%20%7C%7C%3D%20%5B%5D%0A%0A%20%20%20%20result%20%3D%20process_similarity_data(similarity_data%2C%20merchant)%0A%20%20%20%20result%0A%20%20end%0A%0A%0A%0A%0A%0A%0A%0A%20%20sig%20do%0A%20%20%20%20params(%0A%20%20%20%20%20%20similarity_data%3A%20T%3A%3AArray%5BRawSimilarityData%5D%2C%0A%20%20%20%20%20%20merchant%3A%20String%0A%20%20%20%20)%0A%20%20%20%20.returns(SimilarityRecord)%0A%20%20end%0A%20%20def%20self.process_similarity_data(similarity_data%2C%20merchant)%0A%20%20%20%20raise%20%22Unimplemented%22%0A%20%20end%0Aend%0A%0Amodule%20Risk%3A%3AMerchantSimilarity%0A%20%20module%20SimilarityDB%0A%20%20%20%20%23%20Loads%20similarity%20data%20from%20the%20database%20for%20%60merchant%60%0A%20%20%20%20%23%0A%20%20%20%20%23%20Returns%20%60nil%60%20if%20no%20similarity%20data%20has%20been%20registered%20for%20this%20merchant%20yet.%0A%20%20%20%20sig%20%7Bparams(merchant%3A%20String).returns(T.nilable(T%3A%3AArray%5BRawSimilarityData%5D))%7D%0A%20%20%20%20def%20self.fetch(merchant)%0A%20%20%20%20%20%20raise%20%22Unimplemented%22%0A%20%20%20%20end%0A%20%20end%0Aend%0A%0A%0Amodule%20Risk%3A%3AMerchantSimilarity%0A%20%20class%20RawSimilarityData%20%3C%20T%3A%3AStruct%0A%20%20%20%20%23%20Unimplemented%0A%20%20end%0A%0A%20%20class%20SimilarityRecord%20%3C%20T%3A%3AStruct%0A%20%20%20%20prop%20%3Amerchant%2C%20Models%3A%3AMerchant%0A%20%20%20%20prop%20%3Aaccount_application%2C%20Models%3A%3AAccountApplication%0A%20%20%20%20prop%20%3Aintersection_count%2C%20Integer%0A%20%20end%0Aend%0A%0Aclass%20Models%3A%3AMerchant%0A%20%20%23%20Unimplemented%0Aend%0A%0Aclass%20Models%3A%3AAccountApplication%0A%20%20%23%20Unimplemented%0Aend%0A%0Aclass%20Module%0A%20%20include%20T%3A%3ASig%0Aend"></iframe>
 
 ---
 
-<a href="https://sorbet.run/#%23%20typed%3A%20strict%0A%0Amodule%20Risk%3A%3AMerchantSimilarity%0A%0A%20%20sig%20%7Bparams(merchant%3A%20String).returns(SimilarityRecord)%7D%0A%20%20def%20self.find_card_similarity(merchant%3A)%0A%20%20%20%20%23%20Is%20%60merchant%60%20a%20string%20ID%2C%20or%20a%20Models%3A%3AMerchant%20instance%3F%0A%20%20%20%20similarity_data%20%3D%20SimilarityDB.fetch(merchant)%0A%20%20%20%20%23%20Is%20%60similarity_data%60%20ever%20actually%20falsy%3F%20Why%3F%0A%20%20%20%20similarity_data%20%7C%7C%3D%20%5B%5D%0A%0A%20%20%20%20result%20%3D%20process_similarity_data(similarity_data%2C%20merchant)%0A%20%20%20%20result%0A%20%20end%0A%0A%20%20sig%20do%0A%20%20%20%20params(%0A%20%20%20%20%20%20similarity_data%3A%20T%3A%3AArray%5BRawSimilarityData%5D%2C%0A%20%20%20%20%20%20merchant%3A%20String%0A%20%20%20%20)%0A%20%20%20%20.returns(SimilarityRecord)%0A%20%20end%0A%20%20def%20self.process_similarity_data(similarity_data%2C%20merchant)%0A%20%20%20%20raise%20%22Unimplemented%22%0A%20%20end%0Aend%0A%0Amodule%20Risk%3A%3AMerchantSimilarity%0A%20%20module%20SimilarityDB%0A%20%20%20%20%23%20Loads%20similarity%20data%20from%20the%20database%20for%20%60merchant%60%0A%20%20%20%20%23%0A%20%20%20%20%23%20Returns%20%60nil%60%20if%20no%20similarity%20data%20has%20been%20registered%20for%20this%20merchant%20yet.%0A%20%20%20%20sig%20%7Bparams(merchant%3A%20String).returns(T.nilable(T%3A%3AArray%5BRawSimilarityData%5D))%7D%0A%20%20%20%20def%20self.fetch(merchant)%0A%20%20%20%20%20%20raise%20%22Unimplemented%22%0A%20%20%20%20end%0A%20%20end%0Aend%0A%0A%0Amodule%20Risk%3A%3AMerchantSimilarity%0A%20%20class%20RawSimilarityData%20%3C%20T%3A%3AStruct%0A%20%20%20%20%23%20Unimplemented%0A%20%20end%0A%0A%20%20class%20SimilarityRecord%20%3C%20T%3A%3AStruct%0A%20%20%20%20prop%20%3Amerchant%2C%20Models%3A%3AMerchant%0A%20%20%20%20prop%20%3Aaccount_application%2C%20Models%3A%3AAccountApplication%0A%20%20%20%20prop%20%3Aintersection_count%2C%20Integer%0A%20%20end%0Aend%0A%0Aclass%20Models%3A%3AMerchant%0A%20%20%23%20Unimplemented%0Aend%0A%0Aclass%20Models%3A%3AAccountApplication%0A%20%20%23%20Unimplemented%0Aend%0A%0Aclass%20Module%0A%20%20include%20T%3A%3ASig%0Aend">
-
 <img src="img/hover-demo.gif">
-
-</a>
 
 Note:
 
@@ -419,6 +430,10 @@ Sorbet runs **fast** and on the **whole codebase**.
 
 - **The growing Sorbet community**
 
+Note:
+
+switch jez -> dmitry
+
 ---
 
 ## 🎉 Ruby 3 & Types!
@@ -431,12 +446,12 @@ Sorbet runs **fast** and on the **whole codebase**.
 
 ## Contributions 📈
 
-- **800** total commits since open source
+- **800** pull requests commits since open source
 
-- **90** total contributors
+- **135** total contributors
   - 10: current / former sorbet team
   - 30: Stripe employees
-  - 50: non-Stripe employees
+  - 85: non-Stripe employees
 
 ---
 
@@ -455,9 +470,9 @@ Sorbet runs **fast** and on the **whole codebase**.
 
 ## Gem support
 
-- 117 commits: types for Ruby stdlib
+- 117 pull requests: types for Ruby stdlib
 
-- 114 commits: types for gems
+- 114 pull requests: types for gems
 
 - 23 external contributors to [sorbet-typed]
   - 85% of commits from community contributors!
