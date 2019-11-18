@@ -156,7 +156,7 @@ Rest of company didn't have to change or stop using Ruby.
 
 - About Stripe
 
-- **Quick intro to Sorbet**
+- **The problems we wanted Sorbet to solve**
 
 - The growing Sorbet community
 
@@ -166,27 +166,74 @@ switch dmitry -> jez
 
 ---
 
-## 🗣 Context: Dev Productivity Survey
+## The problems we wanted Sorbet to solve
 
-Responses from biannual eng-wide survey:
+1. Too long to grasp unfamiliar code
 
-1. Too long to get feedback
-
-2. Too long to grasp unfamiliar code
+2. Too long to get feedback
 
 3. Too easy to accidentally break things
 
-Note:
-
-Run surveys every 6 months to find common pain points
 
 ---
 
-## 1. Too long to get feedback
+## 1. Too long to grasp unfamiliar code
 
-- **One keystroke**: ~50 milliseconds
-- **All tests, in CI**: 10 – 20 minutes
+```ruby
+def self.find_card_similarity(merchant:)
+
+  similarity_data = SimilarityDB.fetch(merchant)
+
+  similarity_data ||= []
+
+  process_similarity_data(similarity_data, merchant)
+end
+```
+
+Hundreds of engineers means ~all code is unfamiliar
+
+---
+
+## 1. Too long to grasp unfamiliar code
+
+```ruby
+def self.find_card_similarity(merchant:)
+  # Is `merchant` a string ID, or a Models::Merchant instance?
+  similarity_data = SimilarityDB.fetch(merchant)
+
+  similarity_data ||= []
+
+  process_similarity_data(similarity_data, merchant)
+end
+```
+
+Hundreds of engineers means ~all code is unfamiliar
+
+
+---
+
+## 1. Too long to grasp unfamiliar code
+
+```ruby
+def self.find_card_similarity(merchant:)
+  # Is `merchant` a string ID, or a Models::Merchant instance?
+  similarity_data = SimilarityDB.fetch(merchant)
+  # Is `similarity_data` ever actually falsy? Why?
+  similarity_data ||= []
+
+  process_similarity_data(similarity_data, merchant)
+end
+```
+
+Hundreds of engineers means ~all code is unfamiliar
+
+---
+
+## 2. Too long to get feedback
+
 - **All tests, locally**: days
+- **All tests, in CI**: 10 – 20 minutes
+- **One keystroke**: ~50 milliseconds
 
 Already have massively parallel distributed CI test runner
 
@@ -200,43 +247,7 @@ But a huge strength of a monorepo is confidence from running
 
 ---
 
-## 2. Too long to grasp unfamiliar code
-
-```ruby
-def self.find_card_similarity(merchant:)
-
-  similarity_data = SimilarityDB.fetch(merchant)
-
-  similarity_data ||= []
-
-  process_similarity_data(similarity_data, merchant)
-end
-```
-
-Hundreds of engineers means ~all code is unfamiliar
-
-
----
-
-## 2. Too long to grasp unfamiliar code
-
-```ruby
-def self.find_card_similarity(merchant:)
-  # Is `merchant` a string ID, or a Models::Merchant instance?
-  similarity_data = SimilarityDB.fetch(merchant)
-
-  similarity_data ||= []
-
-  process_similarity_data(similarity_data, merchant)
-end
-```
-
-Hundreds of engineers means ~all code is unfamiliar
-
-
----
-
-## 2. Too long to grasp unfamiliar code
+## 3. Too easy to break things
 
 ```ruby
 def self.find_card_similarity(merchant:)
@@ -249,13 +260,7 @@ def self.find_card_similarity(merchant:)
 end
 ```
 
-Hundreds of engineers means ~all code is unfamiliar
-
----
-
-## 3. Too easy to break things
-
-"I want to delete this code!"
+"I want to change this code!"
 
 ... is it enough if the **tests** pass?
 
@@ -269,87 +274,11 @@ Some code paths only tested yearly! (Taxes)
 
 ---
 
-## 🤔 How did Sorbet do?
+## 🤔 Does Sorbet fix these things?
 
-Wanted to improve these things:
+→ Demo
 
-1. Too long to get feedback
-
-2. Too long to grasp unfamiliar code
-
-3. Too easy to accidentally break things
-
----
-
-## 1. Too long to get feedback?
-
-- **One keystroke**: < 50 milliseconds
-- **Sorbet, in editor**: 50ms – 80ms
-- **Sorbet, command line**: 20 seconds
-- **All tests, in CI**: 10 – 20 minutes
-- **All tests, locally**: days
-
-&nbsp;
-
----
-
-## → Sorbet is as fast as you can type
-
-- <span style="opacity: 0.3;">**One keystroke**: < 50 milliseconds</span>
-- **Sorbet, in editor**: 50ms – 80ms
-- **Sorbet, command line**: 20 seconds
-- <span style="opacity: 0.3;">**All tests, in CI**: 10 – 20 minutes</span>
-- <span style="opacity: 0.3;">**All tests, locally**: days</span>
-
-This is for Stripe's multi-million line Ruby monorepo!
-
----
-
-## 2. Too long to grasp unfamiliar code?
-
-```ruby
-
-def self.find_card_similarity(merchant:)
-  # Is `merchant` a string ID, or a Models::Merchant instance?
-  similarity_data = SimilarityDB.fetch(merchant)
-
-  similarity_data ||= []
-
-  process_similarity_data(similarity_data, merchant)
-end
-```
-
----
-
-## → Types make code easier to grasp
-
-```ruby
-sig {params(merchant: String).returns(SimilarityRecord)}  # <- it's a string 👍
-def self.find_card_similarity(merchant:)
-  # Is `merchant` a string ID, or a Models::Merchant instance?
-  similarity_data = SimilarityDB.fetch(merchant)
-
-  similarity_data ||= []
-
-  process_similarity_data(similarity_data, merchant)
-end
-```
-
----
-
-## → Types make code easier to grasp
-
-```ruby
-sig {params(merchant: String).returns(SimilarityRecord)}
-def self.find_card_similarity(merchant:)
-  # Is `merchant` a string ID, or a Models::Merchant instance?
-  similarity_data = SimilarityDB.fetch(merchant)
-  # Is `similarity_data` ever actually falsy? Why?
-  similarity_data ||= []
-
-  process_similarity_data(similarity_data, merchant)
-end
-```
+([sorbet.run](https://sorbet.run))
 
 ---
 
@@ -357,76 +286,20 @@ end
 
 ---
 
-<img src="img/hover-demo.gif">
-
-Note:
-
-Click for live demo
-
----
-
-## → People think about their APIs
-
-```ruby
-sig {params(merchant: String).returns(SimilarityRecord)}
-def self.find_card_similarity(merchant:)
-  # Is `merchant` a string ID, or a Models::Merchant instance?
-  similarity_data = SimilarityDB.fetch(merchant)
-  # Is `similarity_data` ever actually falsy? Why?
-  similarity_data ||= []
-
-  process_similarity_data(similarity_data, merchant)
-end
-```
-
-- "Maybe I should take a `Merchant` instead of a `String`"
-
-- "Maybe I should return `[]` instead of `nil`"
-
----
-
-## 3. Too easy to break things?
-
-"I want to delete this code!"
-
-... is it enough if the **tests** pass?
-
-... is it enough if the QA / canary **deploys** have no errors?
-
-&nbsp;
-
----
-
-## → Harder to break things
-
-"I want to delete this code!"
-
-... is it enough if the **tests** pass?
-
-... is it enough if the QA / canary **deploys** have no errors?
-
-... **also**: is it enough if it typechecks?
-
-Note:
-
-Sorbet runs **fast** and on the **whole codebase**.
-
-
----
-
 ## Recap: Key benefits of Sorbet 💡
 
-1. Sorbet is as fast as you can type
-
-2. Types make code easier to grasp
-
-3. Harder to accidentally break things
+1. Too long to grasp unfamiliar code
+  - → Types make code easier to grasp
+2. Too long to get feedback
+  - → Sorbet is as fast as you can type
+3. Too easy to accidentally break things
+  - → One more tool to reduce brittle code
 
 ---
 
 - About Stripe
 
-- Why we built a type checker for Ruby
+- The problems we wanted Sorbet to solve
 
 - **The growing Sorbet community**
 
