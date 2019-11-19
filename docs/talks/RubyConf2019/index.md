@@ -392,16 +392,9 @@ sorbet-typed :P
 
 ---
 
-TODO roadmap / what's next / goals
-
-call to action of some sort?
-
-
----
-
 ## What's next? 🚀
 
-- Invest heavily in editor tools
+- Invest heavily in editor tools (open source soon!)
 
 - Make it even faster
 
