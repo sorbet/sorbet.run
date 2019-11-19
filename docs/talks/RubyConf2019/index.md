@@ -409,6 +409,16 @@ call to action of some sort?
 
 ---
 
+## See Shopify's Sorbet talk after this!
+
+- How they adopted it
+
+- Why it helped them
+
+- What you can learn from their experiences
+
+---
+
 # Questions❓
 
 ---
@@ -418,6 +428,8 @@ call to action of some sort?
 - We're hiring ([stripe.com/jobs](https://stripe.com/jobs))
 
 - Feel free to chat with us after
+
+- We have lots of stickers!
 
 
 <!-- vim:tw=60
