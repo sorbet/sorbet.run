@@ -2,7 +2,7 @@
 
 ## A type checker for Ruby 3 you can use today!
 
-<img style="max-width: 350px; position: absolute; right: 0;" src="img/sorbet-logo-white-sparkles.svg">
+<img style="max-width: 350px; position: absolute; right: 0;" src="img/QR_sorbet_run.png">
 
 <br>
 
