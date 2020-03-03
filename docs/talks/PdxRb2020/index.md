@@ -192,14 +192,16 @@ Hundreds of engineers means ~all code is unfamiliar
 Already have massively parallel distributed CI test runner
 
 <aside class="notes">
-  <ul>
-    <li>Stripe believes in test driven development</li>
-    <li>We need to ensure that our code is behaving correctly</li>
-    <li>Developer productivity has worked hard to get test results quickly, but
-    it's still slow</li>
-    <li>Recently this is improved, but it's still ~5 minutes</li>
-    <li>We aspire to giving feedback on individual keystrokes</li>
-  </ul>
+  <small>
+    <ul>
+      <li>Stripe believes in test driven development</li>
+      <li>We need to ensure that our code is behaving correctly</li>
+      <li>Developer productivity has worked hard to get test results to 10-20
+      minutes</li>
+      <li>Recently this is improved, but it's still ~5 minutes</li>
+      <li>We aspire to giving feedback on individual keystrokes</li>
+    </ul>
+  </small>
 </aside>
 
 ---
