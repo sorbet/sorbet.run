@@ -67,6 +67,7 @@ var editor = monaco.editor.create(element, {
     wordBasedSuggestions: false,
     acceptSuggestionOnCommitCharacter: false,
 });
+editor.focus();
 window.addEventListener('hashchange', function () {
     // Remove leading '#'
     var hash = window.location.hash.substr(1);
