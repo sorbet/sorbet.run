@@ -51,7 +51,7 @@ element.addEventListener('click', function (e) {
 });
 // Remove leading '#'
 var hash = window.location.hash.slice(1);
-var initialValue = hash ? decodeURIComponent(hash) : "# typed: true\nclass A\n  extend T::Sig\n\n  sig {params(x: Integer).returns(String)}\n  def bar(x)\n    x.to_s\n  end\nend\n\ndef main\n  A.new.barr(91)   # error: Typo!\n  A.new.bar(\"91\")  # error: Type mismatch!\nend";
+var initialValue = hash ? decodeURIComponent(hash) : "# typed: true\nextend T::Sig\n\nsig {params(x: Integer).void}\ndef foo(x)\n  puts(x + 1)\nend\n\nffoo(0)\nfoo(\"not an int\")";
 // create Monaco editor
 var model = monaco.editor.createModel(initialValue, 'ruby', monaco.Uri.parse('inmemory://model/default'));
 var editor = monaco.editor.create(element, {
