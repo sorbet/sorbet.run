@@ -20,19 +20,15 @@ element.addEventListener('click', (e) => {
 // Remove leading '#'
 const hash = window.location.hash.slice(1);
 const initialValue = hash ? decodeURIComponent(hash) : `# typed: true
-class A
-  extend T::Sig
+extend T::Sig
 
-  sig {params(x: Integer).returns(String)}
-  def bar(x)
-    x.to_s
-  end
+sig {params(x: Integer).void}
+def foo(x)
+  puts(x + 1)
 end
 
-def main
-  A.new.barr(91)   # error: Typo!
-  A.new.bar("91")  # error: Type mismatch!
-end`;
+ffoo(0)
+foo("not an int")`;
 
 // create Monaco editor
 const model = monaco.editor.createModel(
