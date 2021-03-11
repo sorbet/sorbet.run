@@ -3,7 +3,7 @@
   "name": "@monaco-languageclient/example",
   "version": "0.0.1",
   "dependencies": {
-    "ansi_up": "^4.0.4",
+    "ansi_up": "^5.0.0",
     "express": "^4.15.2",
     "mock-socket": "^8.0.5",
     "monaco-editor-core": "^0.14.6",
