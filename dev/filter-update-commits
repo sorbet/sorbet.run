@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# Script to rewrite the sorbet.run commit history when it gets too large. This
+# is only useful to Sorbet maintainers.
+
+set -euo pipefail
+
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd)"
+repo_root="${dir}/../"
+
+cd "$repo_root"
+
+# We want to skip all commits from the Sorbet build farm bot, *except* the 
+# last one. Generally, this is going to be the last commit that touched
+# docs/sha.html.
+COMMIT_TO_KEEP="$(git log -n 1 --pretty=format:%H docs/sha.html)"
+export COMMIT_TO_KEEP
+
+if [ -z "${COMMIT_TO_KEEP:-}" ]; then
+  echo "Could not find the last Sorbet build farm commit. Exiting." >&2
+  exit 1
+fi
+
+# Filter command for git filter-branch.
+set +e # read will return 1 here
+
+read -r -d '' filter_command <<'EOF'
+# We are only interested in commits from the Sorbet build farm bot.
+if [ "$GIT_AUTHOR_NAME" = "Sorbet build farm" ];
+then
+  # If this is the "commit to keep", just commit it.
+  if [ "$GIT_COMMIT" = "$COMMIT_TO_KEEP" ]; then
+    echo "INFO: Keeping Sorbet build farm commit $GIT_COMMIT because it is the last one to change docs/sha.html" >&2
+    git commit-tree "$@"
+  # If this commit has touched anything other than the expected files, we'll
+  # keep it just to be safe.
+  elif git diff-tree --no-commit-id --name-only -r "$GIT_COMMIT" | grep -q -E -v '^(docs/sha\.html|docs/sorbet-wasm\.js|docs/sorbet-wasm.wasm)$'; then
+    echo "WARNING: Keeping Sorbet build farm commit $GIT_COMMIT because it touches files we didn't expect it to touch" >&2
+    git commit-tree "$@"
+  else
+    echo "INFO: Skipping Sorbet build farm commit $GIT_COMMIT" >&2
+    skip_commit "$@"
+  fi
+else
+  echo "INFO: Keeping commit $GIT_COMMIT from $GIT_AUTHOR_NAME" >&2
+  git commit-tree "$@"
+fi
+EOF
+
+set -e
+
+# Squelch deprecation warning from git filter-branch
+export FILTER_BRANCH_SQUELCH_WARNING=1
+
+# Filter past commits.
+git filter-branch --commit-filter "$filter_command"
