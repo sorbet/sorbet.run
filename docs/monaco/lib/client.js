@@ -78,7 +78,7 @@ window.addEventListener('hashchange', function () {
 });
 editor.onDidChangeModelContent(function (event) {
     var contents = editor.getValue();
-    window.location.hash = "#" + encodeURIComponent(contents);
+    window.location.hash = "#" + encodeURIComponent(contents).replace(/\(/g, "%28").replace(/\)/g, "%29");
     output_1.typecheck(contents);
 });
 output_1.typecheck(editor.getValue());
