@@ -59,7 +59,7 @@ window.addEventListener('hashchange', () => {
 
 editor.onDidChangeModelContent((event: any) => {
   const contents = editor.getValue();
-  window.location.hash = `#${encodeURIComponent(contents)}`;
+  window.location.hash = `#${encodeURIComponent(contents).replace(/\(/g, "%28").replace(/\)/g, "%29")}`;
   typecheck(contents);
 });
 typecheck(editor.getValue());
