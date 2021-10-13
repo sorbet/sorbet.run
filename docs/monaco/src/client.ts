@@ -46,6 +46,7 @@ const editor = monaco.editor.create(element, {
   wordBasedSuggestions: false,
   acceptSuggestionOnCommitCharacter: false,
 });
+(window as any).editor = editor; // Useful for prototyping in dev tools
 editor.focus();
 
 window.addEventListener('hashchange', () => {
@@ -55,6 +56,38 @@ window.addEventListener('hashchange', () => {
   if (editor.getValue() !== ruby) {
     editor.setValue(ruby);
   }
+});
+
+const createIssueButton = document.getElementById('create-issue-from-example');
+createIssueButton!.addEventListener('click', function(ev) {
+  const template = `
+#### Input
+
+[→ View on sorbet.run](${window.location.href})
+
+\`\`\`ruby
+${editor.getValue()}
+\`\`\`
+
+#### Observed output
+
+\`\`\`
+${(document.querySelector('#output') as HTMLPreElement).innerText}
+\`\`\`
+
+<!-- TODO: For issues where \`srb tc\` differs from the behavior of \`sorbet-runtime\`, please include the observed runtime output. -->
+
+#### Expected behavior
+
+<!-- TODO: Briefly explain what the expected behavior should be on this example. -->
+
+- - -
+
+<!-- TODO: If there is any additional information you'd like to include, include it here. -->
+`;
+
+  const body = encodeURIComponent(template);
+  (ev.target as HTMLAnchorElement).href = `https://github.com/sorbet/sorbet/issues/new?body=${body}&labels=bug,unconfirmed`;
 });
 
 editor.onDidChangeModelContent((event: any) => {
