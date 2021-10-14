@@ -93,9 +93,9 @@ ${(document.querySelector('#output') as HTMLPreElement).innerText}
 editor.onDidChangeModelContent((event: any) => {
   const contents = editor.getValue();
   window.location.hash = `#${encodeURIComponent(contents).replace(/\(/g, "%28").replace(/\)/g, "%29")}`;
-  typecheck(contents);
+  typecheck(contents, (new URLSearchParams(window.location.search)).getAll('arg'));
 });
-typecheck(editor.getValue());
+typecheck(editor.getValue(), (new URLSearchParams(window.location.search)).getAll('arg'));
 
 
 // install Monaco language client services

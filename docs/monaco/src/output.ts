@@ -25,7 +25,7 @@ const flush = () => {
 };
 
 let lastRuby = '';
-const runCpp = (Module: any, ruby: string) => {
+const runCpp = (Module: any, ruby: string, extraArgs: string[]) => {
   if (lastRuby === ruby) {
     return;
   }
@@ -35,7 +35,8 @@ const runCpp = (Module: any, ruby: string) => {
 
   const t0 = performance.now();
   const f = Module.cwrap('typecheck', null, ['string']);
-  f(`${ruby}\n`);
+  const argv = ['sorbet', '--color=always', '--silence-dev-message', ...extraArgs, '-e', `${ruby}\n`]
+  f(JSON.stringify(argv));
   const t1 = performance.now();
 
   gtag('event', 'timing_complete', {
@@ -48,10 +49,10 @@ const runCpp = (Module: any, ruby: string) => {
   flush();
 };
 
-export const typecheck = (ruby: string) => {
+export const typecheck = (ruby: string, extraArgs: string[]) => {
   setTimeout(() => {
     if (sorbet) {
-      runCpp(sorbet, ruby)
+      runCpp(sorbet, ruby, extraArgs)
     }
   }, 1);
 };
@@ -83,6 +84,9 @@ async function instantiateSorbet() {
     stdout.push(replaced);
   };
   ({sorbet} = await createSorbet(onPrint, onError));
-  typecheck(monaco.editor.getModels()[0].getValue());
+  typecheck(
+    monaco.editor.getModels()[0].getValue(),
+    (new URLSearchParams(window.location.search)).getAll('arg')
+  );
 }
 instantiateSorbet();

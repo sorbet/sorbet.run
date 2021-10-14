@@ -86,9 +86,9 @@ createIssueButton.addEventListener('click', function (ev) {
 editor.onDidChangeModelContent(function (event) {
     var contents = editor.getValue();
     window.location.hash = "#" + encodeURIComponent(contents).replace(/\(/g, "%28").replace(/\)/g, "%29");
-    output_1.typecheck(contents);
+    output_1.typecheck(contents, (new URLSearchParams(window.location.search)).getAll('arg'));
 });
-output_1.typecheck(editor.getValue());
+output_1.typecheck(editor.getValue(), (new URLSearchParams(window.location.search)).getAll('arg'));
 // install Monaco language client services
 monaco_languageclient_1.MonacoServices.install(editor);
 function startLanguageServer() {

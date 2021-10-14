@@ -57,7 +57,7 @@ var flush = function () {
     stdout = [];
 };
 var lastRuby = '';
-var runCpp = function (Module, ruby) {
+var runCpp = function (Module, ruby, extraArgs) {
     if (lastRuby === ruby) {
         return;
     }
@@ -66,7 +66,8 @@ var runCpp = function (Module, ruby) {
     curId = runId;
     var t0 = performance.now();
     var f = Module.cwrap('typecheck', null, ['string']);
-    f(ruby + "\n");
+    var argv = ['sorbet', '--color=always', '--silence-dev-message'].concat(extraArgs, ['-e', ruby + "\n"]);
+    f(JSON.stringify(argv));
     var t1 = performance.now();
     gtag('event', 'timing_complete', {
         event_category: 'typecheck_time',
@@ -76,10 +77,10 @@ var runCpp = function (Module, ruby) {
     });
     flush();
 };
-exports.typecheck = function (ruby) {
+exports.typecheck = function (ruby, extraArgs) {
     setTimeout(function () {
         if (sorbet) {
-            runCpp(sorbet, ruby);
+            runCpp(sorbet, ruby, extraArgs);
         }
     }, 1);
 };
@@ -116,7 +117,7 @@ function instantiateSorbet() {
                     return [4 /*yield*/, sorbet_1.createSorbet(onPrint, onError)];
                 case 1:
                     (sorbet = (_a.sent()).sorbet);
-                    exports.typecheck(monaco.editor.getModels()[0].getValue());
+                    exports.typecheck(monaco.editor.getModels()[0].getValue(), (new URLSearchParams(window.location.search)).getAll('arg'));
                     return [2 /*return*/];
             }
         });
