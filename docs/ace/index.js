@@ -80,19 +80,21 @@
     return sorbet;
   };
 
-  let lastRuby = '';
+  let lastArgv = [];
   const runCpp = (Module) => {
     const ruby = editor.getValue();
-    if (lastRuby === ruby) {
+    const extraArgs = (new URLSearchParams(window.location.search)).getAll('arg');
+    const argv = ['sorbet', '--color=always', '--silence-dev-message', ...extraArgs, '-e', `${ruby}\n`]
+    if (lastRun === argv) {
       return;
     }
-    lastRuby = ruby;
+    lastArgv = argv;
     runId += 1;
     curId = runId;
 
     const t0 = performance.now();
     const f = Module.cwrap('typecheck', null, ['string']);
-    f(`${ruby}\n`);
+    f(JSON.stringify(argv));
     const t1 = performance.now();
 
     gtag('event', 'timing_complete', {
