@@ -7,6 +7,7 @@ revealjs-url: 'https://unpkg.com/reveal.js@^4'
 
 css:
 - 'css/stripe.css'
+- 'css/line-highlights.css'
 
 # These are all strings because they'll be interpolated into
 # JS and then become JS values.
@@ -41,12 +42,15 @@ Normal text
 
 ## 🐍 Python
 
-```python
+```{.python .hl-1 .hl-4 .hl-5}
 import requests
 
 # This does a thing
 def foo():
     return 'bar'
+
+def hello():
+    print('Another function')
 ```
 
 ## 🚀 Haskell
