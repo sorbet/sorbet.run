@@ -44,6 +44,7 @@
 
   --code-font: Menlo, Monaco, Source Code Pro, monospace;
   --code-font-size: 0.9em;
+  --code-highlight: #404182;
 
   --block-margin: 20px;
 
@@ -220,6 +221,10 @@
 
 /* --- Code ----------------------------------- */
 
+pre > code.sourceCode > span {
+  line-height: 1.7;
+}
+
 .reveal code {
   font-family: var(--code-font);
   font-size: var(--code-font-size);
@@ -357,6 +362,7 @@ html.stripe-light {
   --bg-color: var(--stripe-slate9);
   --fg-color: var(--stripe-slate2);
   --accent-color: var(--stripe-cyan4);
+  --code-highlight: #afbbc7;
 }
 
 html.stripe-light body {
