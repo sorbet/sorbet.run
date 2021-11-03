@@ -243,12 +243,22 @@ transition to trevor
 <!-- why do we expect a compiler to work for Ruby a priori? -->
 <!-- nathan has bits about this in the nonvergence talk -->
 
-## Sorbet
+##
 
-<!-- surprising that sorbet was not mentioned very much, or that it was so late in the pipeline -->
+<!-- TODO(trevor) maybe move this earlier, before example -->
 
-- A typechecker for ruby with a powerful static analysis pass
-- A gradual type system, allowing users to locally opt-out of type checking
+![](img/sorbet-llvm-pipeline.png)
+
+<!-- ![](img/compiled-code-in-production.png) -->
+
+
+::: notes
+
+A typechecker for ruby with a powerful static analysis pass built by Stripe
+
+A gradual type system, allowing users to locally opt-out of type checking
+
+:::
 
 ## Sorbet Example
 
@@ -280,21 +290,22 @@ We introduced an error by producing an array of strings instead of an array of i
 
 :::
 
-## LLVM
+##
 
-- A toolkit that powers many compilers today
-- clang, ghc, swift, …
+<!-- TODO(trevor) maybe move this earlier, before example -->
 
-## Sorbet + LLVM = Sorbet Compiler
+![](img/sorbet-llvm-pipeline.png)
 
-- Sorbet, augmented with an additional pass to generate LLVM IR
-- LLVM is used to generate native code
+<!-- ![](img/compiled-code-in-production.png) -->
+
 
 ::: notes
 
-Our type annotations help LLVM to generate better code.
+LLVM is used by many compilers: clang, ghc, swift...
 
-Runtime type-checks are coalesced to both reduce the amount of typechecking at runtime, and enable more aggressive inlining.
+LLVM IR is generated from a typechecked ruby program
+
+The code generation pass adds about 10k lines of c++, runtime support adds 5k lines of c
 
 :::
 
@@ -313,6 +324,9 @@ end
 ::: notes
 
 We'll use some pseudo-code to illustrate the transformations the compiler will apply
+
+Note that the compiler is not source-to-source, this example is just to give an
+idea of the sorts of transformations the compiler applies
 
 :::
 
@@ -337,23 +351,6 @@ The return value has been named, and its runtime type-check is also specialized 
 
 :::
 
-## Leveraging types (the compiler's view)
-```{.ruby .hl-3}
-def f(x)
-  raise unless x.is_a?(Array)
-  t = x.map {|v| v + 1}
-  raise unless t.is_a?(Array)
-  t
-end
-```
-
-
-::: notes
-
-* At this point we know that `x` is an `Array`, and can dispatch to a faster implementation of `map`
-
-:::
-
 ## Leveraging types (skipping the vm to call map directly)
 
 ```{.ruby .hl-3}
@@ -369,7 +366,9 @@ end
 
 ::: notes
 
-* This is hand-wavy: setting up the block for the call to `rb_ary_collect` takes more work than this
+At this point we know that `x` is an `Array`, and can dispatch directly to the implementation of `map`
+
+This is hand-wavy: setting up the block for the call to `rb_ary_collect` takes more work than this
 
 :::
 
@@ -390,7 +389,7 @@ end
 
 ::: notes
 
-* We can inline the definition of `rb_ary_collect` constructing the array directly instead
+We can inline the definition of `rb_ary_collect` constructing the array directly instead
 
 :::
 
@@ -411,7 +410,7 @@ end
 
 ::: notes
 
-* There's no longer any need for the block to be called, and we can inline it in the body of the loop
+There's no longer any need for the block to be called, and we can inline it in the body of the loop
 
 :::
 
@@ -458,8 +457,6 @@ end
 
 ## Final version
 
-<!-- TODO(trevor) make it clear that the compiler is not source-to-source -->
-
 ```{.ruby}
 def f(x)
   raise unless x.is_a?(Array)
@@ -474,104 +471,9 @@ end
 
 ::: notes
 
-
-
-:::
-
-##
-
-<!-- TODO(trevor) maybe move this earlier, before example -->
-
-![](img/sorbet-llvm-pipeline.png)
-
-<!-- ![](img/compiled-code-in-production.png) -->
-
-
-::: notes
-
-the "LLVM" part is only like extra 15k lines
+Re-iterate that this is not a source-to-source transformation
 
 :::
-
-## Requirements of source
-
-<!-- will people even know what typed: sigils are? -->
-
-- Must be **`# typed: true`** or higher
-- Must enable **`# frozen_string_literal: true`**
-- Must be marked **`# compiled: true`**
-
-::: notes
-
-Sorbet doesn't generate a CFG for `typed: false` and lower files.
-
-We intern string constants.
-
-This last point is subtle: we opt-in to compilation on a per-file basis.
-
-:::
-
-## Code Generation
-
-<!-- can we roll this whole section into just pointing out LLVM in the picture? -->
-
-<!-- this was the first mention of CFG, wasn't really clear what that means? -->
-
-- LLVM IR is generated from a typechecked CFG
-- The code generation pass and runtime support adds about 15k lines of code
-
-::: notes
-
-The 15k lines are 5k of runtime support and 10k of actual code-generation pass.
-
-:::
-
-## Modifying the ruby VM
-
-<!-- focus on "we have support code that we link into the VM for convenience" more than "we arbitrarily modify the VM"
-
-- Expose more symbols for runtime linking
-- Add a new sorbet calling convention for methods compiled by sorbet
-
-::: notes
-
-We need to expose previously hidden methods, `rb_ary_compact_bang` for example, so that we can call them directly when appropriate
-
-* Reasons for the sorbet calling convention
-  * speed up method calls with keyword args
-  * move common method frame setup code into the vm
-
-:::
-
-## Loading compiled code
-
-- Stripe already monkey patches require for our autoloader
-- Let’s use that monkey patch to also make the decision about loading a shared objects
-
-## Deploying Compiled Code
-
-<!-- potential cut? -->
-
-- We make changes frequently to the vm, and re-deploying to hosts wasn’t an acceptable solution
-- What about bundling ruby into the deployment artifacts?
-
-::: notes
-
-* Re-deploying ruby to hosts each time we made a change would be onerous and would significantly decrease development velocity on the compiler
-
-:::
-
-## Deploying Compiled Code (Additional benefits)
-
-- Canarying ruby upgrades is much simpler now
-- We run tests with the same patched vm in CI that goes out to production
-
-::: notes
-
-After getting compiled code running in production, our next step was to validate our hypothesis by profiling the running compiled code. Jake will describe what went into setting all of that up at Stripe.
-
-:::
-
 
 ## Agenda
 

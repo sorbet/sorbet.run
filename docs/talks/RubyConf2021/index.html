@@ -251,13 +251,15 @@
 <!-- why do we expect a compiler to work for Ruby a priori? -->
 <!-- nathan has bits about this in the nonvergence talk -->
 </section>
-<section id="sorbet" class="slide level2">
-<h2>Sorbet</h2>
-<!-- surprising that sorbet was not mentioned very much, or that it was so late in the pipeline -->
-<ul>
-<li>A typechecker for ruby with a powerful static analysis pass</li>
-<li>A gradual type system, allowing users to locally opt-out of type checking</li>
-</ul>
+<section id="section-6" class="slide level2">
+<h2></h2>
+<!-- TODO(trevor) maybe move this earlier, before example -->
+<p><img data-src="img/sorbet-llvm-pipeline.png" /></p>
+<!-- ![](img/compiled-code-in-production.png) -->
+<aside class="notes">
+<p>A typechecker for ruby with a powerful static analysis pass built by Stripe</p>
+<p>A gradual type system, allowing users to locally opt-out of type checking</p>
+</aside>
 </section>
 <section id="sorbet-example" class="slide level2">
 <h2>Sorbet Example</h2>
@@ -282,22 +284,15 @@
 <p>We introduced an error by producing an array of strings instead of an array of integers, and sorbet flags this statically</p>
 </aside>
 </section>
-<section id="llvm" class="slide level2">
-<h2>LLVM</h2>
-<ul>
-<li>A toolkit that powers many compilers today</li>
-<li>clang, ghc, swift, …</li>
-</ul>
-</section>
-<section id="sorbet-llvm-sorbet-compiler" class="slide level2">
-<h2>Sorbet + LLVM = Sorbet Compiler</h2>
-<ul>
-<li>Sorbet, augmented with an additional pass to generate LLVM IR</li>
-<li>LLVM is used to generate native code</li>
-</ul>
+<section id="section-7" class="slide level2">
+<h2></h2>
+<!-- TODO(trevor) maybe move this earlier, before example -->
+<p><img data-src="img/sorbet-llvm-pipeline.png" /></p>
+<!-- ![](img/compiled-code-in-production.png) -->
 <aside class="notes">
-<p>Our type annotations help LLVM to generate better code.</p>
-<p>Runtime type-checks are coalesced to both reduce the amount of typechecking at runtime, and enable more aggressive inlining.</p>
+<p>LLVM is used by many compilers: clang, ghc, swift…</p>
+<p>LLVM IR is generated from a typechecked ruby program</p>
+<p>The code generation pass adds about 10k lines of c++, runtime support adds 5k lines of c</p>
 </aside>
 </section>
 <section id="compiling-the-example" class="slide level2">
@@ -311,6 +306,7 @@
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 <aside class="notes">
 <p>We’ll use some pseudo-code to illustrate the transformations the compiler will apply</p>
+<p>Note that the compiler is not source-to-source, this example is just to give an idea of the sorts of transformations the compiler applies</p>
 </aside>
 </section>
 <section id="leveraging-types-the-compilers-view" class="slide level2">
@@ -327,57 +323,56 @@
 <p>The return value has been named, and its runtime type-check is also specialized to <code>Array</code>.</p>
 </aside>
 </section>
-<section id="leveraging-types-the-compilers-view-1" class="slide level2">
-<h2>Leveraging types (the compiler’s view)</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode ruby hl-3"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> x<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  t <span class="kw">=</span> x<span class="at">.map</span> <span class="kw">{|</span>v<span class="kw">|</span> v <span class="kw">+</span> <span class="dv">1</span><span class="kw">}</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> t<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  t</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
-<aside class="notes">
-<ul>
-<li>At this point we know that <code>x</code> is an <code>Array</code>, and can dispatch to a faster implementation of <code>map</code></li>
-</ul>
-</aside>
-</section>
 <section id="leveraging-types-skipping-the-vm-to-call-map-directly" class="slide level2">
 <h2>Leveraging types (skipping the vm to call map directly)</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode ruby hl-3"><code class="sourceCode ruby"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> x<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  t <span class="kw">=</span> rb_ary_collect(x) <span class="cf">do</span> <span class="kw">|</span>v<span class="kw">|</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    v <span class="kw">+</span> <span class="dv">1</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> t<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  t</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode ruby hl-3"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> x<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  t <span class="kw">=</span> rb_ary_collect(x) <span class="cf">do</span> <span class="kw">|</span>v<span class="kw">|</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    v <span class="kw">+</span> <span class="dv">1</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> t<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  t</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 <aside class="notes">
-<ul>
-<li>This is hand-wavy: setting up the block for the call to <code>rb_ary_collect</code> takes more work than this</li>
-</ul>
+<p>At this point we know that <code>x</code> is an <code>Array</code>, and can dispatch directly to the implementation of <code>map</code></p>
+<p>This is hand-wavy: setting up the block for the call to <code>rb_ary_collect</code> takes more work than this</p>
 </aside>
 </section>
 <section id="leveraging-types-inlining-the-definition-of-map" class="slide level2">
 <h2>Leveraging types (inlining the definition of map)</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> x<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  t <span class="kw">=</span> <span class="kw">[]</span>; i <span class="kw">=</span> <span class="dv">0</span>; len <span class="kw">=</span> x<span class="at">.length</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> i <span class="kw">&lt;</span> len</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    t <span class="kw">&lt;&lt;</span> <span class="kw">&lt;</span>callblock<span class="kw">&gt;</span>(x<span class="kw">[</span>i<span class="kw">]</span>) <span class="kw">{|</span>v<span class="kw">|</span> v <span class="kw">+</span> <span class="dv">1</span><span class="kw">}</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    i <span class="kw">+=</span> <span class="dv">1</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> t<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  t</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<aside class="notes">
+<p>We can inline the definition of <code>rb_ary_collect</code> constructing the array directly instead</p>
+</aside>
+</section>
+<section id="leveraging-types-inlining-the-block" class="slide level2">
+<h2>Leveraging types (inlining the block)</h2>
 <div class="sourceCode" id="cb7"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> x<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  t <span class="kw">=</span> <span class="kw">[]</span>; i <span class="kw">=</span> <span class="dv">0</span>; len <span class="kw">=</span> x<span class="at">.length</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> i <span class="kw">&lt;</span> len</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    t <span class="kw">&lt;&lt;</span> <span class="kw">&lt;</span>callblock<span class="kw">&gt;</span>(x<span class="kw">[</span>i<span class="kw">]</span>) <span class="kw">{|</span>v<span class="kw">|</span> v <span class="kw">+</span> <span class="dv">1</span><span class="kw">}</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    t <span class="kw">&lt;&lt;</span> x<span class="kw">[</span>i<span class="kw">]</span> <span class="kw">+</span> <span class="dv">1</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    i <span class="kw">+=</span> <span class="dv">1</span></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> t<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  t</span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 <aside class="notes">
-<ul>
-<li>We can inline the definition of <code>rb_ary_collect</code> constructing the array directly instead</li>
-</ul>
+<p>There’s no longer any need for the block to be called, and we can inline it in the body of the loop</p>
 </aside>
 </section>
-<section id="leveraging-types-inlining-the-block" class="slide level2">
-<h2>Leveraging types (inlining the block)</h2>
-<div class="sourceCode" id="cb8"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
+<section id="leveraging-types-removing-additional-method-calls" class="slide level2">
+<h2>Leveraging types (removing additional method calls)</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode ruby hl-3 hl-5"><code class="sourceCode ruby"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> x<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  t <span class="kw">=</span> <span class="kw">[]</span>; i <span class="kw">=</span> <span class="dv">0</span>; len <span class="kw">=</span> x<span class="at">.length</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> i <span class="kw">&lt;</span> len</span>
@@ -389,13 +384,13 @@
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 <aside class="notes">
 <ul>
-<li>There’s no longer any need for the block to be called, and we can inline it in the body of the loop</li>
+<li>We can further inline other calls to methods on <code>x</code>, inlining the calls to <code>length</code> and <code>[]</code>, and the <code>&lt;&lt;</code> method on <code>t</code></li>
 </ul>
 </aside>
 </section>
-<section id="leveraging-types-removing-additional-method-calls" class="slide level2">
-<h2>Leveraging types (removing additional method calls)</h2>
-<div class="sourceCode" id="cb9"><pre class="sourceCode ruby hl-3 hl-5"><code class="sourceCode ruby"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
+<section id="leveraging-types-removing-redundant-type-tests" class="slide level2">
+<h2>Leveraging types (removing redundant type tests)</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode ruby hl-8"><code class="sourceCode ruby"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> x<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  t <span class="kw">=</span> <span class="kw">[]</span>; i <span class="kw">=</span> <span class="dv">0</span>; len <span class="kw">=</span> x<span class="at">.length</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> i <span class="kw">&lt;</span> len</span>
@@ -407,122 +402,23 @@
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 <aside class="notes">
 <ul>
-<li>We can further inline other calls to methods on <code>x</code>, inlining the calls to <code>length</code> and <code>[]</code>, and the <code>&lt;&lt;</code> method on <code>t</code></li>
-</ul>
-</aside>
-</section>
-<section id="leveraging-types-removing-redundant-type-tests" class="slide level2">
-<h2>Leveraging types (removing redundant type tests)</h2>
-<div class="sourceCode" id="cb10"><pre class="sourceCode ruby hl-8"><code class="sourceCode ruby"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> x<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  t <span class="kw">=</span> <span class="kw">[]</span>; i <span class="kw">=</span> <span class="dv">0</span>; len <span class="kw">=</span> x<span class="at">.length</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> i <span class="kw">&lt;</span> len</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    t <span class="kw">&lt;&lt;</span> x<span class="kw">[</span>i<span class="kw">]</span> <span class="kw">+</span> <span class="dv">1</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    i <span class="kw">+=</span> <span class="dv">1</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> t<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  t</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
-<aside class="notes">
-<ul>
 <li>We know that <code>t</code> will always be an array, so we can remove the check on the return value</li>
 </ul>
 </aside>
 </section>
 <section id="final-version" class="slide level2">
 <h2>Final version</h2>
-<!-- TODO(trevor) make it clear that the compiler is not source-to-source -->
-<div class="sourceCode" id="cb11"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> x<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  t <span class="kw">=</span> <span class="kw">[]</span>; i <span class="kw">=</span> <span class="dv">0</span>; len <span class="kw">=</span> x<span class="at">.length</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> i <span class="kw">&lt;</span> len</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    t <span class="kw">&lt;&lt;</span> x<span class="kw">[</span>i<span class="kw">]</span> <span class="kw">+</span> <span class="dv">1</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    i <span class="kw">+=</span> <span class="dv">1</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  t</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> x<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  t <span class="kw">=</span> <span class="kw">[]</span>; i <span class="kw">=</span> <span class="dv">0</span>; len <span class="kw">=</span> x<span class="at">.length</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> i <span class="kw">&lt;</span> len</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    t <span class="kw">&lt;&lt;</span> x<span class="kw">[</span>i<span class="kw">]</span> <span class="kw">+</span> <span class="dv">1</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    i <span class="kw">+=</span> <span class="dv">1</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  t</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 <aside class="notes">
-
-</aside>
-</section>
-<section id="section-6" class="slide level2">
-<h2></h2>
-<!-- TODO(trevor) maybe move this earlier, before example -->
-<p><img data-src="img/sorbet-llvm-pipeline.png" /></p>
-<!-- ![](img/compiled-code-in-production.png) -->
-<aside class="notes">
-<p>the “LLVM” part is only like extra 15k lines</p>
-</aside>
-</section>
-<section id="requirements-of-source" class="slide level2">
-<h2>Requirements of source</h2>
-<!-- will people even know what typed: sigils are? -->
-<ul>
-<li>Must be <strong><code># typed: true</code></strong> or higher</li>
-<li>Must enable <strong><code># frozen_string_literal: true</code></strong></li>
-<li>Must be marked <strong><code># compiled: true</code></strong></li>
-</ul>
-<aside class="notes">
-<p>Sorbet doesn’t generate a CFG for <code>typed: false</code> and lower files.</p>
-<p>We intern string constants.</p>
-<p>This last point is subtle: we opt-in to compilation on a per-file basis.</p>
-</aside>
-</section>
-<section id="code-generation" class="slide level2">
-<h2>Code Generation</h2>
-<!-- can we roll this whole section into just pointing out LLVM in the picture? -->
-<!-- this was the first mention of CFG, wasn't really clear what that means? -->
-<ul>
-<li>LLVM IR is generated from a typechecked CFG</li>
-<li>The code generation pass and runtime support adds about 15k lines of code</li>
-</ul>
-<aside class="notes">
-<p>The 15k lines are 5k of runtime support and 10k of actual code-generation pass.</p>
-</aside>
-</section>
-<section id="modifying-the-ruby-vm" class="slide level2">
-<h2>Modifying the ruby VM</h2>
-<!-- focus on "we have support code that we link into the VM for convenience" more than "we arbitrarily modify the VM"
-
-- Expose more symbols for runtime linking
-- Add a new sorbet calling convention for methods compiled by sorbet
-
-::: notes
-
-We need to expose previously hidden methods, `rb_ary_compact_bang` for example, so that we can call them directly when appropriate
-
-* Reasons for the sorbet calling convention
-  * speed up method calls with keyword args
-  * move common method frame setup code into the vm
-
-:::
-
-## Loading compiled code
-
-- Stripe already monkey patches require for our autoloader
-- Let’s use that monkey patch to also make the decision about loading a shared objects
-
-## Deploying Compiled Code
-
-<!-- potential cut? -->
-<ul>
-<li>We make changes frequently to the vm, and re-deploying to hosts wasn’t an acceptable solution</li>
-<li>What about bundling ruby into the deployment artifacts?</li>
-</ul>
-<aside class="notes">
-<ul>
-<li>Re-deploying ruby to hosts each time we made a change would be onerous and would significantly decrease development velocity on the compiler</li>
-</ul>
-</aside>
-</section>
-<section id="deploying-compiled-code-additional-benefits" class="slide level2">
-<h2>Deploying Compiled Code (Additional benefits)</h2>
-<ul>
-<li>Canarying ruby upgrades is much simpler now</li>
-<li>We run tests with the same patched vm in CI that goes out to production</li>
-</ul>
-<aside class="notes">
-<p>After getting compiled code running in production, our next step was to validate our hypothesis by profiling the running compiled code. Jake will describe what went into setting all of that up at Stripe.</p>
+<p>Re-iterate that this is not a source-to-source transformation</p>
 </aside>
 </section>
 <section id="agenda-4" class="slide level2">
@@ -643,7 +539,7 @@ We need to expose previously hidden methods, `rb_ary_compact_bang` for example, 
 
         // Add the current slide number to the URL hash so that reloading the
         // page/copying the URL will return you to the same slide
-        hash: false,
+        hash: true,
 
         // Start with 1 for the hash rather than 0
         hashOneBasedIndex: false,
