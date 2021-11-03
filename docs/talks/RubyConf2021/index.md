@@ -35,7 +35,7 @@ include-after:
 - Why does Stripe care about Ruby performance?
 - Why write a compiler for Ruby?
 - How does it work?
-- How did we adopt it?
+- How are we adopting it?
 
 
 ## 🔎 About Stripe
