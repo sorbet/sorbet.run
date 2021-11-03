@@ -35,6 +35,46 @@ include-after:
 
 ##
 
+:::: {.columns style="text-align: center;"}
+
+::: {.column width="20%"}
+![](img/sorbet-logo.svg){height="175px"}
+
+Sorbet
+:::
+
+::: {.column width="7%"}
+
+\
+
+### +
+
+:::
+
+::: {.column width="33%"}
+![](img/LLVMWyvernSmall.png){height="175px"}
+
+LLVM
+:::
+
+::: {.column width="7%"}
+
+\
+
+### =
+
+:::
+
+::: {.column width="33%"}
+![](img/sorbet-compiler-logo.svg){height="175px"}
+
+the Sorbet Compiler
+:::
+
+::::
+
+## Agenda
+
 - Why does Stripe care about performance?
 
 - Why build a compiler for Ruby?
@@ -44,7 +84,7 @@ include-after:
 - How are we adopting it?
 
 
-##
+## Agenda
 
 - **Why does Stripe care about performance?**
 
@@ -83,7 +123,7 @@ You're going to choose the faster API over the slower API if they're otherwise e
 :::
 
 
-##
+## Agenda
 
 - Why does Stripe care about performance?
 
@@ -178,7 +218,7 @@ targets Ruby C extensions
 :::
 
 
-##
+## Agenda
 
 - Why does Stripe care about performance?
 
@@ -527,7 +567,7 @@ After getting compiled code running in production, our next step was to validate
 :::
 
 
-##
+## Agenda
 
 - Why does Stripe care about performance?
 
