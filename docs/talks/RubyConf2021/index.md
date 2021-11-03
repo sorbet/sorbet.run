@@ -73,6 +73,12 @@ the Sorbet Compiler
 
 ::::
 
+::: notes
+
+"For those who don't know..."
+
+:::
+
 ## Agenda
 
 - Why does Stripe care about performance?
