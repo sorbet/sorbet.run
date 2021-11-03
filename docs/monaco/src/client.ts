@@ -164,8 +164,9 @@ let socket: any = null;
 
 async function instantiateSorbet() {
   let errorCalled = false;
+  const onPrint = (msg: string) => console.log(msg);
   const onError = (event: any) => {
-    console.log(event);
+    console.log({event});
      // If Sorbet crashes, try creating Sorbet again.
      // Avoid acting on multiple errors from the same Sorbet instance.
      if (errorCalled) {
@@ -181,7 +182,7 @@ async function instantiateSorbet() {
      sorbet = null;
      instantiateSorbet();
   };
-  ({sorbet} = await createSorbet(onError, onError));
+  ({sorbet} = await createSorbet(onPrint, onError));
   startLanguageServer();
 }
 
