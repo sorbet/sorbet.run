@@ -534,77 +534,57 @@ We need to expose previously hidden methods, `rb_ary_compact_bang` for example, 
 <p>switch to jez</p>
 </aside>
 </section>
-<section id="adopting-in-production" class="slide level2">
-<h2>Adopting in production</h2>
+<section id="goals-for-adoption" class="slide level2">
+<h2>Goals for adoption</h2>
 <!-- TODO(jez) we test in CI too, not only in production -->
-<ol type="1">
-<li>Compare performance on real traffic</li>
-<li>Must be incremental</li>
-<li>Plan for when things go wrong</li>
-</ol>
+<p>1️⃣ Plan for when things go wrong</p>
+<p>2️⃣ Compare performance on real traffic</p>
+<p>3️⃣ Must be incremental</p>
 <!-- mature company, have existing guardrails -->
 <aside class="notes">
 <p>incremental == iteration speed</p>
 </aside>
 </section>
-<section id="real-traffic-small-blast-radius" class="slide level2">
-<h2>Real traffic, small blast radius</h2>
-<p><img data-src="img/api-fleet.png" /></p>
-</section>
-<section id="stackprof-in-production" class="slide level2">
-<h2>Stackprof in production 👷‍♂️</h2>
-<!-- this might be in the weeds. maybe just mention stackprof and move on -->
-<!-- uses standard ruby tools--compiler just works with all this stuff -->
-<p><img data-src="img/stackprof.png" /></p>
-<aside class="notes">
-<p>Record contents of stack periodically</p>
-<p>Use existing Ruby tools!</p>
-<p>Reuse another team’s work (to measure interpreted code)</p>
-<p>Bunch of things we can do with this information</p>
-</aside>
-</section>
-<section id="compile-incrementally-most-important-first" class="slide level2">
-<h2>🏆 Compile incrementally, most important first</h2>
-<p><img data-src="img/stackprof.png" /></p>
-<aside class="notes">
-<p>Compiling file with <code>A</code> is more important than <code>B</code> (B always calls into <code>A</code> anyways)</p>
-<p>Rank all files required by importance to production</p>
-<p>Low effort, high reward</p>
-<p>“Should we implements support for X or Y first?”</p>
-</aside>
-</section>
-<section id="estimate-latency-of-single-method" class="slide level2">
-<h2>Estimate latency of single method ⚖️</h2>
-<p><img data-src="img/stackprof-estimate.png" /></p>
-<aside class="notes">
-<p>Did we make <code>A#bar</code> faster or slower?</p>
-</aside>
-</section>
-<section id="track-how-much-of-request-runs-compiled" class="slide level2">
-<h2>⏱ Track how much of request runs compiled</h2>
-<p><img data-src="img/time-in-compiled-files.png" /></p>
-</section>
 <section id="plan-for-when-things-go-wrong" class="slide level2">
-<h2>Plan for when things go wrong 😱</h2>
-<p><img data-src="img/api-fleet.png" /></p>
+<h2>1️⃣ Plan for when things go wrong</h2>
+<ul>
+<li><p>Compiler test cases</p></li>
+<li><p>Entire Stripe test suite</p></li>
+<li><p>Pre-production (staging environment)</p></li>
+<li><p>Blue/green deploys</p></li>
+<li><p>Separate host set to kill traffic fast</p></li>
+</ul>
 <aside class="notes">
-<ol type="1">
-<li>Flip a feature flag (no code change, build, no deploy)</li>
-<li>All compiled code off in under 30 seconds</li>
-</ol>
-<p>Rest of the organization is happy with us experimenting</p>
+<p>multiple lines of defense</p>
+</aside>
+</section>
+<section id="performance-on-real-traffic" class="slide level2">
+<h2>2️⃣ Performance on real traffic</h2>
+<p><img data-src="img/api-fleet.png" /></p>
+</section>
+<section id="must-be-incremental" class="slide level2">
+<h2>3️⃣ Must be incremental</h2>
+<p>→ Measure with <strong>Stackprof</strong></p>
+<p><img data-src="img/stackprof.png" /></p>
+<aside class="notes">
+<p>Compiling file with <code>A</code> is more important than <code>B</code></p>
+<p>Existing Stackprof tooling!</p>
 </aside>
 </section>
 <section id="whats-next" class="slide level2">
-<h2>What’s next?</h2>
+<h2>What’s next? 💭</h2>
 <!-- should we have a slide here explaining why we're not talking about numbers? -->
 <!-- "this is what we're getting out of it" -->
 <!-- we've learned a lot about how to build fast C extensions, and we're eager to chat with people about potential modifications to the Ruby C API that would make C extensions more powerful and also allow the compiler to be faster -->
-<ul>
-<li>Increase adoption (fraction running compiled)</li>
-<li>Profile and optimize (improve compiled performance)</li>
-<li>Keep time-to-compile low (developer productivity)</li>
-</ul>
+<p>📈 <strong>Increase adoption</strong><br />
+　 (fraction running compiled)</p>
+<p>⏱ <strong>Profile and optimize</strong><br />
+　 (improve compiled performance)</p>
+<p>⏳ <strong>Keep time-to-compile low</strong><br />
+　 (developer productivity)</p>
+<aside class="notes">
+<p>note quite worth sharing concrete performance numbers yet, because we’ve been focused on adoption</p>
+</aside>
 </section>
 <section id="questions" class="slide level2">
 <h2>Questions? 🙋</h2>

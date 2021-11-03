@@ -584,13 +584,16 @@ switch to jez
 :::
 
 
-## Adopting in production
+## Goals for adoption
 
 <!-- TODO(jez) we test in CI too, not only in production -->
 
-1. Compare performance on real traffic
-2. Must be incremental
-3. Plan for when things go wrong
+1️⃣ Plan for when things go wrong
+
+2️⃣ Compare performance on real traffic
+
+3️⃣ Must be incremental
+
 
 <!-- mature company, have existing guardrails -->
 
@@ -600,32 +603,32 @@ incremental == iteration speed
 
 :::
 
-## Real traffic, small blast radius
+## 1️⃣ Plan for when things go wrong
+
+- Compiler test cases
+
+- Entire Stripe test suite
+
+- Pre-production (staging environment)
+
+- Blue/green deploys
+
+- Separate host set to kill traffic fast
+
+::: notes
+
+multiple lines of defense
+
+:::
+
+## 2️⃣ Performance on real traffic
 
 ![](img/api-fleet.png)
 
 
-## Stackprof in production 👷‍♂️
+## 3️⃣ Must be incremental
 
-<!-- this might be in the weeds. maybe just mention stackprof and move on -->
-<!-- uses standard ruby tools--compiler just works with all this stuff -->
-
-![](img/stackprof.png)
-
-
-::: notes
-
-Record contents of stack periodically
-
-Use existing Ruby tools!
-
-Reuse another team's work (to measure interpreted code)
-
-Bunch of things we can do with this information
-
-:::
-
-## 🏆 Compile incrementally, most important first
+→ Measure with **Stackprof**
 
 ![](img/stackprof.png)
 
@@ -633,53 +636,33 @@ Bunch of things we can do with this information
 ::: notes
 
 Compiling file with `A` is more important than `B`
-(B always calls into `A` anyways)
 
-Rank all files required by importance to production
-
-Low effort, high reward
-
-"Should we implements support for X or Y first?"
+Existing Stackprof tooling!
 
 :::
 
-## Estimate latency of single method ⚖️
-
-![](img/stackprof-estimate.png)
-
-::: notes
-
-Did we make `A#bar` faster or slower?
-
-:::
-
-## ⏱ Track how much of request runs compiled
-
-![](img/time-in-compiled-files.png)
-
-## Plan for when things go wrong 😱
-
-![](img/api-fleet.png)
-
-::: notes
-
-1. Flip a feature flag (no code change, build, no deploy)
-2. All compiled code off in under 30 seconds
-
-Rest of the organization is happy with us experimenting
-
-:::
-
-## What's next?
+## What's next? 💭
 
 <!-- should we have a slide here explaining why we're not talking about numbers? -->
 <!-- "this is what we're getting out of it" -->
 
 <!-- we've learned a lot about how to build fast C extensions, and we're eager to chat with people about potential modifications to the Ruby C API that would make C extensions more powerful and also allow the compiler to be faster -->
 
-- Increase adoption (fraction running compiled)
-- Profile and optimize (improve compiled performance)
-- Keep time-to-compile low (developer productivity)
+📈 **Increase adoption**\
+　 (fraction running compiled)
+
+⏱ **Profile and optimize**\
+　 (improve compiled performance)
+
+⏳ **Keep time-to-compile low**\
+　 (developer productivity)
+
+::: notes
+
+note quite worth sharing concrete performance numbers yet, because we've been
+focused on adoption
+
+:::
 
 ## Questions? 🙋
 
