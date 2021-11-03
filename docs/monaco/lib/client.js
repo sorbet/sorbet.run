@@ -148,13 +148,14 @@ var sorbet = null;
 var socket = null;
 function instantiateSorbet() {
     return __awaiter(this, void 0, void 0, function () {
-        var errorCalled, onError;
+        var errorCalled, onPrint, onError;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     errorCalled = false;
+                    onPrint = function (msg) { return console.log(msg); };
                     onError = function (event) {
-                        console.log(event);
+                        console.log({ event: event });
                         // If Sorbet crashes, try creating Sorbet again.
                         // Avoid acting on multiple errors from the same Sorbet instance.
                         if (errorCalled) {
@@ -169,7 +170,7 @@ function instantiateSorbet() {
                         sorbet = null;
                         instantiateSorbet();
                     };
-                    return [4 /*yield*/, sorbet_1.createSorbet(onError, onError)];
+                    return [4 /*yield*/, sorbet_1.createSorbet(onPrint, onError)];
                 case 1:
                     (sorbet = (_a.sent()).sorbet);
                     startLanguageServer();
