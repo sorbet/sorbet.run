@@ -102,13 +102,20 @@
 
 <section id="section" class="slide level2">
 <h2></h2>
-<!-- TODO(jez, trevor) practice, practice, practice -->
-<!-- overal pace was quick, we need to cut stuff -->
 <ul>
-<li>Why does Stripe care about Ruby performance?</li>
-<li>Why write a compiler for Ruby?</li>
-<li>How does it work?</li>
-<li>How are we adopting it?</li>
+<li><p>Why does Stripe care about performance?</p></li>
+<li><p>Why build a compiler for Ruby?</p></li>
+<li><p>How does it work?</p></li>
+<li><p>How are we adopting it?</p></li>
+</ul>
+</section>
+<section id="section-1" class="slide level2">
+<h2></h2>
+<ul>
+<li><p><strong>Why does Stripe care about performance?</strong></p></li>
+<li><p>Why build a compiler for Ruby?</p></li>
+<li><p>How does it work?</p></li>
+<li><p>How are we adopting it?</p></li>
 </ul>
 </section>
 <section id="about-stripe" class="slide level2">
@@ -139,15 +146,6 @@
 <p>Product for pretty much everything that has to do with your business’s money needs.</p>
 </aside>
 </section>
-<section id="stripe-uses-ruby-extensively" class="slide level2">
-<h2>💎 Stripe uses <strong>Ruby</strong> extensively</h2>
-<ul>
-<li><p>Powers our most important services (Stripe API)</p></li>
-<li><p>Hundreds of engineers use Ruby daily</p></li>
-<li><p>Millions of lines of code (monorepo)</p></li>
-<li><p>Massive type coverage with Sorbet</p></li>
-</ul>
-</section>
 <section id="api-latency-is-a-feature" class="slide level2">
 <h2>API latency is a feature ✨</h2>
 <ul>
@@ -158,6 +156,24 @@
 <p>You’re going to choose the faster API over the slower API if they’re otherwise equal.</p>
 </aside>
 </section>
+<section id="section-2" class="slide level2">
+<h2></h2>
+<ul>
+<li><p>Why does Stripe care about performance?</p></li>
+<li><p><strong>Why build a compiler for Ruby?</strong></p></li>
+<li><p>How does it work?</p></li>
+<li><p>How are we adopting it?</p></li>
+</ul>
+</section>
+<section id="stripe-uses-ruby-extensively" class="slide level2">
+<h2>💎 Stripe uses <strong>Ruby</strong> extensively</h2>
+<ul>
+<li><p>Powers our most important services (Stripe API)</p></li>
+<li><p>Hundreds of engineers use Ruby daily</p></li>
+<li><p>Millions of lines of code (monorepo)</p></li>
+<li><p>Massive type coverage with Sorbet</p></li>
+</ul>
+</section>
 <section id="visualizing-api-latency" class="slide level2">
 <h2>Visualizing API Latency</h2>
 <p><img data-src="img/request-breakdown-no-header.png" /></p>
@@ -167,18 +183,18 @@
 <p>Dozens and dozens of teams’ code</p>
 </aside>
 </section>
-<section id="section-1" class="slide level2">
+<section id="section-3" class="slide level2">
 <h2></h2>
 <p><img data-src="img/compiler-leverage-1.png" /></p>
 </section>
-<section id="section-2" class="slide level2">
+<section id="section-4" class="slide level2">
 <h2></h2>
 <p><img data-src="img/compiler-leverage-2.png" /></p>
 <aside class="notes">
 <p>generous: hottest files take &lt;1% of request duration</p>
 </aside>
 </section>
-<section id="section-3" class="slide level2">
+<section id="section-5" class="slide level2">
 <h2></h2>
 <p><img data-src="img/compiler-leverage-3.png" /></p>
 <aside class="notes">
@@ -402,7 +418,7 @@
 
 </aside>
 </section>
-<section id="section-4" class="slide level2">
+<section id="section-6" class="slide level2">
 <h2></h2>
 <!-- TODO(trevor) maybe move this earlier, before example -->
 <p><img data-src="img/sorbet-llvm-pipeline.png" /></p>

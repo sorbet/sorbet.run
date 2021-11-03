@@ -25,16 +25,31 @@ slideNumber: '\"c/t\"'
 
 include-after:
 - '<script src="js/toggle-theme.js"></script>'
+
+# TODO(jez, trevor) practice, practice, practice
+# overal pace was quick, we need to cut stuff
+
 ---
 
 ##
 
-<!-- TODO(jez, trevor) practice, practice, practice -->
-<!-- overal pace was quick, we need to cut stuff -->
+- Why does Stripe care about performance?
 
-- Why does Stripe care about Ruby performance?
-- Why write a compiler for Ruby?
+- Why build a compiler for Ruby?
+
 - How does it work?
+
+- How are we adopting it?
+
+
+##
+
+- **Why does Stripe care about performance?**
+
+- Why build a compiler for Ruby?
+
+- How does it work?
+
 - How are we adopting it?
 
 
@@ -59,6 +74,7 @@ to work in a super-typed Ruby codebase.
 
 :::
 
+
 ## 📈 Stripe is an API for building a business
 
 - Accept payments
@@ -75,16 +91,6 @@ business's money needs.
 
 :::
 
-## 💎 Stripe uses **Ruby** extensively
-
-- Powers our most important services (Stripe API)
-
-- Hundreds of engineers use Ruby daily
-
-- Millions of lines of code (monorepo)
-
-- Massive type coverage with Sorbet
-
 
 ## API latency is a feature ✨
 
@@ -97,6 +103,29 @@ business's money needs.
 You're going to choose the faster API over the slower API if they're otherwise equal.
 
 :::
+
+
+##
+
+- Why does Stripe care about performance?
+
+- **Why build a compiler for Ruby?**
+
+- How does it work?
+
+- How are we adopting it?
+
+
+## 💎 Stripe uses **Ruby** extensively
+
+- Powers our most important services (Stripe API)
+
+- Hundreds of engineers use Ruby daily
+
+- Millions of lines of code (monorepo)
+
+- Massive type coverage with Sorbet
+
 
 ## Visualizing API Latency
 
@@ -139,7 +168,6 @@ pieces"
 high-leverage
 
 :::
-
 
 ## Why build a compiler...? 🤔
 
