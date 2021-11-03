@@ -118,28 +118,12 @@
 <li><p>How are we adopting it?</p></li>
 </ul>
 </section>
-<section id="about-stripe" class="slide level2">
-<h2>🔎 About Stripe</h2>
-<!-- We're the company that brought you Sorbet -->
-<ul>
-<li><p>More than 4,000 employees</p></li>
-<li><p>Company that built Sorbet</p></li>
-<li><p>22% of company works <strong>permanently remote</strong></p></li>
-<li><p>We’re hiring!</p>
-<p>→ <a href="https://stripe.com/jobs"><strong>stripe.com/jobs</strong></a></p></li>
-</ul>
-<aside class="notes">
-<p>Working at Stripe is a great way to find out what it’s like to work in a super-typed Ruby codebase.</p>
-</aside>
-</section>
 <section id="stripe-is-an-api-for-building-a-business" class="slide level2">
 <h2>📈 Stripe is an API for building a business</h2>
 <ul>
 <li>Accept payments</li>
 <li>Coordinate payouts</li>
 <li>Manage taxes</li>
-<li>Borrow &amp; lend</li>
-<li>Expand globally</li>
 <li>…</li>
 </ul>
 <aside class="notes">
@@ -176,11 +160,16 @@
 </section>
 <section id="visualizing-api-latency" class="slide level2">
 <h2>Visualizing API Latency</h2>
-<p><img data-src="img/request-breakdown-no-header.png" /></p>
+<p><img data-src="img/request-breakdown-1.png" /></p>
 <aside class="notes">
 <p>I/O is sizable, but is being tackled by other projects—compiler focuses on Ruby</p>
-<p>Ruby portion is owned by many teams (have their own priorities)</p>
-<p>Dozens and dozens of teams’ code</p>
+</aside>
+</section>
+<section id="visualizing-api-latency-1" class="slide level2">
+<h2>Visualizing API Latency</h2>
+<p><img data-src="img/request-breakdown-2.png" /></p>
+<aside class="notes">
+<p>Ruby portion is owned by dozens of teams</p>
 </aside>
 </section>
 <section id="section-3" class="slide level2">
@@ -202,25 +191,37 @@
 <p>high-leverage</p>
 </aside>
 </section>
-<section id="why-build-a-compiler" class="slide level2">
-<h2>Why build a compiler…? 🤔</h2>
-<div>
+<section id="why-aot-not-jit" class="slide level2">
+<h2>Why AoT, not JIT?</h2>
+<p><strong>AoT</strong>: ahead-of-time<br />
+<strong>JIT</strong>: just-in-time</p>
 <ul>
-<li class="fragment">… at all?</li>
-<li class="fragment">… instead of a JIT compiler?</li>
-<li class="fragment">… instead of using TruffleRuby or JRuby?</li>
-<li class="fragment">… for Ruby, instead of using another language?</li>
+<li><p>Sorbet types speed up generated code</p></li>
+<li><p>AoT are simpler (implement, debug)</p></li>
+<li><p>Can still do both!</p></li>
 </ul>
-</div>
+</section>
+<section id="why-not-truffleruby-or-jruby" class="slide level2">
+<h2>Why not TruffleRuby or JRuby?</h2>
+<ul>
+<li><p>No incremental migration</p></li>
+<li><p>Compiler works with existing Ruby VM</p></li>
+</ul>
 <aside class="notes">
-<ol type="1">
-<li>Sorbet has view of whole program</li>
-<li>compiler is simpler (to implement, to debug)</li>
-<li>our compiler is incremental</li>
-<li>partly are doing this, but too much to ask to rewrite everything</li>
-</ol>
+<p>targets Ruby C extensions</p>
 </aside>
-<!------------------- switch to trevor ------------------->
+</section>
+<section id="section-6" class="slide level2">
+<h2></h2>
+<ul>
+<li><p>Why does Stripe care about performance?</p></li>
+<li><p>Why build a compiler for Ruby?</p></li>
+<li><p><strong>How does it work?</strong></p></li>
+<li><p>How are we adopting it?</p></li>
+</ul>
+<aside class="notes">
+<p>transition to trevor</p>
+</aside>
 <!-- why do we expect a compiler to work for Ruby a priori? -->
 <!-- nathan has bits about this in the nonvergence talk -->
 </section>
@@ -418,7 +419,7 @@
 
 </aside>
 </section>
-<section id="section-6" class="slide level2">
+<section id="section-7" class="slide level2">
 <h2></h2>
 <!-- TODO(trevor) maybe move this earlier, before example -->
 <p><img data-src="img/sorbet-llvm-pipeline.png" /></p>
@@ -497,7 +498,18 @@ We need to expose previously hidden methods, `rb_ary_compact_bang` for example, 
 <aside class="notes">
 <p>After getting compiled code running in production, our next step was to validate our hypothesis by profiling the running compiled code. Jake will describe what went into setting all of that up at Stripe.</p>
 </aside>
-<!-------------------- switch to jez --------------------->
+</section>
+<section id="section-8" class="slide level2">
+<h2></h2>
+<ul>
+<li><p>Why does Stripe care about performance?</p></li>
+<li><p>Why build a compiler for Ruby?</p></li>
+<li><p>How does it work?</p></li>
+<li><p><strong>How are we adopting it?</strong></p></li>
+</ul>
+<aside class="notes">
+<p>switch to jez</p>
+</aside>
 </section>
 <section id="adopting-in-production" class="slide level2">
 <h2>Adopting in production</h2>
@@ -572,7 +584,18 @@ We need to expose previously hidden methods, `rb_ary_compact_bang` for example, 
 </ul>
 </section>
 <section id="questions" class="slide level2">
-<h2>Questions? 🙋‍♂️</h2>
+<h2>Questions? 🙋</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><em>btw, we have stickers!</em></p>
+<p><img data-src="img/sorbet-logo.svg" height="150" /> <img data-src="img/sorbet-compiler-logo.svg" height="150" /></p>
+</div><div class="column" style="width:50%;">
+<p><em>also, we’re hiring!</em></p>
+<p>→ <a href="https://stripe.com/jobs">stripe.com/jobs</a></p>
+</div>
+</div>
+<p><br />
+</p>
 </section>
     </div>
   </div>

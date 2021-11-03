@@ -29,6 +29,8 @@ include-after:
 # TODO(jez, trevor) practice, practice, practice
 # overal pace was quick, we need to cut stuff
 
+# TODO(jez) separate light/dark mode images
+
 ---
 
 ##
@@ -53,35 +55,11 @@ include-after:
 - How are we adopting it?
 
 
-## 🔎 About Stripe
-
-<!-- We're the company that brought you Sorbet -->
-
-- More than 4,000 employees
-
-- Company that built Sorbet
-
-- 22% of company works **permanently remote**
-
-- We're hiring!
-
-  → [**stripe.com/jobs**](https://stripe.com/jobs)
-
-::: notes
-
-Working at Stripe is a great way to find out what it's like
-to work in a super-typed Ruby codebase.
-
-:::
-
-
 ## 📈 Stripe is an API for building a business
 
 - Accept payments
 - Coordinate payouts
 - Manage taxes
-- Borrow & lend
-- Expand globally
 - ...
 
 ::: notes
@@ -129,16 +107,23 @@ You're going to choose the faster API over the slower API if they're otherwise e
 
 ## Visualizing API Latency
 
-![](img/request-breakdown-no-header.png)
-
+![](img/request-breakdown-1.png)
 
 ::: notes
 
 I/O is sizable, but is being tackled by other projects—compiler focuses on Ruby
 
-Ruby portion is owned by many teams (have their own priorities)
+:::
 
-Dozens and dozens of teams' code
+
+## Visualizing API Latency
+
+![](img/request-breakdown-2.png)
+
+
+::: notes
+
+Ruby portion is owned by dozens of teams
 
 :::
 
@@ -169,27 +154,45 @@ high-leverage
 
 :::
 
-## Why build a compiler...? 🤔
+## Why AoT, not JIT?
 
-::: incremental
+**AoT**: ahead-of-time\
+**JIT**: just-in-time
 
-- ... at all?
-- ... instead of a JIT compiler?
-- ... instead of using TruffleRuby or JRuby?
-- ... for Ruby, instead of using another language?
+- Sorbet types speed up generated code
 
-:::
+- AoT are simpler (implement, debug)
+
+- Can still do both!
+
+## Why not TruffleRuby or JRuby?
+
+- No incremental migration
+
+- Compiler works with existing Ruby VM
 
 ::: notes
 
-1. Sorbet has view of whole program
-2. compiler is simpler (to implement, to debug)
-3. our compiler is incremental
-4. partly are doing this, but too much to ask to rewrite everything
+targets Ruby C extensions
 
 :::
 
-<!------------------- switch to trevor ------------------->
+
+##
+
+- Why does Stripe care about performance?
+
+- Why build a compiler for Ruby?
+
+- **How does it work?**
+
+- How are we adopting it?
+
+::: notes
+
+transition to trevor
+
+:::
 
 <!-- why do we expect a compiler to work for Ruby a priori? -->
 <!-- nathan has bits about this in the nonvergence talk -->
@@ -523,7 +526,23 @@ After getting compiled code running in production, our next step was to validate
 
 :::
 
-<!-------------------- switch to jez --------------------->
+
+##
+
+- Why does Stripe care about performance?
+
+- Why build a compiler for Ruby?
+
+- How does it work?
+
+- **How are we adopting it?**
+
+::: notes
+
+switch to jez
+
+:::
+
 
 ## Adopting in production
 
@@ -622,6 +641,25 @@ Rest of the organization is happy with us experimenting
 - Profile and optimize (improve compiled performance)
 - Keep time-to-compile low (developer productivity)
 
-## Questions? 🙋‍♂️
+## Questions? 🙋
+
+:::: {.columns}
+
+::: {.column width="50%"}
+*btw, we have stickers!*
+
+![](img/sorbet-logo.svg){height="150px"}
+![](img/sorbet-compiler-logo.svg){height="150px"}
+:::
+
+::: {.column width="50%"}
+*also, we're hiring!*
+
+→ [stripe.com/jobs](https://stripe.com/jobs)
+:::
+::::
+
+
+\
 
 
