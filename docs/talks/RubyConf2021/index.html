@@ -186,32 +186,32 @@
 </section>
 <section id="visualizing-api-latency" class="slide level2">
 <h2>Visualizing API Latency</h2>
-<p><img data-src="img/request-breakdown-1.png" /></p>
+<p><img data-src="img/dark/request-breakdown-1.png" /> <img data-src="img/light/request-breakdown-1.png" /></p>
 <aside class="notes">
 <p>I/O is sizable, but is being tackled by other projects—compiler focuses on Ruby</p>
 </aside>
 </section>
 <section id="visualizing-api-latency-1" class="slide level2">
 <h2>Visualizing API Latency</h2>
-<p><img data-src="img/request-breakdown-2.png" /></p>
+<p><img data-src="img/dark/request-breakdown-2.png" /> <img data-src="img/light/request-breakdown-2.png" /></p>
 <aside class="notes">
 <p>Ruby portion is owned by dozens of teams</p>
 </aside>
 </section>
 <section id="section-3" class="slide level2">
 <h2></h2>
-<p><img data-src="img/compiler-leverage-1.png" /></p>
+<p><img data-src="img/dark/compiler-leverage-1.png" /> <img data-src="img/light/compiler-leverage-1.png" /></p>
 </section>
 <section id="section-4" class="slide level2">
 <h2></h2>
-<p><img data-src="img/compiler-leverage-2.png" /></p>
+<p><img data-src="img/dark/compiler-leverage-2.png" /> <img data-src="img/light/compiler-leverage-2.png" /></p>
 <aside class="notes">
 <p>generous: hottest files take &lt;1% of request duration</p>
 </aside>
 </section>
 <section id="section-5" class="slide level2">
 <h2></h2>
-<p><img data-src="img/compiler-leverage-3.png" /></p>
+<p><img data-src="img/dark/compiler-leverage-3.png" /> <img data-src="img/light/compiler-leverage-3.png" /></p>
 <aside class="notes">
 <p>“if the compiler works, it has the potential to speed up all pieces”</p>
 <p>high-leverage</p>
@@ -248,13 +248,10 @@
 <aside class="notes">
 <p>transition to trevor</p>
 </aside>
-<!-- why do we expect a compiler to work for Ruby a priori? -->
-<!-- nathan has bits about this in the nonvergence talk -->
 </section>
 <section id="section-6" class="slide level2">
 <h2></h2>
-<p><img data-src="img/sorbet-llvm-pipeline.png" /></p>
-<!-- ![](img/compiled-code-in-production.png) -->
+<p><img data-src="img/dark/sorbet-llvm-pipeline.png" /> <img data-src="img/light/sorbet-llvm-pipeline.png" /></p>
 <aside class="notes">
 <p>A typechecker for ruby with a powerful static analysis pass built by Stripe</p>
 <p>A gradual type system, allowing users to locally opt-out of type checking</p>
@@ -285,8 +282,7 @@
 </section>
 <section id="section-7" class="slide level2">
 <h2></h2>
-<p><img data-src="img/sorbet-llvm-pipeline.png" /></p>
-<!-- ![](img/compiled-code-in-production.png) -->
+<p><img data-src="img/dark/sorbet-llvm-pipeline.png" /> <img data-src="img/light/sorbet-llvm-pipeline.png" /></p>
 <aside class="notes">
 <p>LLVM is used by many compilers: clang, ghc, swift…</p>
 <p>LLVM IR is generated from a typechecked ruby program</p>
@@ -301,8 +297,7 @@
 </section>
 <section id="section-8" class="slide level2">
 <h2></h2>
-<p><img data-src="img/sorbet-llvm-pipeline.png" /></p>
-<!-- ![](img/compiled-code-in-production.png) -->
+<p><img data-src="img/dark/sorbet-llvm-pipeline.png" /> <img data-src="img/light/sorbet-llvm-pipeline.png" /></p>
 <aside class="notes">
 <p>The output of the LLVM codgen pass is a native shared object</p>
 <p>Shared objects produced by the sorbet compiler use the ruby vm’s c api to interact directly with the VM</p>
@@ -475,11 +470,9 @@
 </section>
 <section id="goals-for-adoption" class="slide level2">
 <h2>Goals for adoption</h2>
-<!-- TODO(jez) we test in CI too, not only in production -->
 <p>1️⃣ Plan for when things go wrong</p>
 <p>2️⃣ Compare performance on real traffic</p>
 <p>3️⃣ Must be incremental</p>
-<!-- mature company, have existing guardrails -->
 <aside class="notes">
 <p>incremental == iteration speed</p>
 </aside>
@@ -499,12 +492,12 @@
 </section>
 <section id="performance-on-real-traffic" class="slide level2">
 <h2>2️⃣ Performance on real traffic</h2>
-<p><img data-src="img/api-fleet.png" /></p>
+<p><img data-src="img/dark/api-fleet.png" /> <img data-src="img/light/api-fleet.png" /></p>
 </section>
 <section id="must-be-incremental" class="slide level2">
 <h2>3️⃣ Must be incremental</h2>
 <p>→ Measure with <strong>Stackprof</strong></p>
-<p><img data-src="img/stackprof.png" /></p>
+<p><img data-src="img/dark/stackprof.png" /> <img data-src="img/light/stackprof.png" /></p>
 <aside class="notes">
 <p>Compiling file with <code>A</code> is more important than <code>B</code></p>
 <p>Existing Stackprof tooling!</p>
@@ -512,9 +505,6 @@
 </section>
 <section id="whats-next" class="slide level2">
 <h2>What’s next? 💭</h2>
-<!-- should we have a slide here explaining why we're not talking about numbers? -->
-<!-- "this is what we're getting out of it" -->
-<!-- we've learned a lot about how to build fast C extensions, and we're eager to chat with people about potential modifications to the Ruby C API that would make C extensions more powerful and also allow the compiler to be faster -->
 <p>📈 <strong>Increase adoption</strong><br />
 　 (fraction running compiled)</p>
 <p>⏱ <strong>Profile and optimize</strong><br />
@@ -579,7 +569,7 @@
 
         // Add the current slide number to the URL hash so that reloading the
         // page/copying the URL will return you to the same slide
-        hash: true,
+        hash: false,
 
         // Start with 1 for the hash rather than 0
         hashOneBasedIndex: false,

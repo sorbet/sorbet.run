@@ -26,11 +26,6 @@ slideNumber: '\"c/t\"'
 include-after:
 - '<script src="js/toggle-theme.js"></script>'
 
-# TODO(jez, trevor) practice, practice, practice
-# overal pace was quick, we need to cut stuff
-
-# TODO(jez) separate light/dark mode images
-
 ---
 
 ##
@@ -153,7 +148,8 @@ You're going to choose the faster API over the slower API if they're otherwise e
 
 ## Visualizing API Latency
 
-![](img/request-breakdown-1.png)
+![](img/dark/request-breakdown-1.png)
+![](img/light/request-breakdown-1.png)
 
 ::: notes
 
@@ -164,7 +160,8 @@ I/O is sizable, but is being tackled by other projects—compiler focuses on Rub
 
 ## Visualizing API Latency
 
-![](img/request-breakdown-2.png)
+![](img/dark/request-breakdown-2.png)
+![](img/light/request-breakdown-2.png)
 
 
 ::: notes
@@ -175,11 +172,13 @@ Ruby portion is owned by dozens of teams
 
 ##
 
-![](img/compiler-leverage-1.png)
+![](img/dark/compiler-leverage-1.png)
+![](img/light/compiler-leverage-1.png)
 
 ##
 
-![](img/compiler-leverage-2.png)
+![](img/dark/compiler-leverage-2.png)
+![](img/light/compiler-leverage-2.png)
 
 ::: notes
 
@@ -189,7 +188,8 @@ generous: hottest files take <1% of request duration
 
 ##
 
-![](img/compiler-leverage-3.png)
+![](img/dark/compiler-leverage-3.png)
+![](img/light/compiler-leverage-3.png)
 
 ::: notes
 
@@ -240,15 +240,10 @@ transition to trevor
 
 :::
 
-<!-- why do we expect a compiler to work for Ruby a priori? -->
-<!-- nathan has bits about this in the nonvergence talk -->
-
 ##
 
-![](img/sorbet-llvm-pipeline.png)
-
-<!-- ![](img/compiled-code-in-production.png) -->
-
+![](img/dark/sorbet-llvm-pipeline.png)
+![](img/light/sorbet-llvm-pipeline.png)
 
 ::: notes
 
@@ -290,9 +285,8 @@ We introduced an error by producing an array of strings instead of an array of i
 
 ##
 
-![](img/sorbet-llvm-pipeline.png)
-
-<!-- ![](img/compiled-code-in-production.png) -->
+![](img/dark/sorbet-llvm-pipeline.png)
+![](img/light/sorbet-llvm-pipeline.png)
 
 
 ::: notes
@@ -311,10 +305,8 @@ The code generation pass adds about 10k lines of c++, runtime support adds 5k li
 
 ##
 
-![](img/sorbet-llvm-pipeline.png)
-
-<!-- ![](img/compiled-code-in-production.png) -->
-
+![](img/dark/sorbet-llvm-pipeline.png)
+![](img/light/sorbet-llvm-pipeline.png)
 
 ::: notes
 
@@ -549,22 +541,18 @@ switch to jez
 
 ## Goals for adoption
 
-<!-- TODO(jez) we test in CI too, not only in production -->
-
 1️⃣ Plan for when things go wrong
 
 2️⃣ Compare performance on real traffic
 
 3️⃣ Must be incremental
 
-
-<!-- mature company, have existing guardrails -->
-
 ::: notes
 
 incremental == iteration speed
 
 :::
+
 
 ## 1️⃣ Plan for when things go wrong
 
@@ -586,14 +574,16 @@ multiple lines of defense
 
 ## 2️⃣ Performance on real traffic
 
-![](img/api-fleet.png)
+![](img/dark/api-fleet.png)
+![](img/light/api-fleet.png)
 
 
 ## 3️⃣ Must be incremental
 
 → Measure with **Stackprof**
 
-![](img/stackprof.png)
+![](img/dark/stackprof.png)
+![](img/light/stackprof.png)
 
 
 ::: notes
@@ -605,11 +595,6 @@ Existing Stackprof tooling!
 :::
 
 ## What's next? 💭
-
-<!-- should we have a slide here explaining why we're not talking about numbers? -->
-<!-- "this is what we're getting out of it" -->
-
-<!-- we've learned a lot about how to build fast C extensions, and we're eager to chat with people about potential modifications to the Ruby C API that would make C extensions more powerful and also allow the compiler to be faster -->
 
 📈 **Increase adoption**\
 　 (fraction running compiled)

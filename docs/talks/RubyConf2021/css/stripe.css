@@ -56,7 +56,7 @@
 /* --- Global styles -------------------------- */
 
 .reveal-viewport {
-  background-image: url('../img/background-dark.png');
+  background-image: url('../img/dark/background.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-color: var(--bg-color);
@@ -366,7 +366,7 @@ html.stripe-light {
 }
 
 html.stripe-light body {
-  background-image: url(../img/background-light.png);
+  background-image: url(../img/light/background.png);
 }
 
 /* The stripe.theme file can't use CSS variables,
@@ -377,6 +377,17 @@ html.stripe-light div.sourceCode {
 
 html.stripe-light pre.numberSource code > span > a:first-child::before {
   color: var(--stripe-slate4);
+}
+
+img[src^="img/light/"] {
+  display: none;
+}
+
+html.stripe-light img[src^="img/light/"] {
+  display: initial;
+}
+html.stripe-light img[src^="img/dark/"] {
+  display: none;
 }
 
 html.stripe-light code span.al { color: var(--stripe-red3);    } /* Alert */
