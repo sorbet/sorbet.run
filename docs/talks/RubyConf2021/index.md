@@ -111,7 +111,7 @@ business's money needs.
 :::
 
 
-## API latency is a feature ✨
+## API speed is a feature ✨
 
 - Stripe users want **lower latency**
 
@@ -297,8 +297,8 @@ The code generation pass adds about 10k lines of c++, runtime support adds 5k li
 
 ## LLVM
 
-* Compiler backend toolkit
-* Used by many compilers: clang, ghc, swift, ...
+- Compiler backend toolkit
+- Used by many compilers: clang, ghc, swift, ...
 
 ::: notes
 
