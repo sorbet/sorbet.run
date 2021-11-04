@@ -245,8 +245,6 @@ transition to trevor
 
 ##
 
-<!-- TODO(trevor) maybe move this earlier, before example -->
-
 ![](img/sorbet-llvm-pipeline.png)
 
 <!-- ![](img/compiled-code-in-production.png) -->
@@ -292,8 +290,6 @@ We introduced an error by producing an array of strings instead of an array of i
 
 ##
 
-<!-- TODO(trevor) maybe move this earlier, before example -->
-
 ![](img/sorbet-llvm-pipeline.png)
 
 <!-- ![](img/compiled-code-in-production.png) -->
@@ -309,6 +305,50 @@ The code generation pass adds about 10k lines of c++, runtime support adds 5k li
 
 :::
 
+## LLVM
+
+* 
+
+##
+
+![](img/sorbet-llvm-pipeline.png)
+
+<!-- ![](img/compiled-code-in-production.png) -->
+
+
+::: notes
+
+The output of the LLVM codgen pass is a native shared object
+
+Shared objects produced by the sorbet compiler use the ruby vm's c api to
+interact directly with the VM
+
+:::
+
+## The Ruby C API
+
+```{.ruby}
+def foo(val)
+  puts val
+end
+```
+
+```{.c}
+VALUE my_foo(VALUE self, VALUE val) {
+  return rb_funcall(self, rb_intern("puts"), 1, val)
+}
+
+void Init_my_lib() {
+  rb_define_method(rb_cObject, "foo", my_foo);
+}
+```
+
+::: notes
+
+Example of a ruby function, and an equivalent c extension.
+
+:::
+
 ## Compiling the example
 
 ```{.ruby}
@@ -319,6 +359,10 @@ end
 def f(x)
   x.map {|v| v + 1}
 end
+
+
+
+
 ```
 
 ::: notes
@@ -330,15 +374,20 @@ idea of the sorts of transformations the compiler applies
 
 :::
 
-## Leveraging types (the compiler's view)
+## The Compiler's View
 
-```{.ruby .hl-2 .hl-4}
+```{.ruby .hl-6 .hl-8}
+# sig do
+#   params(x: T::Array[Integer])
+#   .returns(T::Array[Integer])
+# end
 def f(x)
   raise unless x.is_a?(Array)
   t = x.map {|v| v + 1}
   raise unless t.is_a?(Array)
   t
 end
+
 ```
 
 ::: notes
@@ -351,7 +400,7 @@ The return value has been named, and its runtime type-check is also specialized 
 
 :::
 
-## Leveraging types (skipping the vm to call map directly)
+## Avoiding VM Dispatch
 
 ```{.ruby .hl-3}
 def f(x)
@@ -362,6 +411,9 @@ def f(x)
   raise unless t.is_a?(Array)
   t
 end
+
+
+
 ```
 
 ::: notes
@@ -370,9 +422,11 @@ At this point we know that `x` is an `Array`, and can dispatch directly to the i
 
 This is hand-wavy: setting up the block for the call to `rb_ary_collect` takes more work than this
 
+Really stress that method dispatch is expensive
+
 :::
 
-## Leveraging types (inlining the definition of map)
+## Inlining `rb_ary_collect`
 
 ```{.ruby}
 def f(x)
@@ -393,7 +447,7 @@ We can inline the definition of `rb_ary_collect` constructing the array directly
 
 :::
 
-## Leveraging types (inlining the block)
+## Inlining the block
 
 ```{.ruby}
 def f(x)
@@ -414,7 +468,7 @@ There's no longer any need for the block to be called, and we can inline it in t
 
 :::
 
-## Leveraging types (removing additional method calls)
+## Avoiding VM Dispatch
 ```{.ruby .hl-3 .hl-5}
 def f(x)
   raise unless x.is_a?(Array)
@@ -434,7 +488,7 @@ end
 
 :::
 
-## Leveraging types (removing redundant type tests)
+## Removing redundant type tests
 
 ```{.ruby .hl-8}
 def f(x)
@@ -465,6 +519,7 @@ def f(x)
     t << x[i] + 1
     i += 1
   end
+
   t
 end
 ```
