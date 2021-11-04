@@ -302,7 +302,7 @@ The code generation pass adds about 10k lines of c++, runtime support adds 5k li
 
 ::: notes
 
-LLVM IR is generated from a typechecked ruby program
+LLVM intermediate representation is generated from a typechecked ruby program
 
 :::
 
@@ -457,6 +457,10 @@ end
 
 We can inline the definition of `rb_ary_collect` constructing the array directly instead
 
+There's a lot hidden by `<callblock>`:
+  - function body extracted
+  - vm setup for the call
+
 :::
 
 ## Inlining the block
@@ -543,6 +547,8 @@ end
 ::: notes
 
 Re-iterate that this is not a source-to-source transformation
+
+Recap work saved: fewer vm dispatches, no block calls, fewer type checks
 
 :::
 

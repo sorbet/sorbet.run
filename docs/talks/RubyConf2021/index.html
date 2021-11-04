@@ -294,7 +294,7 @@
 <li>Used by many compilers: clang, ghc, swift, …</li>
 </ul>
 <aside class="notes">
-<p>LLVM IR is generated from a typechecked ruby program</p>
+<p>LLVM intermediate representation is generated from a typechecked ruby program</p>
 </aside>
 </section>
 <section id="section-8" class="slide level2">
@@ -406,6 +406,7 @@
 <span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 <aside class="notes">
 <p>We can inline the definition of <code>rb_ary_collect</code> constructing the array directly instead</p>
+<p>There’s a lot hidden by <code>&lt;callblock&gt;</code>: - function body extracted - vm setup for the call</p>
 </aside>
 </section>
 <section id="inlining-the-block" class="slide level2">
@@ -478,6 +479,7 @@
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 <aside class="notes">
 <p>Re-iterate that this is not a source-to-source transformation</p>
+<p>Recap work saved: fewer vm dispatches, no block calls, fewer type checks</p>
 </aside>
 </section>
 <section id="agenda-4" class="slide level2">
