@@ -344,6 +344,7 @@ Example of a ruby function, and an equivalent c extension.
 ## Compiling the example
 
 ```{.ruby}
+ 
 sig do
   params(x: T::Array[Integer])
   .returns(T::Array[Integer])
@@ -351,10 +352,25 @@ end
 def f(x)
   x.map {|v| v + 1}
 end
+ 
+ 
+ 
+```
 
+## Compiling the example
 
-
-
+```{.ruby}
+# compiled: true
+sig do
+  params(x: T::Array[Integer])
+  .returns(T::Array[Integer])
+end
+def f(x)
+  x.map {|v| v + 1}
+end
+ 
+ 
+ 
 ```
 
 ::: notes
@@ -368,7 +384,8 @@ idea of the sorts of transformations the compiler applies
 
 ## The Compiler's View
 
-```{.ruby .hl-6 .hl-8}
+```{.ruby .hl-7 .hl-9}
+# compiled: true
 # sig do
 #   params(x: T::Array[Integer])
 #   .returns(T::Array[Integer])
@@ -379,7 +396,6 @@ def f(x)
   raise unless t.is_a?(Array)
   t
 end
-
 ```
 
 ::: notes
@@ -394,7 +410,8 @@ The return value has been named, and its runtime type-check is also specialized 
 
 ## Avoiding VM Dispatch
 
-```{.ruby .hl-3}
+```{.ruby .hl-4}
+# compiled: true
 def f(x)
   raise unless x.is_a?(Array)
   t = rb_ary_collect(x) do |v|
@@ -403,9 +420,8 @@ def f(x)
   raise unless t.is_a?(Array)
   t
 end
-
-
-
+ 
+ 
 ```
 
 ::: notes
@@ -418,9 +434,10 @@ Really stress that method dispatch is expensive
 
 :::
 
-## Inlining `rb_ary_collect`
+## Inlining **`rb_ary_collect`**
 
 ```{.ruby}
+# compiled: true
 def f(x)
   raise unless x.is_a?(Array)
   t = []; i = 0; len = x.length
@@ -442,6 +459,7 @@ We can inline the definition of `rb_ary_collect` constructing the array directly
 ## Inlining the block
 
 ```{.ruby}
+# compiled: true
 def f(x)
   raise unless x.is_a?(Array)
   t = []; i = 0; len = x.length
@@ -461,7 +479,8 @@ There's no longer any need for the block to be called, and we can inline it in t
 :::
 
 ## Avoiding VM Dispatch
-```{.ruby .hl-3 .hl-5}
+```{.ruby .hl-4 .hl-6}
+# compiled: true
 def f(x)
   raise unless x.is_a?(Array)
   t = []; i = 0; len = x.length
@@ -482,7 +501,8 @@ end
 
 ## Removing redundant type tests
 
-```{.ruby .hl-8}
+```{.ruby .hl-9}
+# compiled: true
 def f(x)
   raise unless x.is_a?(Array)
   t = []; i = 0; len = x.length
@@ -504,6 +524,7 @@ end
 ## Final version
 
 ```{.ruby}
+# compiled: true
 def f(x)
   raise unless x.is_a?(Array)
   t = []; i = 0; len = x.length
@@ -511,7 +532,7 @@ def f(x)
     t << x[i] + 1
     i += 1
   end
-
+  
   t
 end
 ```
