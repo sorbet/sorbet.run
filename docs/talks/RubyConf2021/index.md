@@ -22,6 +22,7 @@ transition: 'none'
 # it's interpolated into JS. It's also escaped so that
 # pandoc doesn't turn them into curly quotes.
 slideNumber: '\"c/t\"'
+backgroundTransition: 'none'
 
 include-after:
 - '<script src="js/toggle-theme.js"></script>'

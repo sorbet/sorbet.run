@@ -55,7 +55,7 @@
 
 /* --- Global styles -------------------------- */
 
-.reveal-viewport {
+.reveal .slide-background-content {
   background-image: url('../img/dark/background.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
@@ -365,7 +365,7 @@ html.stripe-light {
   --code-highlight: #afbbc7;
 }
 
-html.stripe-light body {
+html.stripe-light .reveal .slide-background-content {
   background-image: url(../img/light/background.png);
 }
 

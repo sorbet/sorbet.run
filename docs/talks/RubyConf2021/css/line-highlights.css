@@ -21,6 +21,13 @@ pre > code.sourceCode > span::after {
   height: 100%;
 }
 
+/* Undo styles that pandoc injects into the page. */
+@media print {
+  pre > code.sourceCode { white-space: pre; }
+  pre > code.sourceCode > span { text-indent: 0px; padding-left: 0px; }
+}
+
+
 pre.hl-1  > code.sourceCode > span:nth-of-type(1)::after  { content: ""; }
 pre.hl-2  > code.sourceCode > span:nth-of-type(2)::after  { content: ""; }
 pre.hl-3  > code.sourceCode > span:nth-of-type(3)::after  { content: ""; }
