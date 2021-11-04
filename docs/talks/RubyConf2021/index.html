@@ -284,16 +284,18 @@
 <h2></h2>
 <p><img data-src="img/dark/sorbet-llvm-pipeline.png" /> <img data-src="img/light/sorbet-llvm-pipeline.png" /></p>
 <aside class="notes">
-<p>LLVM is used by many compilers: clang, ghc, swift…</p>
-<p>LLVM IR is generated from a typechecked ruby program</p>
 <p>The code generation pass adds about 10k lines of c++, runtime support adds 5k lines of c</p>
 </aside>
 </section>
 <section id="llvm" class="slide level2">
 <h2>LLVM</h2>
 <ul>
-<li></li>
+<li>Compiler backend toolkit</li>
+<li>Used by many compilers: clang, ghc, swift, …</li>
 </ul>
+<aside class="notes">
+<p>LLVM IR is generated from a typechecked ruby program</p>
+</aside>
 </section>
 <section id="section-8" class="slide level2">
 <h2></h2>
@@ -591,7 +593,7 @@
 
         // Add the current slide number to the URL hash so that reloading the
         // page/copying the URL will return you to the same slide
-        hash: false,
+        hash: true,
 
         // Start with 1 for the hash rather than 0
         hashOneBasedIndex: false,

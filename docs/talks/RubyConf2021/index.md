@@ -291,17 +291,20 @@ We introduced an error by producing an array of strings instead of an array of i
 
 ::: notes
 
-LLVM is used by many compilers: clang, ghc, swift...
-
-LLVM IR is generated from a typechecked ruby program
-
 The code generation pass adds about 10k lines of c++, runtime support adds 5k lines of c
 
 :::
 
 ## LLVM
 
-* 
+* Compiler backend toolkit
+* Used by many compilers: clang, ghc, swift, ...
+
+::: notes
+
+LLVM IR is generated from a typechecked ruby program
+
+:::
 
 ##
 
