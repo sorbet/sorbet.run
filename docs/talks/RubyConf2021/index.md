@@ -406,7 +406,7 @@ Example of a ruby function, and an equivalent c extension.
 ## Compiling the example
 
 ```{.ruby}
- 
+
 sig do
   params(x: T::Array[Integer])
   .returns(T::Array[Integer])
@@ -414,9 +414,10 @@ end
 def f(x)
   x.map {|v| v + 1}
 end
- 
- 
- 
+
+
+
+
 ```
 
 ## Compiling the example
@@ -430,9 +431,10 @@ end
 def f(x)
   x.map {|v| v + 1}
 end
- 
- 
- 
+
+
+
+
 ```
 
 ::: notes
@@ -482,8 +484,9 @@ def f(x)
   raise unless t.is_a?(Array)
   t
 end
- 
- 
+
+
+
 ```
 
 ::: notes
@@ -690,9 +693,6 @@ Existing Stackprof tooling!
 
 ⏱ **Profile and optimize**\
 　 (improve compiled performance)
-
-⏳ **Keep time-to-compile low**\
-　 (developer productivity)
 
 ::: notes
 

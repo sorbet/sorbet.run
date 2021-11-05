@@ -361,7 +361,7 @@
 </section>
 <section id="compiling-the-example" class="slide level2">
 <h2>Compiling the example</h2>
-<div class="sourceCode" id="cb7"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a> </span>
+<div class="sourceCode" id="cb7"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>sig <span class="cf">do</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  params(<span class="wa">x: </span>T<span class="kw">::</span><span class="dt">Array</span><span class="kw">[</span><span class="dt">Integer</span><span class="kw">]</span>)</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">.returns</span>(T<span class="kw">::</span><span class="dt">Array</span><span class="kw">[</span><span class="dt">Integer</span><span class="kw">]</span>)</span>
@@ -369,9 +369,9 @@
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  x<span class="at">.map</span> <span class="kw">{|</span>v<span class="kw">|</span> v <span class="kw">+</span> <span class="dv">1</span><span class="kw">}</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a> </span></code></pre></div>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
 </section>
 <section id="compiling-the-example-1" class="slide level2">
 <h2>Compiling the example</h2>
@@ -383,9 +383,9 @@
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  x<span class="at">.map</span> <span class="kw">{|</span>v<span class="kw">|</span> v <span class="kw">+</span> <span class="dv">1</span><span class="kw">}</span></span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a> </span></code></pre></div>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
 <aside class="notes">
 <p>We’ll use some pseudo-code to illustrate the transformations the compiler will apply</p>
 <p>Note that the compiler is not source-to-source, this example is just to give an idea of the sorts of transformations the compiler applies</p>
@@ -421,8 +421,8 @@
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> t<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  t</span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a> </span></code></pre></div>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
 <aside class="notes">
 <p>At this point we know that <code>x</code> is an <code>Array</code>, and can dispatch directly to the implementation of <code>map</code></p>
 <p>This is hand-wavy: setting up the block for the call to <code>rb_ary_collect</code> takes more work than this</p>
@@ -573,8 +573,6 @@
 　 (fraction running compiled)</p>
 <p>⏱ <strong>Profile and optimize</strong><br />
 　 (improve compiled performance)</p>
-<p>⏳ <strong>Keep time-to-compile low</strong><br />
-　 (developer productivity)</p>
 <aside class="notes">
 <p>note quite worth sharing concrete performance numbers yet, because we’ve been focused on adoption</p>
 </aside>

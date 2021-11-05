@@ -221,6 +221,7 @@
 
 /* --- Code ----------------------------------- */
 
+pre code,
 pre > code.sourceCode > span {
   line-height: 1.7;
 }
