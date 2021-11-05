@@ -254,6 +254,18 @@ A gradual type system, allowing users to locally opt-out of type checking
 
 :::
 
+## Example
+
+```{.ruby}
+  
+  
+  
+  
+def f(x)
+  x.map {|v| v + 1}
+end
+```
+
 ## Sorbet Example
 
 ```{.ruby}
@@ -339,6 +351,32 @@ end
 
 ::::
 
+:::
+
+::: notes
+
+Example of a ruby function, and an equivalent c extension.
+
+:::
+
+## The Ruby C API
+
+::: {.columns}
+
+:::: {.column width="20%" }
+
+```{.ruby}
+def foo(val)
+  puts val
+end
+  
+  
+  
+  
+```
+
+::::
+
 :::: {.column width="5%" }
 ::::
 
@@ -363,6 +401,7 @@ void Init_my_lib() {
 Example of a ruby function, and an equivalent c extension.
 
 :::
+
 
 ## Compiling the example
 
