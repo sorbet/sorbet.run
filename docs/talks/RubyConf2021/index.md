@@ -254,19 +254,29 @@ A gradual type system, allowing users to locally opt-out of type checking
 
 :::
 
-## Example
+## A Ruby program
+
+::::{.columns}
+:::{.column width="40%"}
 
 ```{.ruby}
-  
-  
-  
-  
+
+
+
+
 def f(x)
   x.map {|v| v + 1}
 end
 ```
 
-## Sorbet Example
+:::
+::::
+
+
+## A Ruby program **with Sorbet**
+
+::::{.columns}
+:::{.column width="40%"}
 
 ```{.ruby}
 sig do
@@ -278,7 +288,24 @@ def f(x)
 end
 ```
 
+:::
+:::{.column width="5%"}
+:::
+:::{.column width="55%"}
+
+```{.markdown}
+# srb tc
+No errors! Great job.
+```
+
+:::
+::::
+
+
 ## Catching a type error
+
+::::{.columns}
+:::{.column width="40%"}
 
 ```{.ruby .hl-6}
 sig do
@@ -286,9 +313,25 @@ sig do
   .returns(T::Array[Integer])
 end
 def f(x)
-  x.map {|v| v + 1}.to_s # static error!
-end
+  x.map {|v| v + 1}.to_s
+end #              ^^^^^
 ```
+
+:::
+:::{.column width="5%"}
+:::
+:::{.column width="55%"}
+
+```{.markdown}
+# srb tc
+editor.rb:6: Expected `T::Array[Integer]`
+but found `String` for method result type
+     6 |  x.map {|v| v + 1}.to_s
+          ^^^^^^^^^^^^^^^^^^^^^^
+```
+
+:::
+::::
 
 ::: notes
 
@@ -310,8 +353,17 @@ The code generation pass adds about 10k lines of c++, runtime support adds 5k li
 
 ## LLVM
 
+::::{.columns align="center"}
+:::{.column width="70%"}
 - Compiler backend toolkit
-- Used by many compilers: clang, ghc, swift, ...
+
+- Used by many compilers:\
+  Clang, GHC (Haskell), Swift, ...
+:::
+:::{.column width="30%"}
+![](img/LLVMWyvernSmall.png){height="175px"}
+:::
+::::
 
 ::: notes
 
@@ -333,25 +385,26 @@ interact directly with the VM
 
 :::
 
-## The Ruby C API
+## A simple Ruby program
 
-::: {.columns}
+:::: {.columns}
 
-:::: {.column width="20%" }
+::: {.column width="20%" }
 
 ```{.ruby}
+# my_lib.rb
+
 def foo(val)
   puts val
 end
-  
-  
-  
-  
+
+
+
 ```
 
-::::
-
 :::
+
+::::
 
 ::: notes
 
@@ -359,42 +412,43 @@ Example of a ruby function, and an equivalent c extension.
 
 :::
 
-## The Ruby C API
+## A simple Ruby program **in C**
 
-::: {.columns}
+:::: {.columns}
 
-:::: {.column width="20%" }
+::: {.column width="20%" }
 
 ```{.ruby}
+# my_lib.rb
+
 def foo(val)
   puts val
 end
-  
-  
-  
-  
+
+
+
 ```
 
-::::
+:::
 
-:::: {.column width="5%" }
-::::
+::: {.column width="5%" }
+:::
 
-:::: {.column width="70%" }
+::: {.column width="70%" }
 
 ```{.c}
 VALUE my_foo(VALUE self, VALUE val) {
   return rb_funcall(self, rb_intern("puts"), 1, val)
 }
-  
+
 void Init_my_lib() {
   rb_define_method(rb_cObject, "foo", my_foo, 1);
 }
 ```
 
-::::
-
 :::
+
+::::
 
 ::: notes
 
@@ -590,7 +644,10 @@ end
 
 :::
 
-## Final version
+## The final version
+
+::::{.columns}
+:::{.column width="45%"}
 
 ```{.ruby}
 # compiled: true
@@ -601,16 +658,66 @@ def f(x)
     t << x[i] + 1
     i += 1
   end
-  
+
   t
 end
 ```
+
+:::
+::::
 
 ::: notes
 
 Re-iterate that this is not a source-to-source transformation
 
 Recap work saved: fewer vm dispatches, no block calls, fewer type checks
+
+:::
+
+## The final version **approaches C**
+
+::::{.columns}
+:::{.column width="45%"}
+
+```{.ruby}
+# compiled: true
+def f(x)
+  raise unless x.is_a?(Array)
+  t = []; i = 0; len = x.length
+  while i < len
+    t << x[i] + 1
+    i += 1
+  end
+
+  t
+end
+```
+
+:::
+:::{.column width="5%"}
+:::
+:::{.column width="50%"}
+
+```{.c}
+VALUE rb_f(VALUE x) {
+  if (!RB_TYPE_P(x, T_ARRAY))
+    rb_raise(rb_eRuntimeError);
+  VALUE t = rb_ary_new2(0);
+  int i, len = 0, RARRAY_LEN(x);
+  while (i < len) {
+    rb_ary_push(t, rb_ary_entry(x, i));
+    i++;
+  }
+  return t;
+}
+```
+
+:::
+::::
+
+::: notes
+
+Turns Ruby into elegant "DSL" for writing fast Ruby native extensions
 
 :::
 
