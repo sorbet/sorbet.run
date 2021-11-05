@@ -323,21 +323,40 @@ interact directly with the VM
 
 ## The Ruby C API
 
+::: {.columns}
+
+:::: {.column width="20%" }
+
 ```{.ruby}
 def foo(val)
   puts val
 end
+  
+  
+  
+  
 ```
+
+::::
+
+:::: {.column width="5%" }
+::::
+
+:::: {.column width="70%" }
 
 ```{.c}
 VALUE my_foo(VALUE self, VALUE val) {
   return rb_funcall(self, rb_intern("puts"), 1, val)
 }
-
+  
 void Init_my_lib() {
-  rb_define_method(rb_cObject, "foo", my_foo);
+  rb_define_method(rb_cObject, "foo", my_foo, 1);
 }
 ```
+
+::::
+
+:::
 
 ::: notes
 

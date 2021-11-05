@@ -307,16 +307,27 @@
 </section>
 <section id="the-ruby-c-api" class="slide level2">
 <h2>The Ruby C API</h2>
+<div class="columns">
+<div class="column" style="width:20%;">
 <div class="sourceCode" id="cb3"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> foo(val)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">puts</span> val</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+</div><div class="column" style="width:5%;">
+
+</div><div class="column" style="width:70%;">
 <div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>VALUE my_foo<span class="op">(</span>VALUE self<span class="op">,</span> VALUE val<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> rb_funcall<span class="op">(</span>self<span class="op">,</span> rb_intern<span class="op">(</span><span class="st">&quot;puts&quot;</span><span class="op">),</span> <span class="dv">1</span><span class="op">,</span> val<span class="op">)</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> Init_my_lib<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  rb_define_method<span class="op">(</span>rb_cObject<span class="op">,</span> <span class="st">&quot;foo&quot;</span><span class="op">,</span> my_foo<span class="op">);</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  rb_define_method<span class="op">(</span>rb_cObject<span class="op">,</span> <span class="st">&quot;foo&quot;</span><span class="op">,</span> my_foo<span class="op">,</span> <span class="dv">1</span><span class="op">);</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+</div>
 <aside class="notes">
 <p>Example of a ruby function, and an equivalent c extension.</p>
 </aside>
