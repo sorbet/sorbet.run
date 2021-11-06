@@ -647,7 +647,7 @@ end
 ## The final version
 
 ::::{.columns}
-:::{.column width="45%"}
+:::{.column width="42%"}
 
 ```{.ruby}
 # compiled: true
@@ -677,7 +677,7 @@ Recap work saved: fewer vm dispatches, no block calls, fewer type checks
 ## The final version **approaches C**
 
 ::::{.columns}
-:::{.column width="45%"}
+:::{.column width="42%"}
 
 ```{.ruby}
 # compiled: true
@@ -696,17 +696,17 @@ end
 :::
 :::{.column width="5%"}
 :::
-:::{.column width="50%"}
+:::{.column width="53%"}
 
 ```{.c}
 VALUE rb_f(VALUE x) {
   if (!RB_TYPE_P(x, T_ARRAY))
     rb_raise(rb_eRuntimeError);
   VALUE t = rb_ary_new2(0);
-  int i, len = 0, RARRAY_LEN(x);
-  while (i < len) {
-    rb_ary_push(t, rb_ary_entry(x, i));
-    i++;
+  int len = RARRAY_LEN(x);
+  for (int i = 0; i < len; i++) {
+    VALUE v = FIX2INT(rb_ary_entry(x,i));
+    rb_ary_push(t, INT2FIX(v + 1));
   }
   return t;
 }

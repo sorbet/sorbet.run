@@ -537,7 +537,7 @@ Clang, GHC (Haskell), Swift, …</p></li>
 <section id="the-final-version" class="slide level2">
 <h2>The final version</h2>
 <div class="columns">
-<div class="column" style="width:45%;">
+<div class="column" style="width:42%;">
 <div class="sourceCode" id="cb17"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compiled: true</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> x<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
@@ -559,7 +559,7 @@ Clang, GHC (Haskell), Swift, …</p></li>
 <section id="the-final-version-approaches-c" class="slide level2">
 <h2>The final version <strong>approaches C</strong></h2>
 <div class="columns">
-<div class="column" style="width:45%;">
+<div class="column" style="width:42%;">
 <div class="sourceCode" id="cb18"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compiled: true</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> x<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
@@ -573,15 +573,15 @@ Clang, GHC (Haskell), Swift, …</p></li>
 <span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 </div><div class="column" style="width:5%;">
 
-</div><div class="column" style="width:50%;">
+</div><div class="column" style="width:53%;">
 <div class="sourceCode" id="cb19"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>VALUE rb_f<span class="op">(</span>VALUE x<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(!</span>RB_TYPE_P<span class="op">(</span>x<span class="op">,</span> T_ARRAY<span class="op">))</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    rb_raise<span class="op">(</span>rb_eRuntimeError<span class="op">);</span></span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  VALUE t <span class="op">=</span> rb_ary_new2<span class="op">(</span><span class="dv">0</span><span class="op">);</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> i<span class="op">,</span> len <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> RARRAY_LEN<span class="op">(</span>x<span class="op">);</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> <span class="op">(</span>i <span class="op">&lt;</span> len<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    rb_ary_push<span class="op">(</span>t<span class="op">,</span> rb_ary_entry<span class="op">(</span>x<span class="op">,</span> i<span class="op">));</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    i<span class="op">++;</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> len <span class="op">=</span> RARRAY_LEN<span class="op">(</span>x<span class="op">);</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> len<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    VALUE v <span class="op">=</span> FIX2INT<span class="op">(</span>rb_ary_entry<span class="op">(</span>x<span class="op">,</span>i<span class="op">));</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    rb_ary_push<span class="op">(</span>t<span class="op">,</span> INT2FIX<span class="op">(</span>v <span class="op">+</span> <span class="dv">1</span><span class="op">));</span></span>
 <span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
 <span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> t<span class="op">;</span></span>
 <span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
@@ -702,7 +702,7 @@ Clang, GHC (Haskell), Swift, …</p></li>
 
         // Add the current slide number to the URL hash so that reloading the
         // page/copying the URL will return you to the same slide
-        hash: true,
+        hash: false,
 
         // Start with 1 for the hash rather than 0
         hashOneBasedIndex: false,
