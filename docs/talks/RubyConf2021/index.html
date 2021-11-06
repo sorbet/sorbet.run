@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jake Zimmerman (@jez) Trevor Elliott (@elliottt)">
+  <meta name="dcterms.date" content="2021-11-10">
+  <title>Compiling Ruby to Native Code with Sorbet and LLVM</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4/dist/reset.css">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4/dist/reveal.css">
+  <style>
+    .reveal .sourceCode {  /* see #7635 */
+      overflow: visible;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #33365b; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ffa27b; font-weight: bold; } /* Alert */
+    code span.an { color: #aab7c4; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { } /* Attribute */
+    code span.bn { color: #fcd669; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #f6a4eb; } /* ControlFlow */
+    code span.ch { color: #fcd669; } /* Char */
+    code span.cn { color: #fcd669; } /* Constant */
+    code span.co { color: #aab7c4; font-style: italic; } /* Comment */
+    code span.cv { color: #aab7c4; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #aab7c4; font-style: italic; } /* Documentation */
+    code span.dt { color: #74e4a2; } /* DataType */
+    code span.dv { color: #fcd669; } /* DecVal */
+    code span.er { color: #ffa27b; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #fcd669; } /* Float */
+    code span.fu { color: #87bbfd; } /* Function */
+    code span.im { color: #beb0f4; } /* Import */
+    code span.in { color: #aab7c4; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #f6a4eb; } /* Keyword */
+    code span.op { color: #f6a4eb; } /* Operator */
+    code span.ot { color: #87bbfd; } /* Other */
+    code span.pp { color: #fdbc72; } /* Preprocessor */
+    code span.sc { color: #ffa27b; } /* SpecialChar */
+    code span.ss { color: #ffa27b; } /* SpecialString */
+    code span.st { color: #fcd669; } /* String */
+    code span.va { color: #87bbfd; } /* Variable */
+    code span.vs { } /* VerbatimString */
+    code span.wa { color: #fdbc72; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4/dist/theme/black.css" id="theme">
+  <link rel="stylesheet" href="css/stripe.css"/>
+  <link rel="stylesheet" href="css/line-highlights.css"/>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Compiling Ruby to Native Code with Sorbet and LLVM</h1>
+  <p class="author">Jake Zimmerman (<strong><code>@jez</code></strong>)<br>Trevor Elliott (<strong><code>@elliottt</code></strong>)</p>
+  <p class="date">November 10, 2021</p>
+</section>
+
+<section id="section" class="slide level2">
+<h2></h2>
+<div class="columns" style="text-align: center;">
+<div class="column" style="width:20%;">
+<p><img data-src="img/sorbet-logo.svg" height="175" /></p>
+<p>Sorbet</p>
+</div><div class="column" style="width:7%;">
+<p><br />
+</p>
+<h3 id="section-1">+</h3>
+</div><div class="column" style="width:33%;">
+<p><img data-src="img/LLVMWyvernSmall.png" height="175" /></p>
+<p>LLVM</p>
+</div><div class="column" style="width:7%;">
+<p><br />
+</p>
+<h3 id="section-2">=</h3>
+</div><div class="column" style="width:33%;">
+<p><img data-src="img/sorbet-compiler-logo.svg" height="175" /></p>
+<p>the Sorbet Compiler</p>
+</div>
+</div>
+<aside class="notes">
+<p>“For those who don’t know…”</p>
+</aside>
+</section>
+<section id="agenda" class="slide level2">
+<h2>Agenda</h2>
+<ul>
+<li><p>Why does Stripe care about performance?</p></li>
+<li><p>Why build a compiler for Ruby?</p></li>
+<li><p>How does it work?</p></li>
+<li><p>How are we adopting it?</p></li>
+</ul>
+</section>
+<section id="agenda-1" class="slide level2">
+<h2>Agenda</h2>
+<ul>
+<li><p><strong>Why does Stripe care about performance?</strong></p></li>
+<li><p>Why build a compiler for Ruby?</p></li>
+<li><p>How does it work?</p></li>
+<li><p>How are we adopting it?</p></li>
+</ul>
+</section>
+<section id="stripe-is-an-api-for-building-a-business" class="slide level2">
+<h2>📈 Stripe is an API for building a business</h2>
+<ul>
+<li>Accept payments</li>
+<li>Coordinate payouts</li>
+<li>Manage taxes</li>
+<li>…</li>
+</ul>
+<aside class="notes">
+<p>Product for pretty much everything that has to do with your business’s money needs.</p>
+</aside>
+</section>
+<section id="api-speed-is-a-feature" class="slide level2">
+<h2>API speed is a feature ✨</h2>
+<ul>
+<li><p>Stripe users want <strong>lower latency</strong></p></li>
+<li><p>Stripe API runs on every checkout</p></li>
+</ul>
+<aside class="notes">
+<p>You’re going to choose the faster API over the slower API if they’re otherwise equal.</p>
+</aside>
+</section>
+<section id="agenda-2" class="slide level2">
+<h2>Agenda</h2>
+<ul>
+<li><p>Why does Stripe care about performance?</p></li>
+<li><p><strong>Why build a compiler for Ruby?</strong></p></li>
+<li><p>How does it work?</p></li>
+<li><p>How are we adopting it?</p></li>
+</ul>
+</section>
+<section id="stripe-uses-ruby-extensively" class="slide level2">
+<h2>💎 Stripe uses <strong>Ruby</strong> extensively</h2>
+<ul>
+<li><p>Powers our most important services (Stripe API)</p></li>
+<li><p>Hundreds of engineers use Ruby daily</p></li>
+<li><p>Millions of lines of code (monorepo)</p></li>
+<li><p>Massive type coverage with Sorbet</p></li>
+</ul>
+</section>
+<section id="visualizing-api-latency" class="slide level2">
+<h2>Visualizing API Latency</h2>
+<p><img data-src="img/dark/request-breakdown-1.png" /> <img data-src="img/light/request-breakdown-1.png" /></p>
+<aside class="notes">
+<p>I/O is sizable, but is being tackled by other projects—compiler focuses on Ruby</p>
+</aside>
+</section>
+<section id="visualizing-api-latency-1" class="slide level2">
+<h2>Visualizing API Latency</h2>
+<p><img data-src="img/dark/request-breakdown-2.png" /> <img data-src="img/light/request-breakdown-2.png" /></p>
+<aside class="notes">
+<p>Ruby portion is owned by dozens of teams</p>
+</aside>
+</section>
+<section id="section-3" class="slide level2">
+<h2></h2>
+<p><img data-src="img/dark/compiler-leverage-1.png" /> <img data-src="img/light/compiler-leverage-1.png" /></p>
+</section>
+<section id="section-4" class="slide level2">
+<h2></h2>
+<p><img data-src="img/dark/compiler-leverage-2.png" /> <img data-src="img/light/compiler-leverage-2.png" /></p>
+<aside class="notes">
+<p>generous: hottest files take &lt;1% of request duration</p>
+</aside>
+</section>
+<section id="section-5" class="slide level2">
+<h2></h2>
+<p><img data-src="img/dark/compiler-leverage-3.png" /> <img data-src="img/light/compiler-leverage-3.png" /></p>
+<aside class="notes">
+<p>“if the compiler works, it has the potential to speed up all pieces”</p>
+<p>high-leverage</p>
+</aside>
+</section>
+<section id="why-aot-not-jit" class="slide level2">
+<h2>Why AoT, not JIT?</h2>
+<p><strong>AoT</strong>: ahead-of-time<br />
+<strong>JIT</strong>: just-in-time</p>
+<ul>
+<li><p>Sorbet types speed up generated code</p></li>
+<li><p>AoT are simpler (implement, debug)</p></li>
+<li><p>Can still do both!</p></li>
+</ul>
+</section>
+<section id="why-not-truffleruby-or-jruby" class="slide level2">
+<h2>Why not TruffleRuby or JRuby?</h2>
+<ul>
+<li><p>No incremental migration</p></li>
+<li><p>Compiler works with existing Ruby VM</p></li>
+</ul>
+<aside class="notes">
+<p>targets Ruby C extensions</p>
+</aside>
+</section>
+<section id="agenda-3" class="slide level2">
+<h2>Agenda</h2>
+<ul>
+<li><p>Why does Stripe care about performance?</p></li>
+<li><p>Why build a compiler for Ruby?</p></li>
+<li><p><strong>How does it work?</strong></p></li>
+<li><p>How are we adopting it?</p></li>
+</ul>
+<aside class="notes">
+<p>transition to trevor</p>
+</aside>
+</section>
+<section id="section-6" class="slide level2">
+<h2></h2>
+<p><img data-src="img/dark/sorbet-llvm-pipeline.png" /> <img data-src="img/light/sorbet-llvm-pipeline.png" /></p>
+<aside class="notes">
+<p>A typechecker for ruby with a powerful static analysis pass built by Stripe</p>
+<p>A gradual type system, allowing users to locally opt-out of type checking</p>
+</aside>
+</section>
+<section id="a-ruby-program" class="slide level2">
+<h2>A Ruby program</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="sourceCode" id="cb1"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  x<span class="at">.map</span> <span class="kw">{|</span>v<span class="kw">|</span> v <span class="kw">+</span> <span class="dv">1</span><span class="kw">}</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+</div>
+</div>
+</section>
+<section id="a-ruby-program-with-sorbet" class="slide level2">
+<h2>A Ruby program <strong>with Sorbet</strong></h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="sourceCode" id="cb2"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sig <span class="cf">do</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  params(<span class="wa">x: </span>T<span class="kw">::</span><span class="dt">Array</span><span class="kw">[</span><span class="dt">Integer</span><span class="kw">]</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">.returns</span>(T<span class="kw">::</span><span class="dt">Array</span><span class="kw">[</span><span class="dt">Integer</span><span class="kw">]</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  x<span class="at">.map</span> <span class="kw">{|</span>v<span class="kw">|</span> v <span class="kw">+</span> <span class="dv">1</span><span class="kw">}</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+</div><div class="column" style="width:5%;">
+
+</div><div class="column" style="width:55%;">
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># srb tc</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>No errors! Great job.</span></code></pre></div>
+</div>
+</div>
+</section>
+<section id="catching-a-type-error" class="slide level2">
+<h2>Catching a type error</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="sourceCode" id="cb4"><pre class="sourceCode ruby hl-6"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sig <span class="cf">do</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  params(<span class="wa">x: </span>T<span class="kw">::</span><span class="dt">Array</span><span class="kw">[</span><span class="dt">Integer</span><span class="kw">]</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">.returns</span>(T<span class="kw">::</span><span class="dt">Array</span><span class="kw">[</span><span class="dt">Integer</span><span class="kw">]</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  x<span class="at">.map</span> <span class="kw">{|</span>v<span class="kw">|</span> v <span class="kw">+</span> <span class="dv">1</span><span class="kw">}</span><span class="at">.to_s</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span> <span class="co">#              ^^^^^</span></span></code></pre></div>
+</div><div class="column" style="width:5%;">
+
+</div><div class="column" style="width:55%;">
+<div class="sourceCode" id="cb5"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># srb tc</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>editor.rb:6: Expected <span class="in">`T::Array[Integer]`</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>but found <span class="in">`String`</span> for method result type</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>     6 |  x.map {|v| v + 1}.to_s</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>          ^^^^^^^^^^^^^^^^^^^^^^</span></code></pre></div>
+</div>
+</div>
+<aside class="notes">
+<p>We introduced an error by producing an array of strings instead of an array of integers, and sorbet flags this statically</p>
+</aside>
+</section>
+<section id="section-7" class="slide level2">
+<h2></h2>
+<p><img data-src="img/dark/sorbet-llvm-pipeline.png" /> <img data-src="img/light/sorbet-llvm-pipeline.png" /></p>
+<aside class="notes">
+<p>The code generation pass adds about 10k lines of c++, runtime support adds 5k lines of c</p>
+</aside>
+</section>
+<section id="llvm" class="slide level2">
+<h2>LLVM</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:70%;">
+<ul>
+<li><p>Compiler backend toolkit</p></li>
+<li><p>Used by many compilers:<br />
+Clang, GHC (Haskell), Swift, …</p></li>
+</ul>
+</div><div class="column" style="width:30%;">
+<p><img data-src="img/LLVMWyvernSmall.png" height="175" /></p>
+</div>
+</div>
+<aside class="notes">
+<p>LLVM intermediate representation is generated from a typechecked ruby program</p>
+</aside>
+</section>
+<section id="section-8" class="slide level2">
+<h2></h2>
+<p><img data-src="img/dark/sorbet-llvm-pipeline.png" /> <img data-src="img/light/sorbet-llvm-pipeline.png" /></p>
+<aside class="notes">
+<p>The output of the LLVM codgen pass is a native shared object</p>
+<p>Shared objects produced by the sorbet compiler use the ruby vm’s c api to interact directly with the VM</p>
+</aside>
+</section>
+<section id="a-simple-ruby-program" class="slide level2">
+<h2>A simple Ruby program</h2>
+<div class="columns">
+<div class="column" style="width:20%;">
+<div class="sourceCode" id="cb6"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># my_lib.rb</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> foo(val)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">puts</span> val</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
+</div>
+</div>
+<aside class="notes">
+<p>Example of a ruby function, and an equivalent c extension.</p>
+</aside>
+</section>
+<section id="a-simple-ruby-program-in-c" class="slide level2">
+<h2>A simple Ruby program <strong>in C</strong></h2>
+<div class="columns">
+<div class="column" style="width:20%;">
+<div class="sourceCode" id="cb7"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># my_lib.rb</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> foo(val)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">puts</span> val</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
+</div><div class="column" style="width:5%;">
+
+</div><div class="column" style="width:70%;">
+<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>VALUE my_foo<span class="op">(</span>VALUE self<span class="op">,</span> VALUE val<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> rb_funcall<span class="op">(</span>self<span class="op">,</span> rb_intern<span class="op">(</span><span class="st">&quot;puts&quot;</span><span class="op">),</span> <span class="dv">1</span><span class="op">,</span> val<span class="op">)</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> Init_my_lib<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  rb_define_method<span class="op">(</span>rb_cObject<span class="op">,</span> <span class="st">&quot;foo&quot;</span><span class="op">,</span> my_foo<span class="op">,</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+</div>
+<aside class="notes">
+<p>Example of a ruby function, and an equivalent c extension.</p>
+</aside>
+</section>
+<section id="compiling-the-example" class="slide level2">
+<h2>Compiling the example</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>sig <span class="cf">do</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  params(<span class="wa">x: </span>T<span class="kw">::</span><span class="dt">Array</span><span class="kw">[</span><span class="dt">Integer</span><span class="kw">]</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">.returns</span>(T<span class="kw">::</span><span class="dt">Array</span><span class="kw">[</span><span class="dt">Integer</span><span class="kw">]</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  x<span class="at">.map</span> <span class="kw">{|</span>v<span class="kw">|</span> v <span class="kw">+</span> <span class="dv">1</span><span class="kw">}</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
+</section>
+<section id="compiling-the-example-1" class="slide level2">
+<h2>Compiling the example</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compiled: true</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>sig <span class="cf">do</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  params(<span class="wa">x: </span>T<span class="kw">::</span><span class="dt">Array</span><span class="kw">[</span><span class="dt">Integer</span><span class="kw">]</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">.returns</span>(T<span class="kw">::</span><span class="dt">Array</span><span class="kw">[</span><span class="dt">Integer</span><span class="kw">]</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  x<span class="at">.map</span> <span class="kw">{|</span>v<span class="kw">|</span> v <span class="kw">+</span> <span class="dv">1</span><span class="kw">}</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
+<aside class="notes">
+<p>We’ll use some pseudo-code to illustrate the transformations the compiler will apply</p>
+<p>Note that the compiler is not source-to-source, this example is just to give an idea of the sorts of transformations the compiler applies</p>
+</aside>
+</section>
+<section id="the-compilers-view" class="slide level2">
+<h2>The Compiler’s View</h2>
+<div class="sourceCode" id="cb11"><pre class="sourceCode ruby hl-7 hl-9"><code class="sourceCode ruby"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compiled: true</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># sig do</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   params(x: T::Array[Integer])</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   .returns(T::Array[Integer])</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># end</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> x<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  t <span class="kw">=</span> x<span class="at">.map</span> <span class="kw">{|</span>v<span class="kw">|</span> v <span class="kw">+</span> <span class="dv">1</span><span class="kw">}</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> t<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  t</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<aside class="notes">
+<p>The signature is checked unconditionally at runtime, and produce assumptions for us to reuse later. Parameter and return value validation moves into the function body.</p>
+<p>The check for <code>x</code> is now specialized to <code>Array</code>.</p>
+<p>The return value has been named, and its runtime type-check is also specialized to <code>Array</code>.</p>
+</aside>
+</section>
+<section id="avoiding-vm-dispatch" class="slide level2">
+<h2>Avoiding VM Dispatch</h2>
+<div class="sourceCode" id="cb12"><pre class="sourceCode ruby hl-4"><code class="sourceCode ruby"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compiled: true</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> x<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  t <span class="kw">=</span> rb_ary_collect(x) <span class="cf">do</span> <span class="kw">|</span>v<span class="kw">|</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    v <span class="kw">+</span> <span class="dv">1</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> t<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  t</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
+<aside class="notes">
+<p>At this point we know that <code>x</code> is an <code>Array</code>, and can dispatch directly to the implementation of <code>map</code></p>
+<p>This is hand-wavy: setting up the block for the call to <code>rb_ary_collect</code> takes more work than this</p>
+<p>Really stress that method dispatch is expensive</p>
+</aside>
+</section>
+<section id="inlining-rb_ary_collect" class="slide level2">
+<h2>Inlining <strong><code>rb_ary_collect</code></strong></h2>
+<div class="sourceCode" id="cb13"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compiled: true</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> x<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  t <span class="kw">=</span> <span class="kw">[]</span>; i <span class="kw">=</span> <span class="dv">0</span>; len <span class="kw">=</span> x<span class="at">.length</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> i <span class="kw">&lt;</span> len</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    t <span class="kw">&lt;&lt;</span> <span class="kw">&lt;</span>callblock<span class="kw">&gt;</span>(x<span class="kw">[</span>i<span class="kw">]</span>) <span class="kw">{|</span>v<span class="kw">|</span> v <span class="kw">+</span> <span class="dv">1</span><span class="kw">}</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    i <span class="kw">+=</span> <span class="dv">1</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> t<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  t</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<aside class="notes">
+<p>We can inline the definition of <code>rb_ary_collect</code> constructing the array directly instead</p>
+<p>There’s a lot hidden by <code>&lt;callblock&gt;</code>: - function body extracted - vm setup for the call</p>
+</aside>
+</section>
+<section id="inlining-the-block" class="slide level2">
+<h2>Inlining the block</h2>
+<div class="sourceCode" id="cb14"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compiled: true</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> x<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  t <span class="kw">=</span> <span class="kw">[]</span>; i <span class="kw">=</span> <span class="dv">0</span>; len <span class="kw">=</span> x<span class="at">.length</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> i <span class="kw">&lt;</span> len</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    t <span class="kw">&lt;&lt;</span> x<span class="kw">[</span>i<span class="kw">]</span> <span class="kw">+</span> <span class="dv">1</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    i <span class="kw">+=</span> <span class="dv">1</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> t<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  t</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<aside class="notes">
+<p>There’s no longer any need for the block to be called, and we can inline it in the body of the loop</p>
+</aside>
+</section>
+<section id="avoiding-vm-dispatch-1" class="slide level2">
+<h2>Avoiding VM Dispatch</h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode ruby hl-4 hl-6"><code class="sourceCode ruby"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compiled: true</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> x<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  t <span class="kw">=</span> <span class="kw">[]</span>; i <span class="kw">=</span> <span class="dv">0</span>; len <span class="kw">=</span> x<span class="at">.length</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> i <span class="kw">&lt;</span> len</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    t <span class="kw">&lt;&lt;</span> x<span class="kw">[</span>i<span class="kw">]</span> <span class="kw">+</span> <span class="dv">1</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    i <span class="kw">+=</span> <span class="dv">1</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> t<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  t</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<aside class="notes">
+<ul>
+<li>We can further inline other calls to methods on <code>x</code>, inlining the calls to <code>length</code> and <code>[]</code>, and the <code>&lt;&lt;</code> method on <code>t</code></li>
+</ul>
+</aside>
+</section>
+<section id="removing-redundant-type-tests" class="slide level2">
+<h2>Removing redundant type tests</h2>
+<div class="sourceCode" id="cb16"><pre class="sourceCode ruby hl-9"><code class="sourceCode ruby"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compiled: true</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> x<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  t <span class="kw">=</span> <span class="kw">[]</span>; i <span class="kw">=</span> <span class="dv">0</span>; len <span class="kw">=</span> x<span class="at">.length</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> i <span class="kw">&lt;</span> len</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    t <span class="kw">&lt;&lt;</span> x<span class="kw">[</span>i<span class="kw">]</span> <span class="kw">+</span> <span class="dv">1</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    i <span class="kw">+=</span> <span class="dv">1</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> t<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  t</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<aside class="notes">
+<ul>
+<li>We know that <code>t</code> will always be an array, so we can remove the check on the return value</li>
+</ul>
+</aside>
+</section>
+<section id="the-final-version" class="slide level2">
+<h2>The final version</h2>
+<div class="columns">
+<div class="column" style="width:42%;">
+<div class="sourceCode" id="cb17"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compiled: true</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> x<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  t <span class="kw">=</span> <span class="kw">[]</span>; i <span class="kw">=</span> <span class="dv">0</span>; len <span class="kw">=</span> x<span class="at">.length</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> i <span class="kw">&lt;</span> len</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    t <span class="kw">&lt;&lt;</span> x<span class="kw">[</span>i<span class="kw">]</span> <span class="kw">+</span> <span class="dv">1</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    i <span class="kw">+=</span> <span class="dv">1</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  t</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+</div>
+</div>
+<aside class="notes">
+<p>Re-iterate that this is not a source-to-source transformation</p>
+<p>Recap work saved: fewer vm dispatches, no block calls, fewer type checks</p>
+</aside>
+</section>
+<section id="the-final-version-approaches-c" class="slide level2">
+<h2>The final version <strong>approaches C</strong></h2>
+<div class="columns">
+<div class="column" style="width:42%;">
+<div class="sourceCode" id="cb18"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compiled: true</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> f(x)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raise</span> <span class="cf">unless</span> x<span class="at">.is_a?</span>(<span class="dt">Array</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  t <span class="kw">=</span> <span class="kw">[]</span>; i <span class="kw">=</span> <span class="dv">0</span>; len <span class="kw">=</span> x<span class="at">.length</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> i <span class="kw">&lt;</span> len</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    t <span class="kw">&lt;&lt;</span> x<span class="kw">[</span>i<span class="kw">]</span> <span class="kw">+</span> <span class="dv">1</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    i <span class="kw">+=</span> <span class="dv">1</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  t</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+</div><div class="column" style="width:5%;">
+
+</div><div class="column" style="width:53%;">
+<div class="sourceCode" id="cb19"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>VALUE rb_f<span class="op">(</span>VALUE x<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(!</span>RB_TYPE_P<span class="op">(</span>x<span class="op">,</span> T_ARRAY<span class="op">))</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    rb_raise<span class="op">(</span>rb_eRuntimeError<span class="op">);</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  VALUE t <span class="op">=</span> rb_ary_new2<span class="op">(</span><span class="dv">0</span><span class="op">);</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> len <span class="op">=</span> RARRAY_LEN<span class="op">(</span>x<span class="op">);</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> len<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    VALUE v <span class="op">=</span> FIX2INT<span class="op">(</span>rb_ary_entry<span class="op">(</span>x<span class="op">,</span>i<span class="op">));</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    rb_ary_push<span class="op">(</span>t<span class="op">,</span> INT2FIX<span class="op">(</span>v <span class="op">+</span> <span class="dv">1</span><span class="op">));</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> t<span class="op">;</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+</div>
+<aside class="notes">
+<p>Turns Ruby into elegant “DSL” for writing fast Ruby native extensions</p>
+</aside>
+</section>
+<section id="agenda-4" class="slide level2">
+<h2>Agenda</h2>
+<ul>
+<li><p>Why does Stripe care about performance?</p></li>
+<li><p>Why build a compiler for Ruby?</p></li>
+<li><p>How does it work?</p></li>
+<li><p><strong>How are we adopting it?</strong></p></li>
+</ul>
+<aside class="notes">
+<p>switch to jez</p>
+</aside>
+</section>
+<section id="goals-for-adoption" class="slide level2">
+<h2>Goals for adoption</h2>
+<p>1️⃣ Plan for when things go wrong</p>
+<p>2️⃣ Compare performance on real traffic</p>
+<p>3️⃣ Must be incremental</p>
+<aside class="notes">
+<p>incremental == iteration speed</p>
+</aside>
+</section>
+<section id="plan-for-when-things-go-wrong" class="slide level2">
+<h2>1️⃣ Plan for when things go wrong</h2>
+<ul>
+<li><p>Compiler test cases</p></li>
+<li><p>Entire Stripe test suite</p></li>
+<li><p>Pre-production (staging environment)</p></li>
+<li><p>Blue/green deploys</p></li>
+<li><p>Separate host set to kill traffic fast</p></li>
+</ul>
+<aside class="notes">
+<p>multiple lines of defense</p>
+</aside>
+</section>
+<section id="performance-on-real-traffic" class="slide level2">
+<h2>2️⃣ Performance on real traffic</h2>
+<p><img data-src="img/dark/api-fleet.png" /> <img data-src="img/light/api-fleet.png" /></p>
+</section>
+<section id="must-be-incremental" class="slide level2">
+<h2>3️⃣ Must be incremental</h2>
+<p>→ Measure with <strong>Stackprof</strong></p>
+<p><img data-src="img/dark/stackprof.png" /> <img data-src="img/light/stackprof.png" /></p>
+<aside class="notes">
+<p>Compiling file with <code>A</code> is more important than <code>B</code></p>
+<p>Existing Stackprof tooling!</p>
+</aside>
+</section>
+<section id="whats-next" class="slide level2">
+<h2>What’s next? 💭</h2>
+<p>📈 <strong>Increase adoption</strong><br />
+　 (fraction running compiled)</p>
+<p>⏱ <strong>Profile and optimize</strong><br />
+　 (improve compiled performance)</p>
+<aside class="notes">
+<p>note quite worth sharing concrete performance numbers yet, because we’ve been focused on adoption</p>
+</aside>
+</section>
+<section id="questions" class="slide level2">
+<h2>Questions? 🙋</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><em>btw, we have stickers!</em></p>
+<p><img data-src="img/sorbet-logo.svg" height="150" /> <img data-src="img/sorbet-compiler-logo.svg" height="150" /></p>
+</div><div class="column" style="width:50%;">
+<p><em>also, we’re hiring!</em></p>
+<p>→ <a href="https://stripe.com/jobs">stripe.com/jobs</a></p>
+</div>
+</div>
+<p><br />
+</p>
+</section>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/reveal.js@^4/dist/reveal.js"></script>
+
+  <!-- reveal.js plugins -->
+  <script src="https://unpkg.com/reveal.js@^4/plugin/notes/notes.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4/plugin/search/search.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4/plugin/zoom/zoom.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: "c/t",
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: false,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: true,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: false,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // reveal.js plugins
+        plugins: [
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script src="js/toggle-theme.js"></script>
+    </body>
+</html>
