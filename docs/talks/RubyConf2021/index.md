@@ -201,17 +201,6 @@ high-leverage
 
 :::
 
-## Why AoT, not JIT?
-
-**AoT**: ahead-of-time\
-**JIT**: just-in-time
-
-- Sorbet types speed up generated code
-
-- AoT are simpler (implement, debug)
-
-- Can still do both!
-
 ## Why not TruffleRuby or JRuby?
 
 - No incremental migration
@@ -224,6 +213,17 @@ targets Ruby C extensions
 
 :::
 
+
+## Why AoT, not JIT?
+
+**AoT**: ahead-of-time\
+**JIT**: just-in-time
+
+- Sorbet types speed up generated code
+
+- AoT are simpler (implement, debug)
+
+- Can still do both!
 
 ## Agenda
 
@@ -438,7 +438,7 @@ end
 
 ```{.c}
 VALUE my_foo(VALUE self, VALUE val) {
-  return rb_funcall(self, rb_intern("puts"), 1, val)
+  return rb_funcall(self, rb_intern("puts"), 1, val);
 }
 
 void Init_my_lib() {

@@ -217,16 +217,6 @@
 <p>high-leverage</p>
 </aside>
 </section>
-<section id="why-aot-not-jit" class="slide level2">
-<h2>Why AoT, not JIT?</h2>
-<p><strong>AoT</strong>: ahead-of-time<br />
-<strong>JIT</strong>: just-in-time</p>
-<ul>
-<li><p>Sorbet types speed up generated code</p></li>
-<li><p>AoT are simpler (implement, debug)</p></li>
-<li><p>Can still do both!</p></li>
-</ul>
-</section>
 <section id="why-not-truffleruby-or-jruby" class="slide level2">
 <h2>Why not TruffleRuby or JRuby?</h2>
 <ul>
@@ -236,6 +226,16 @@
 <aside class="notes">
 <p>targets Ruby C extensions</p>
 </aside>
+</section>
+<section id="why-aot-not-jit" class="slide level2">
+<h2>Why AoT, not JIT?</h2>
+<p><strong>AoT</strong>: ahead-of-time<br />
+<strong>JIT</strong>: just-in-time</p>
+<ul>
+<li><p>Sorbet types speed up generated code</p></li>
+<li><p>AoT are simpler (implement, debug)</p></li>
+<li><p>Can still do both!</p></li>
+</ul>
 </section>
 <section id="agenda-3" class="slide level2">
 <h2>Agenda</h2>
@@ -379,7 +379,7 @@ Clang, GHC (Haskell), Swift, …</p></li>
 
 </div><div class="column" style="width:70%;">
 <div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>VALUE my_foo<span class="op">(</span>VALUE self<span class="op">,</span> VALUE val<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> rb_funcall<span class="op">(</span>self<span class="op">,</span> rb_intern<span class="op">(</span><span class="st">&quot;puts&quot;</span><span class="op">),</span> <span class="dv">1</span><span class="op">,</span> val<span class="op">)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> rb_funcall<span class="op">(</span>self<span class="op">,</span> rb_intern<span class="op">(</span><span class="st">&quot;puts&quot;</span><span class="op">),</span> <span class="dv">1</span><span class="op">,</span> val<span class="op">);</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> Init_my_lib<span class="op">()</span> <span class="op">{</span></span>
