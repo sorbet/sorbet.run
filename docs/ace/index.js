@@ -85,7 +85,7 @@
     const ruby = editor.getValue();
     const extraArgs = (new URLSearchParams(window.location.search)).getAll('arg');
     const argv = ['sorbet', '--color=always', '--silence-dev-message', ...extraArgs, '-e', `${ruby}\n`]
-    if (lastRun === argv) {
+    if (lastArgv === argv) {
       return;
     }
     lastArgv = argv;
