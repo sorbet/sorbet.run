@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var mock_socket_1 = require("mock-socket");
 var monaco_languageclient_1 = require("monaco-languageclient");
+var monaco_vim_1 = require("monaco-vim");
 var vscode_ws_jsonrpc_1 = require("vscode-ws-jsonrpc");
 var sorbet_1 = require("./sorbet");
 var ruby_1 = require("./ruby");
@@ -51,7 +52,9 @@ element.addEventListener('click', function (e) {
 });
 // Remove leading '#'
 var hash = window.location.hash.slice(1);
-var initialValue = hash ? decodeURIComponent(hash) : "# typed: true\nextend T::Sig\n\nsig {params(x: Integer).void}\ndef foo(x)\n  puts(x + 1)\nend\n\nffoo(0)\nfoo(\"not an int\")";
+var initialValue = hash
+    ? decodeURIComponent(hash)
+    : "# typed: true\nextend T::Sig\n\nsig {params(x: Integer).void}\ndef foo(x)\n  puts(x + 1)\nend\n\nffoo(0)\nfoo(\"not an int\")";
 // create Monaco editor
 var model = monaco.editor.createModel(initialValue, 'ruby', monaco.Uri.parse('inmemory://model/default'));
 var editor = monaco.editor.create(element, {
@@ -69,6 +72,39 @@ var editor = monaco.editor.create(element, {
 });
 window.editor = editor; // Useful for prototyping in dev tools
 editor.focus();
+var useVimKeybindings = function () {
+    var stored = window.localStorage.getItem('useVimKeybindings');
+    if (stored == null) {
+        return null;
+    }
+    else {
+        return JSON.parse(stored);
+    }
+};
+var vimMode = null;
+var toggleVimKeybindings = function () {
+    var current = useVimKeybindings();
+    window.localStorage.setItem('useVimKeybindings', '' + !current);
+    // document.querySelector('html').classList.toggle('stripe-light');
+    if (current) {
+        vimMode.dispose();
+    }
+    else {
+        vimMode = monaco_vim_1.initVimMode(editor, document.getElementById('editor-statusbar'));
+    }
+};
+// First load
+var initialUseVimKeybindings = useVimKeybindings();
+if (initialUseVimKeybindings === true) {
+    vimMode = monaco_vim_1.initVimMode(editor, document.getElementById('editor-statusbar'));
+}
+else {
+    window.localStorage.setItem('useVimKeybindings', 'false');
+}
+document.getElementById('vim-button').addEventListener('click', function (ev) {
+    ev.preventDefault();
+    toggleVimKeybindings();
+});
 window.addEventListener('hashchange', function () {
     // Remove leading '#'
     var hash = window.location.hash.substr(1);
@@ -85,10 +121,12 @@ createIssueButton.addEventListener('click', function (ev) {
 });
 editor.onDidChangeModelContent(function (event) {
     var contents = editor.getValue();
-    window.location.hash = "#" + encodeURIComponent(contents).replace(/\(/g, "%28").replace(/\)/g, "%29");
-    output_1.typecheck(contents, (new URLSearchParams(window.location.search)).getAll('arg'));
+    window.location.hash = "#" + encodeURIComponent(contents)
+        .replace(/\(/g, '%28')
+        .replace(/\)/g, '%29');
+    output_1.typecheck(contents, new URLSearchParams(window.location.search).getAll('arg'));
 });
-output_1.typecheck(editor.getValue(), (new URLSearchParams(window.location.search)).getAll('arg'));
+output_1.typecheck(editor.getValue(), new URLSearchParams(window.location.search).getAll('arg'));
 // install Monaco language client services
 monaco_languageclient_1.MonacoServices.install(editor);
 function startLanguageServer() {
@@ -109,7 +147,7 @@ function startLanguageServer() {
                 // (below) create a new language client.
                 disposable.dispose();
             });
-        }
+        },
     });
 }
 function createLanguageClient(connection) {
@@ -124,8 +162,8 @@ function createLanguageClient(connection) {
         connectionProvider: {
             get: function (errorHandler, closeHandler) {
                 return Promise.resolve(monaco_languageclient_1.createConnection(connection, errorHandler, closeHandler));
-            }
-        }
+            },
+        },
     });
 }
 var url = 'ws://sorbet.run:8080';
