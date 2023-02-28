@@ -1,5 +1,10 @@
 import {Server, WebSocket} from 'mock-socket';
-import {createConnection, MonacoLanguageClient, MonacoServices} from 'monaco-languageclient';
+import {
+  createConnection,
+  MonacoLanguageClient,
+  MonacoServices,
+} from 'monaco-languageclient';
+import {initVimMode} from 'monaco-vim';
 import {listen, MessageConnection} from 'vscode-ws-jsonrpc';
 
 import {createSorbet} from './sorbet';
@@ -19,7 +24,9 @@ element.addEventListener('click', (e) => {
 
 // Remove leading '#'
 const hash = window.location.hash.slice(1);
-const initialValue = hash ? decodeURIComponent(hash) : `# typed: true
+const initialValue = hash
+  ? decodeURIComponent(hash)
+  : `# typed: true
 extend T::Sig
 
 sig {params(x: Integer).void}
@@ -32,7 +39,10 @@ foo("not an int")`;
 
 // create Monaco editor
 const model = monaco.editor.createModel(
-    initialValue, 'ruby', monaco.Uri.parse('inmemory://model/default'));
+  initialValue,
+  'ruby',
+  monaco.Uri.parse('inmemory://model/default')
+);
 const editor = monaco.editor.create(element, {
   model: model,
   theme: 'vs-dark',
@@ -48,6 +58,40 @@ const editor = monaco.editor.create(element, {
 });
 (window as any).editor = editor; // Useful for prototyping in dev tools
 editor.focus();
+
+const useVimKeybindings = () => {
+  const stored = window.localStorage.getItem('useVimKeybindings');
+  if (stored == null) {
+    return null;
+  } else {
+    return JSON.parse(stored) as boolean;
+  }
+};
+
+let vimMode: any = null;
+const toggleVimKeybindings = () => {
+  const current = useVimKeybindings();
+  window.localStorage.setItem('useVimKeybindings', '' + !current);
+  // document.querySelector('html').classList.toggle('stripe-light');
+  if (current) {
+    vimMode.dispose();
+  } else {
+    vimMode = initVimMode(editor, document.getElementById('editor-statusbar'));
+  }
+};
+
+// First load
+const initialUseVimKeybindings = useVimKeybindings();
+if (initialUseVimKeybindings === true) {
+  vimMode = initVimMode(editor, document.getElementById('editor-statusbar'));
+} else {
+  window.localStorage.setItem('useVimKeybindings', 'false');
+}
+
+document.getElementById('vim-button')!.addEventListener('click', (ev) => {
+  ev.preventDefault();
+  toggleVimKeybindings();
+});
 
 window.addEventListener('hashchange', () => {
   // Remove leading '#'
@@ -92,11 +136,18 @@ ${(document.querySelector('#output') as HTMLPreElement).innerText}
 
 editor.onDidChangeModelContent((event: any) => {
   const contents = editor.getValue();
-  window.location.hash = `#${encodeURIComponent(contents).replace(/\(/g, "%28").replace(/\)/g, "%29")}`;
-  typecheck(contents, (new URLSearchParams(window.location.search)).getAll('arg'));
+  window.location.hash = `#${encodeURIComponent(contents)
+    .replace(/\(/g, '%28')
+    .replace(/\)/g, '%29')}`;
+  typecheck(
+    contents,
+    new URLSearchParams(window.location.search).getAll('arg')
+  );
 });
-typecheck(editor.getValue(), (new URLSearchParams(window.location.search)).getAll('arg'));
-
+typecheck(
+  editor.getValue(),
+  new URLSearchParams(window.location.search).getAll('arg')
+);
 
 // install Monaco language client services
 MonacoServices.install(editor);
@@ -108,7 +159,7 @@ function startLanguageServer() {
   // listen when the web socket is opened
   listen({
     webSocket,
-    onConnection: connection => {
+    onConnection: (connection) => {
       // create and start the language client
       const languageClient = createLanguageClient(connection);
       const disposable = languageClient.start();
@@ -118,13 +169,14 @@ function startLanguageServer() {
         // Thus, we dispose of the language client, and let `instantiateSorbet`
         // (below) create a new language client.
         disposable.dispose();
-      })
-    }
+      });
+    },
   });
 }
 
-function createLanguageClient(connection: MessageConnection):
-    MonacoLanguageClient {
+function createLanguageClient(
+  connection: MessageConnection
+): MonacoLanguageClient {
   return new MonacoLanguageClient({
     name: 'Sample Language Client',
     clientOptions: {
@@ -136,9 +188,10 @@ function createLanguageClient(connection: MessageConnection):
     connectionProvider: {
       get: (errorHandler, closeHandler) => {
         return Promise.resolve(
-            createConnection(connection, errorHandler, closeHandler))
-      }
-    }
+          createConnection(connection, errorHandler, closeHandler)
+        );
+      },
+    },
   });
 }
 
@@ -167,20 +220,20 @@ async function instantiateSorbet() {
   const onPrint = (msg: string) => console.log(msg);
   const onError = (event: any) => {
     console.log({event});
-     // If Sorbet crashes, try creating Sorbet again.
-     // Avoid acting on multiple errors from the same Sorbet instance.
-     if (errorCalled) {
-       return;
-     }
+    // If Sorbet crashes, try creating Sorbet again.
+    // Avoid acting on multiple errors from the same Sorbet instance.
+    if (errorCalled) {
+      return;
+    }
 
-     errorCalled = true;
-     if (socket) {
-       // Tell the language client + server to shut down.
-       socket.close();
-       socket = null;
-     }
-     sorbet = null;
-     instantiateSorbet();
+    errorCalled = true;
+    if (socket) {
+      // Tell the language client + server to shut down.
+      socket.close();
+      socket = null;
+    }
+    sorbet = null;
+    instantiateSorbet();
   };
   ({sorbet} = await createSorbet(onPrint, onError));
   startLanguageServer();
@@ -192,13 +245,17 @@ mockServer.on('connection', (s: any) => {
   const processLSPResponse = sorbet.addFunction((arg: any) => {
     const message = sorbet.Pointer_stringify(arg);
     console.log('Write: ' + message);
-    socket.send(message)
+    socket.send(message);
   }, 'vi');
 
   socket.on('message', (message: string) => {
     console.log('Read: ' + message);
     sorbet.ccall(
-        'lsp', null, ['number', 'string'], [processLSPResponse, message]);
+      'lsp',
+      null,
+      ['number', 'string'],
+      [processLSPResponse, message]
+    );
   });
 });
 

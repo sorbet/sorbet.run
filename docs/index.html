@@ -66,9 +66,24 @@ main {
 
 #editor, #output {
   float: left;
-  height: 100%;
   width: 50%;
   box-sizing: border-box;
+}
+
+#editor {
+  height: calc(100% - 24px);
+}
+
+#editor-statusbar {
+  position: absolute;
+  bottom: 0;
+  width: 50%;
+  height: 24px;
+  line-height: 24px;
+}
+
+#output {
+  height: 100%;
 }
 
 #output {
@@ -85,11 +100,11 @@ main {
   display: none;
 }
 
-#editor.editor-only {
+#editor.editor-only, #editor.editor-only + #editor-statusbar {
   width: 100%;
 }
 
-.iframe #editor {
+.iframe #editor, .iframe #editor-statusbar {
   width: 100%;
 }
 .iframe #output {
@@ -98,16 +113,21 @@ main {
 
 @media (max-width: 800px) {
     #editor, #output {
-      height: 50%;
       width: 100%;
+    }
+    #editor {
+      height: calc(50% - 24px);
+    }
+    #output {
+      height: 50%;
     }
 
     #editor.editor-only {
-      height: 100%;
+      height: calc(100% - 24px);
     }
 
     .iframe #editor {
-      height: 100%;
+      height: calc(100% - 24px);
     }
 }
 
@@ -231,6 +251,8 @@ a[data-href^="inmemory://model/"] {
           </li><li>
             <a href="#" id="toggle-editor-only">Toggle editor only</a>
           </li><li>
+            <a href="#" id="vim-button">Toggle Vim keybindings</a>
+          </li><li>
             <a href="#" id="create-issue-from-example">Create issue with example</a>
           </li>
         </ul>
@@ -239,7 +261,9 @@ a[data-href^="inmemory://model/"] {
     </header>
 
     <main>
-      <div id="editor"></div>
+      <div id="editor">
+      </div>
+      <div id="editor-statusbar"></div>
       <pre id="output" class="solarized">Loading...</pre>
     </main>
 
