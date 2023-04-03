@@ -117,7 +117,7 @@ var createIssueButton = document.getElementById('create-issue-from-example');
 createIssueButton.addEventListener('click', function (ev) {
     var template = "\n#### Input\n\n[\u2192 View on sorbet.run](" + window.location.href + ")\n\n```ruby\n" + editor.getValue() + "\n```\n\n#### Observed output\n\n```\n" + document.querySelector('#output').innerText + "\n```\n\n<!-- TODO: For issues where `srb tc` differs from the behavior of `sorbet-runtime`, please include the observed runtime output. -->\n\n#### Expected behavior\n\n<!-- TODO: Briefly explain what the expected behavior should be on this example. -->\n\n- - -\n\n<!-- TODO: If there is any additional information you'd like to include, include it here. -->\n";
     var body = encodeURIComponent(template);
-    ev.target.href = "https://github.com/sorbet/sorbet/issues/new?body=" + body + "&labels=bug,unconfirmed";
+    ev.target.href = "https://github.com/sorbet/sorbet/issues/new?body=" + body + "&labels=bug,unconfirmed&template=bug.md";
 });
 editor.onDidChangeModelContent(function (event) {
     var contents = editor.getValue();

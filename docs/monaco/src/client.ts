@@ -131,7 +131,7 @@ ${(document.querySelector('#output') as HTMLPreElement).innerText}
 `;
 
   const body = encodeURIComponent(template);
-  (ev.target as HTMLAnchorElement).href = `https://github.com/sorbet/sorbet/issues/new?body=${body}&labels=bug,unconfirmed`;
+  (ev.target as HTMLAnchorElement).href = `https://github.com/sorbet/sorbet/issues/new?body=${body}&labels=bug,unconfirmed&template=bug.md`;
 });
 
 editor.onDidChangeModelContent((event: any) => {
