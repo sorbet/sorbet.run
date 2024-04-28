@@ -11,7 +11,9 @@ import {createSorbet} from './sorbet';
 
 import {register} from './ruby';
 import {typecheck} from './output';
-
+// @ts-ignore
+import {DefaultRubyVM} from '@ruby/wasm-wasi/dist/browser';
+// import {File, WASI, OpenFile, ConsoleStdout} from '@bjorn3/browser_wasi_shim';
 register();
 
 const element = document.getElementById('editor')!;
@@ -134,6 +136,37 @@ ${(document.querySelector('#output') as HTMLPreElement).innerText}
   (ev.target as HTMLAnchorElement).href = `https://github.com/sorbet/sorbet/issues/new?body=${body}&labels=bug,unconfirmed&template=bug.md`;
 });
 
+let vm: any = null;
+async function vminit() {
+  const response = await fetch('./ruby-web.wasm');
+  console.log(response);
+  const module = await WebAssembly.compileStreaming(response);
+  console.log(module);
+  ({vm} = await DefaultRubyVM(module));
+  console.log(vm);
+}
+vminit();
+
+function surround(s: string): string {
+  let program = `
+  require "js"
+  require "/bundle/setup"
+  require "sorbet-runtime"
+  extend T::Sig
+  div = JS.global[:document].getElementById("rubyoutput")
+  def div.write(s)
+    self[:innerText] = self[:innerText].to_s + s
+  end
+  $stdout = div
+  begin
+    ${s}
+  rescue => e
+    puts e.to_s
+  end
+  `;
+  return program;
+}
+
 editor.onDidChangeModelContent((event: any) => {
   const contents = editor.getValue();
   window.location.hash = `#${encodeURIComponent(contents)
@@ -143,11 +176,18 @@ editor.onDidChangeModelContent((event: any) => {
     contents,
     new URLSearchParams(window.location.search).getAll('arg')
   );
+
+  let prog = surround(contents);
+  console.log('evaluation', prog);
+
+  document.getElementById('rubyoutput')!.innerText = '';
+  vm.eval(surround(contents));
 });
-typecheck(
-  editor.getValue(),
-  new URLSearchParams(window.location.search).getAll('arg')
-);
+let lastValue = editor.getValue();
+typecheck(lastValue, new URLSearchParams(window.location.search).getAll('arg'));
+let prog = surround(lastValue);
+console.log('evaluation', prog);
+vm.eval(prog);
 
 // install Monaco language client services
 MonacoServices.install(editor);

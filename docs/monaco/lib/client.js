@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -42,6 +43,9 @@ var vscode_ws_jsonrpc_1 = require("vscode-ws-jsonrpc");
 var sorbet_1 = require("./sorbet");
 var ruby_1 = require("./ruby");
 var output_1 = require("./output");
+// @ts-ignore
+var browser_1 = require("@ruby/wasm-wasi/dist/browser");
+// import {File, WASI, OpenFile, ConsoleStdout} from '@bjorn3/browser_wasi_shim';
 ruby_1.register();
 var element = document.getElementById('editor');
 element.addEventListener('click', function (e) {
@@ -119,14 +123,50 @@ createIssueButton.addEventListener('click', function (ev) {
     var body = encodeURIComponent(template);
     ev.target.href = "https://github.com/sorbet/sorbet/issues/new?body=" + body + "&labels=bug,unconfirmed&template=bug.md";
 });
+var vm = null;
+function vminit() {
+    return __awaiter(this, void 0, void 0, function () {
+        var response, module;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, fetch('./ruby-web.wasm')];
+                case 1:
+                    response = _a.sent();
+                    console.log(response);
+                    return [4 /*yield*/, WebAssembly.compileStreaming(response)];
+                case 2:
+                    module = _a.sent();
+                    console.log(module);
+                    return [4 /*yield*/, browser_1.DefaultRubyVM(module)];
+                case 3:
+                    (vm = (_a.sent()).vm);
+                    console.log(vm);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+vminit();
+function surround(s) {
+    var program = "\n  require \"js\"\n  require \"/bundle/setup\"\n  require \"sorbet-runtime\"\n  extend T::Sig\n  div = JS.global[:document].getElementById(\"rubyoutput\")\n  def div.write(s)\n    self[:innerText] = self[:innerText].to_s + s\n  end\n  $stdout = div\n  begin\n    " + s + "\n  rescue => e\n    puts e.to_s\n  end\n  ";
+    return program;
+}
 editor.onDidChangeModelContent(function (event) {
     var contents = editor.getValue();
     window.location.hash = "#" + encodeURIComponent(contents)
         .replace(/\(/g, '%28')
         .replace(/\)/g, '%29');
     output_1.typecheck(contents, new URLSearchParams(window.location.search).getAll('arg'));
+    var prog = surround(contents);
+    console.log('evaluation', prog);
+    document.getElementById('rubyoutput').innerText = '';
+    vm.eval(surround(contents));
 });
-output_1.typecheck(editor.getValue(), new URLSearchParams(window.location.search).getAll('arg'));
+var lastValue = editor.getValue();
+output_1.typecheck(lastValue, new URLSearchParams(window.location.search).getAll('arg'));
+var prog = surround(lastValue);
+console.log('evaluation', prog);
+vm.eval(prog);
 // install Monaco language client services
 monaco_languageclient_1.MonacoServices.install(editor);
 function startLanguageServer() {

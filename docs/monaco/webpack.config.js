@@ -28,6 +28,7 @@ const common = {
   target: 'web',
 
   resolve: {
+    extensions: ['.ts', '.js'],
     alias: {
       vscode: require.resolve('monaco-languageclient/lib/vscode-compatibility'),
       // monaco-vim requires monaco-editor... but not really: only for the core
