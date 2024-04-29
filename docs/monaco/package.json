@@ -3,6 +3,8 @@
   "name": "@monaco-languageclient/example",
   "version": "0.0.1",
   "dependencies": {
+    "@bjorn3/browser_wasi_shim": "^0.3.0",
+    "@ruby/wasm-wasi": "^2.5.1",
     "ansi_up": "^5.0.0",
     "browserify": "^17.0.0",
     "buffer": "^6.0.3",
