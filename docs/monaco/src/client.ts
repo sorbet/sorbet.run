@@ -187,7 +187,9 @@ let lastValue = editor.getValue();
 typecheck(lastValue, new URLSearchParams(window.location.search).getAll('arg'));
 let prog = surround(lastValue);
 console.log('evaluation', prog);
-vm.eval(prog);
+if (vm) {
+  vm.eval(prog);
+}
 
 // install Monaco language client services
 MonacoServices.install(editor);

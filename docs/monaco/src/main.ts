@@ -4,7 +4,8 @@
  * ------------------------------------------------------------------------------------------ */
 require('./page');
 require('monaco-editor-core');
+require('setimmediate');
 (self as any).MonacoEnvironment = {
-    getWorkerUrl: () => './monaco/lib/editor.worker.bundle.js'
-}
+  getWorkerUrl: () => './monaco/lib/editor.worker.bundle.js',
+};
 require('./client');
