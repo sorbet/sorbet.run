@@ -5,8 +5,9 @@
  * ------------------------------------------------------------------------------------------ */
 require('./page');
 require('monaco-editor-core');
+require('setimmediate');
 self.MonacoEnvironment = {
-    getWorkerUrl: function () { return './monaco/lib/editor.worker.bundle.js'; }
+    getWorkerUrl: function () { return './monaco/lib/editor.worker.bundle.js'; },
 };
 require('./client');
 //# sourceMappingURL=main.js.map
