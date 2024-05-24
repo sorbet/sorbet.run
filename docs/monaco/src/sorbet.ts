@@ -32,7 +32,6 @@ async function instantiateWasmImpl(
 export function createSorbet(onPrint: (line: string) => void, onError: (error: any) => void):
     Promise<{sorbet: any}> {
   let sorbet: any;
-  return new Promise<any>((resolve) => {
     const opts = {
       print: (line: string) => {
         onPrint(line);
@@ -60,6 +59,7 @@ export function createSorbet(onPrint: (line: string) => void, onError: (error: a
       }
     };
 
+  return new Promise<any>((resolve) => {
     sorbet = Sorbet(opts);
   });
 }
