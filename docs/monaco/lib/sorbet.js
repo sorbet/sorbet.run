@@ -43,7 +43,7 @@ var sorbetWasmModule = (typeof WebAssembly.compileStreaming == 'function') ?
 // Since instantiateWasm requires an empty object as a return value,
 // we can't make it async. So, instead, we put the async stuff here
 // so we can use nice async/await syntax.
-function instantiateWasmImpl(info, realReceiveInstanceCallBack) {
+function instantiateWasmImpl(imports, successCallback) {
     return __awaiter(this, void 0, void 0, function () {
         var mod, instance, error_1;
         return __generator(this, function (_a) {
@@ -53,10 +53,10 @@ function instantiateWasmImpl(info, realReceiveInstanceCallBack) {
                     return [4 /*yield*/, sorbetWasmModule];
                 case 1:
                     mod = _a.sent();
-                    return [4 /*yield*/, WebAssembly.instantiate(mod, info)];
+                    return [4 /*yield*/, WebAssembly.instantiate(mod, imports)];
                 case 2:
                     instance = _a.sent();
-                    realReceiveInstanceCallBack(instance, mod);
+                    successCallback(instance, mod);
                     return [3 /*break*/, 4];
                 case 3:
                     error_1 = _a.sent();
@@ -72,36 +72,36 @@ function instantiateWasmImpl(info, realReceiveInstanceCallBack) {
  * Creates a new Sorbet instances. Calls errorCallback if Sorbet quits or
  * fails to start up.
  */
-function createSorbet(onPrint, onError) {
-    var sorbet;
-    return new Promise(function (resolve) {
-        var opts = {
-            print: function (line) {
-                onPrint(line);
-            },
-            printErr: function (line) {
-                onPrint(line);
-            },
-            // On abort, throw away our WebAssembly instance and create a
-            // new one. This can happen due to out-of-memory, C++ exceptions,
-            // or other reasons; Throwing away and restarting should get us to a
-            // healthy state.
-            onAbort: onError,
-            instantiateWasm: function (info, realReceiveInstanceCallBack) {
-                instantiateWasmImpl(info, realReceiveInstanceCallBack)
-                    .catch(onError);
-                return {}; // indicates lazy initialization
-            },
-            onRuntimeInitialized: function () {
-                // NOTE: DO *NOT* `resolve(sorbet)`!
-                // You will cause an infinite asynchronous loop. It will not be
-                // debuggable, and will lock up the browser. See:
-                // https://github.com/emscripten-core/emscripten/issues/5820
-                // We wrap it in an object to be safe.
-                resolve({ sorbet: sorbet });
-            }
-        };
-        sorbet = Sorbet(opts);
+function createSorbet(onPrint, onAbort) {
+    var opts = {
+        print: onPrint,
+        printErr: onPrint,
+        // On abort, throw away our WebAssembly instance and create a
+        // new one. This can happen due to out-of-memory, C++ exceptions,
+        // or other reasons; Throwing away and restarting should get us to a
+        // healthy state.
+        onAbort: onAbort,
+        instantiateWasm: function (imports, successCallback) {
+            instantiateWasmImpl(imports, successCallback).catch(onAbort);
+            return {}; // indicates lazy initialization
+        },
+    };
+    // We have to manually return a promise for backwards compatibility. Old
+    // versions of emscripten used to return the Module itself which has a
+    // `.then` property, instead of a Promise object, which would cause infinite
+    // loops.
+    //
+    // We can drop the explict `new Promise` below after we've started publishing
+    // versions of Sorbet build with a more recent emscripten.
+    return new Promise(function (resolve, reject) {
+        Sorbet(opts).then(function (sorbet) {
+            // NOTE: DO *NOT* `resolve(sorbet)`!
+            // You will cause an infinite asynchronous loop. It will not be
+            // debuggable, and will lock up the browser. See:
+            // https://github.com/emscripten-core/emscripten/issues/5820
+            // We wrap it in an object to be safe.
+            resolve({ sorbet: sorbet });
+        });
     });
 }
 exports.createSorbet = createSorbet;

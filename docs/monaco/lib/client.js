@@ -220,7 +220,9 @@ function instantiateSorbet() {
 mockServer.on('connection', function (s) {
     socket = s;
     var processLSPResponse = sorbet.addFunction(function (arg) {
-        var message = sorbet.Pointer_stringify(arg);
+        var message = (typeof sorbet.UTF8ToString == 'function')
+            ? sorbet.UTF8ToString(arg)
+            : sorbet.Pointer_stringify(arg);
         console.log('Write: ' + message);
         socket.send(message);
     }, 'vi');
