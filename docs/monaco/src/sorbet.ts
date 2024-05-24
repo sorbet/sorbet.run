@@ -32,7 +32,6 @@ async function instantiateWasmImpl(imports: any, successCallback: any): Promise<
  */
 export function createSorbet(onPrint: (line: string) => void, onAbort: (error: any) => void):
     Promise<{sorbet: any}> {
-  let sorbet: any;
   const opts = {
     print: onPrint,
     printErr: onPrint,
@@ -45,17 +44,23 @@ export function createSorbet(onPrint: (line: string) => void, onAbort: (error: a
       instantiateWasmImpl(imports, successCallback).catch(onAbort);
       return {};  // indicates lazy initialization
     },
-    onRuntimeInitialized: () => {
+  };
+
+  // We have to manually return a promise for backwards compatibility. Old
+  // versions of emscripten used to return the Module itself which has a
+  // `.then` property, instead of a Promise object, which would cause infinite
+  // loops.
+  //
+  // We can drop the explict `new Promise` below after we've started publishing
+  // versions of Sorbet build with a more recent emscripten.
+  return new Promise<any>((resolve, reject) => {
+    Sorbet(opts).then((sorbet: any) => {
       // NOTE: DO *NOT* `resolve(sorbet)`!
       // You will cause an infinite asynchronous loop. It will not be
       // debuggable, and will lock up the browser. See:
       // https://github.com/emscripten-core/emscripten/issues/5820
       // We wrap it in an object to be safe.
-      resolve({sorbet: sorbet});
-    }
-  };
-
-  return new Promise<any>((resolve) => {
-    sorbet = Sorbet(opts);
+      resolve({sorbet});
+    });
   });
 }
