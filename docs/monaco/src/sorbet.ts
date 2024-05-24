@@ -32,32 +32,32 @@ async function instantiateWasmImpl(
 export function createSorbet(onPrint: (line: string) => void, onError: (error: any) => void):
     Promise<{sorbet: any}> {
   let sorbet: any;
-    const opts = {
-      print: (line: string) => {
-        onPrint(line);
-      },
-      printErr: (line: string) => {
-        onPrint(line);
-      },
-      // On abort, throw away our WebAssembly instance and create a
-      // new one. This can happen due to out-of-memory, C++ exceptions,
-      // or other reasons; Throwing away and restarting should get us to a
-      // healthy state.
-      onAbort: onError,
-      instantiateWasm: (info: any, realReceiveInstanceCallBack: any) => {
-        instantiateWasmImpl(info, realReceiveInstanceCallBack)
-            .catch(onError);
-        return {};  // indicates lazy initialization
-      },
-      onRuntimeInitialized: () => {
-        // NOTE: DO *NOT* `resolve(sorbet)`!
-        // You will cause an infinite asynchronous loop. It will not be
-        // debuggable, and will lock up the browser. See:
-        // https://github.com/emscripten-core/emscripten/issues/5820
-        // We wrap it in an object to be safe.
-        resolve({sorbet: sorbet});
-      }
-    };
+  const opts = {
+    print: (line: string) => {
+      onPrint(line);
+    },
+    printErr: (line: string) => {
+      onPrint(line);
+    },
+    // On abort, throw away our WebAssembly instance and create a
+    // new one. This can happen due to out-of-memory, C++ exceptions,
+    // or other reasons; Throwing away and restarting should get us to a
+    // healthy state.
+    onAbort: onError,
+    instantiateWasm: (info: any, realReceiveInstanceCallBack: any) => {
+      instantiateWasmImpl(info, realReceiveInstanceCallBack)
+          .catch(onError);
+      return {};  // indicates lazy initialization
+    },
+    onRuntimeInitialized: () => {
+      // NOTE: DO *NOT* `resolve(sorbet)`!
+      // You will cause an infinite asynchronous loop. It will not be
+      // debuggable, and will lock up the browser. See:
+      // https://github.com/emscripten-core/emscripten/issues/5820
+      // We wrap it in an object to be safe.
+      resolve({sorbet: sorbet});
+    }
+  };
 
   return new Promise<any>((resolve) => {
     sorbet = Sorbet(opts);
