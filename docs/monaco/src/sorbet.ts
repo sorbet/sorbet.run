@@ -1,4 +1,6 @@
 declare var WebAssembly: any;
+// This comes from a <script> tag in the page.
+// Might be nice to change it to an explicit import.
 declare var Sorbet: any;
 
 const sorbetWasmFile = fetch('../sorbet-wasm.wasm');
@@ -11,12 +13,11 @@ const sorbetWasmModule = (typeof WebAssembly.compileStreaming == 'function') ?
 // Since instantiateWasm requires an empty object as a return value,
 // we can't make it async. So, instead, we put the async stuff here
 // so we can use nice async/await syntax.
-async function instantiateWasmImpl(
-    info: any, realReceiveInstanceCallBack: any): Promise<void> {
+async function instantiateWasmImpl(imports: any, successCallback: any): Promise<void> {
   try {
     const mod = await sorbetWasmModule;
-    const instance = await WebAssembly.instantiate(mod, info);
-    realReceiveInstanceCallBack(instance, mod);
+    const instance = await WebAssembly.instantiate(mod, imports);
+    successCallback(instance, mod);
   } catch (error) {
     console.log(
         'Error loading sorbet.wasm. Maybe your adblock blocked it? Some of them are pretty aggressive on github.io domains. We promise we aren\'t mining crypto currencies on your computer.\n' +
@@ -29,24 +30,19 @@ async function instantiateWasmImpl(
  * Creates a new Sorbet instances. Calls errorCallback if Sorbet quits or
  * fails to start up.
  */
-export function createSorbet(onPrint: (line: string) => void, onError: (error: any) => void):
+export function createSorbet(onPrint: (line: string) => void, onAbort: (error: any) => void):
     Promise<{sorbet: any}> {
   let sorbet: any;
   const opts = {
-    print: (line: string) => {
-      onPrint(line);
-    },
-    printErr: (line: string) => {
-      onPrint(line);
-    },
+    print: onPrint,
+    printErr: onPrint,
     // On abort, throw away our WebAssembly instance and create a
     // new one. This can happen due to out-of-memory, C++ exceptions,
     // or other reasons; Throwing away and restarting should get us to a
     // healthy state.
-    onAbort: onError,
-    instantiateWasm: (info: any, realReceiveInstanceCallBack: any) => {
-      instantiateWasmImpl(info, realReceiveInstanceCallBack)
-          .catch(onError);
+    onAbort,
+    instantiateWasm: (imports: any, successCallback: any) => {
+      instantiateWasmImpl(imports, successCallback).catch(onAbort);
       return {};  // indicates lazy initialization
     },
     onRuntimeInitialized: () => {
