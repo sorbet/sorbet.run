@@ -24,7 +24,7 @@ element.addEventListener('click', (e) => {
 
 // Remove leading '#'
 const hash = window.location.hash.slice(1);
-const initialValue = hash
+const initialRubyValue = hash
   ? decodeURIComponent(hash)
   : `# typed: true
 extend T::Sig
@@ -36,15 +36,29 @@ end
 
 ffoo(0)
 foo("not an int")`;
+const rbiParam = new URLSearchParams(window.location.search).get('rbi');
+const initialRbiValue = rbiParam
+  ? rbiParam
+  : `# typed: true
+module Foo
+  sig {void}
+  def self.bar; end
+end
+`
 
 // create Monaco editor
-const model = monaco.editor.createModel(
-  initialValue,
+const rubyModel = monaco.editor.createModel(
+  initialRubyValue,
   'ruby',
   monaco.Uri.parse('inmemory://model/default')
 );
+const rbiModel = monaco.editor.createModel(
+  initialRbiValue,
+  'ruby',
+  monaco.Uri.parse('--rbi.rbi')
+);
 const editor = monaco.editor.create(element, {
-  model: model,
+  model: rubyModel,
   theme: 'vs-dark',
   scrollBeyondLastLine: false,
   formatOnType: true,
@@ -57,6 +71,21 @@ const editor = monaco.editor.create(element, {
   acceptSuggestionOnCommitCharacter: false,
 });
 (window as any).editor = editor; // Useful for prototyping in dev tools
+
+// Allow toggling between Ruby and RBI code
+(window as any).setEditorModel = (name: 'ruby' | 'rbi') => {
+  switch(name) {
+    case 'ruby': {
+      editor.setModel(rubyModel);
+      break;
+    }
+    case 'rbi': {
+      editor.setModel(rbiModel);
+      break;
+    }
+  }
+}
+
 editor.focus();
 
 const useVimKeybindings = () => {
@@ -134,19 +163,38 @@ ${(document.querySelector('#output') as HTMLPreElement).innerText}
   (ev.target as HTMLAnchorElement).href = `https://github.com/sorbet/sorbet/issues/new?body=${body}&labels=bug,unconfirmed&template=bug.md`;
 });
 
+const typecheckArgs = () => {
+  return new URLSearchParams(window.location.search).getAll('arg')
+    .concat(['--rbi', rbiModel.getValue()]);
+}
+
 editor.onDidChangeModelContent((event: any) => {
-  const contents = editor.getValue();
-  window.location.hash = `#${encodeURIComponent(contents)
-    .replace(/\(/g, '%28')
-    .replace(/\)/g, '%29')}`;
+  const contents = rubyModel.getValue();
+  const rbi = rbiModel.getValue();
+
+  switch(editor.getModel()) {
+    case rubyModel: {
+      window.location.hash = `#${encodeURIComponent(contents)
+        .replace(/\(/g, '%28')
+        .replace(/\)/g, '%29')}`;
+      break;
+    }
+    case rbiModel: {
+      const url = new URL(window.location.href);
+      url.searchParams.set('rbi', rbi)
+      window.history.replaceState({}, '', url.toString());
+      break;
+    }
+  }
+
   typecheck(
     contents,
-    new URLSearchParams(window.location.search).getAll('arg')
+    typecheckArgs()
   );
 });
 typecheck(
   editor.getValue(),
-  new URLSearchParams(window.location.search).getAll('arg')
+  typecheckArgs()
 );
 
 // install Monaco language client services
