@@ -34,6 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var mock_socket_1 = require("mock-socket");
 var monaco_languageclient_1 = require("monaco-languageclient");
@@ -52,13 +53,18 @@ element.addEventListener('click', function (e) {
 });
 // Remove leading '#'
 var hash = window.location.hash.slice(1);
-var initialValue = hash
+var initialRubyValue = hash
     ? decodeURIComponent(hash)
     : "# typed: true\nextend T::Sig\n\nsig {params(x: Integer).void}\ndef foo(x)\n  puts(x + 1)\nend\n\nffoo(0)\nfoo(\"not an int\")";
+var rbiParam = new URLSearchParams(window.location.search).get('rbi');
+var initialRbiValue = rbiParam
+    ? rbiParam
+    : "# typed: true\nmodule Foo\n  sig {void}\n  def self.bar; end\nend\n";
 // create Monaco editor
-var model = monaco.editor.createModel(initialValue, 'ruby', monaco.Uri.parse('inmemory://model/default'));
+var rubyModel = monaco.editor.createModel(initialRubyValue, 'ruby', monaco.Uri.parse('inmemory://model/default'));
+var rbiModel = monaco.editor.createModel(initialRbiValue, 'ruby', monaco.Uri.parse('--rbi.rbi'));
 var editor = monaco.editor.create(element, {
-    model: model,
+    model: rubyModel,
     theme: 'vs-dark',
     scrollBeyondLastLine: false,
     formatOnType: true,
@@ -71,7 +77,38 @@ var editor = monaco.editor.create(element, {
     acceptSuggestionOnCommitCharacter: false,
 });
 window.editor = editor; // Useful for prototyping in dev tools
+// Allow toggling between Ruby and RBI code
+window.setEditorModel = function (name) {
+    switch (name) {
+        case 'ruby': {
+            editor.setModel(rubyModel);
+            break;
+        }
+        case 'rbi': {
+            editor.setModel(rbiModel);
+            break;
+        }
+    }
+};
 editor.focus();
+// Workaround to intercept "go to definition" and change model
+var editorService = editor._codeEditorService;
+var openEditorBase = editorService.openCodeEditor.bind(editorService);
+editorService.openCodeEditor = function (input, source) { return __awaiter(_this, void 0, void 0, function () {
+    var result, model;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, openEditorBase(input, source)];
+            case 1:
+                result = _a.sent();
+                if (result === null) {
+                    model = monaco.editor.getModel(input.resource);
+                    editor.setModel(model);
+                }
+                return [2 /*return*/, result];
+        }
+    });
+}); };
 var useVimKeybindings = function () {
     var stored = window.localStorage.getItem('useVimKeybindings');
     if (stored == null) {
@@ -119,14 +156,30 @@ createIssueButton.addEventListener('click', function (ev) {
     var body = encodeURIComponent(template);
     ev.target.href = "https://github.com/sorbet/sorbet/issues/new?body=" + body + "&labels=bug,unconfirmed&template=bug.md";
 });
+var typecheckArgs = function () {
+    return new URLSearchParams(window.location.search).getAll('arg')
+        .concat(['--rbi', rbiModel.getValue()]);
+};
 editor.onDidChangeModelContent(function (event) {
-    var contents = editor.getValue();
-    window.location.hash = "#" + encodeURIComponent(contents)
-        .replace(/\(/g, '%28')
-        .replace(/\)/g, '%29');
-    output_1.typecheck(contents, new URLSearchParams(window.location.search).getAll('arg'));
+    var contents = rubyModel.getValue();
+    var rbi = rbiModel.getValue();
+    switch (editor.getModel()) {
+        case rubyModel: {
+            window.location.hash = "#" + encodeURIComponent(contents)
+                .replace(/\(/g, '%28')
+                .replace(/\)/g, '%29');
+            break;
+        }
+        case rbiModel: {
+            var url_1 = new URL(window.location.href);
+            url_1.searchParams.set('rbi', rbi);
+            window.history.replaceState({}, '', url_1.toString());
+            break;
+        }
+    }
+    output_1.typecheck(contents, typecheckArgs());
 });
-output_1.typecheck(editor.getValue(), new URLSearchParams(window.location.search).getAll('arg'));
+output_1.typecheck(editor.getValue(), typecheckArgs());
 // install Monaco language client services
 monaco_languageclient_1.MonacoServices.install(editor);
 function startLanguageServer() {
