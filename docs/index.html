@@ -71,7 +71,31 @@ main {
 }
 
 #editor {
+  position: relative;
   height: calc(100% - 24px);
+}
+
+#tabs {
+  position: absolute;
+  z-index: 1;
+  top: 24px;
+  right: 24px;
+  background: #1e1e1e;
+  outline: 2px solid #d4d4d4;
+  border-radius: 4px;
+}
+
+#tabs a {
+  display: block;
+  float: left;
+  color: #d4d4d4;
+  padding: 0 4px;
+  cursor: pointer;
+}
+
+#tabs a.active {
+  color: #1e1e1e;
+  background: #d4d4d4;
 }
 
 #editor-statusbar {
@@ -262,6 +286,10 @@ a[data-href^="inmemory://model/"] {
 
     <main>
       <div id="editor">
+        <div id="tabs">
+          <a id="ruby-tab" class="active">Ruby</a>
+          <a id="rbi-tab">RBI</a>
+        </div>
       </div>
       <div id="editor-statusbar"></div>
       <pre id="output" class="solarized">Loading...</pre>
@@ -282,6 +310,23 @@ if (window.top != window.self) {
       ev.preventDefault();
       document.getElementById('editor').classList.toggle('editor-only');
       document.getElementById('output').classList.toggle('editor-only');
+    });
+
+    var rubyTab = document.getElementById('ruby-tab');
+    var rbiTab = document.getElementById('rbi-tab');
+
+    rubyTab.addEventListener('click', function(ev) {
+      ev.preventDefault();
+      rubyTab.classList.add('active');
+      rbiTab.classList.remove('active');
+      window.setEditorModel('ruby');
+    });
+
+    rbiTab.addEventListener('click', function(ev) {
+      ev.preventDefault();
+      rubyTab.classList.remove('active');
+      rbiTab.classList.add('active');
+      window.setEditorModel('rbi');
     });
   })();
 </script>
