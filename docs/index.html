@@ -317,17 +317,27 @@ if (window.top != window.self) {
 
     rubyTab.addEventListener('click', function(ev) {
       ev.preventDefault();
-      rubyTab.classList.add('active');
-      rbiTab.classList.remove('active');
       window.setEditorModel('ruby');
     });
 
     rbiTab.addEventListener('click', function(ev) {
       ev.preventDefault();
-      rubyTab.classList.remove('active');
-      rbiTab.classList.add('active');
       window.setEditorModel('rbi');
     });
+
+    const setRubyTab = () => {
+      rubyTab.classList.add('active');
+      rbiTab.classList.remove('active');
+    };
+
+    const setRbiTab = () => {
+      rubyTab.classList.remove('active');
+      rbiTab.classList.add('active');
+    };
+
+    window.editor.onDidChangeModel((e) => {
+      e.newModelUrl.path.endsWith('.rbi') ? setRbiTab() : setRubyTab();
+    })
   })();
 </script>
 

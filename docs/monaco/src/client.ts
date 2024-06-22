@@ -88,6 +88,20 @@ const editor = monaco.editor.create(element, {
 
 editor.focus();
 
+// Workaround to intercept "go to definition" and change model
+const editorService = (editor as any)._codeEditorService;
+const openEditorBase = editorService.openCodeEditor.bind(editorService);
+editorService.openCodeEditor = async (input: any, source: any) => {
+    const result = await openEditorBase(input, source);
+
+    if (result === null) {
+      const model = monaco.editor.getModel(input.resource);
+      editor.setModel(model);
+    }
+
+    return result;
+};
+
 const useVimKeybindings = () => {
   const stored = window.localStorage.getItem('useVimKeybindings');
   if (stored == null) {
