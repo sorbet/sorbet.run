@@ -1,0 +1,70 @@
+pre > code {
+  position: relative;
+  display: inline-block;
+  min-width: 100%;
+  /* So that we can put the ::after behind the text but in front of the background */
+  z-index: 1;
+}
+
+pre > code.sourceCode > span {
+  position: relative;
+  min-width: 100%;
+}
+
+pre > code.sourceCode > span::after {
+  position: absolute;
+  background-color: var(--code-highlight);
+  z-index: -1;
+  left: -10px; /* undo padding of parent */
+  right: 10px; /* undo padding of parent */
+  top: 0;
+  height: 100%;
+}
+
+/* Undo styles that pandoc injects into the page. */
+@media print {
+  pre > code.sourceCode { white-space: pre; }
+  pre > code.sourceCode > span { text-indent: 0px; padding-left: 0px; }
+}
+
+
+pre.hl-1  > code.sourceCode > span:nth-of-type(1)::after  { content: ""; }
+pre.hl-2  > code.sourceCode > span:nth-of-type(2)::after  { content: ""; }
+pre.hl-3  > code.sourceCode > span:nth-of-type(3)::after  { content: ""; }
+pre.hl-4  > code.sourceCode > span:nth-of-type(4)::after  { content: ""; }
+pre.hl-5  > code.sourceCode > span:nth-of-type(5)::after  { content: ""; }
+pre.hl-6  > code.sourceCode > span:nth-of-type(6)::after  { content: ""; }
+pre.hl-7  > code.sourceCode > span:nth-of-type(7)::after  { content: ""; }
+pre.hl-8  > code.sourceCode > span:nth-of-type(8)::after  { content: ""; }
+pre.hl-9  > code.sourceCode > span:nth-of-type(9)::after  { content: ""; }
+pre.hl-10 > code.sourceCode > span:nth-of-type(10)::after { content: ""; }
+pre.hl-11 > code.sourceCode > span:nth-of-type(11)::after { content: ""; }
+pre.hl-12 > code.sourceCode > span:nth-of-type(12)::after { content: ""; }
+pre.hl-13 > code.sourceCode > span:nth-of-type(13)::after { content: ""; }
+pre.hl-14 > code.sourceCode > span:nth-of-type(14)::after { content: ""; }
+pre.hl-15 > code.sourceCode > span:nth-of-type(15)::after { content: ""; }
+pre.hl-16 > code.sourceCode > span:nth-of-type(16)::after { content: ""; }
+pre.hl-17 > code.sourceCode > span:nth-of-type(17)::after { content: ""; }
+pre.hl-18 > code.sourceCode > span:nth-of-type(18)::after { content: ""; }
+pre.hl-19 > code.sourceCode > span:nth-of-type(19)::after { content: ""; }
+pre.hl-20 > code.sourceCode > span:nth-of-type(20)::after { content: ""; }
+pre.hl-21 > code.sourceCode > span:nth-of-type(21)::after { content: ""; }
+pre.hl-22 > code.sourceCode > span:nth-of-type(22)::after { content: ""; }
+pre.hl-23 > code.sourceCode > span:nth-of-type(23)::after { content: ""; }
+pre.hl-24 > code.sourceCode > span:nth-of-type(24)::after { content: ""; }
+pre.hl-25 > code.sourceCode > span:nth-of-type(25)::after { content: ""; }
+pre.hl-26 > code.sourceCode > span:nth-of-type(26)::after { content: ""; }
+pre.hl-27 > code.sourceCode > span:nth-of-type(27)::after { content: ""; }
+pre.hl-28 > code.sourceCode > span:nth-of-type(28)::after { content: ""; }
+pre.hl-29 > code.sourceCode > span:nth-of-type(29)::after { content: ""; }
+pre.hl-30 > code.sourceCode > span:nth-of-type(30)::after { content: ""; }
+pre.hl-31 > code.sourceCode > span:nth-of-type(31)::after { content: ""; }
+pre.hl-32 > code.sourceCode > span:nth-of-type(32)::after { content: ""; }
+pre.hl-33 > code.sourceCode > span:nth-of-type(33)::after { content: ""; }
+pre.hl-34 > code.sourceCode > span:nth-of-type(34)::after { content: ""; }
+pre.hl-35 > code.sourceCode > span:nth-of-type(35)::after { content: ""; }
+pre.hl-36 > code.sourceCode > span:nth-of-type(36)::after { content: ""; }
+pre.hl-37 > code.sourceCode > span:nth-of-type(37)::after { content: ""; }
+pre.hl-38 > code.sourceCode > span:nth-of-type(38)::after { content: ""; }
+pre.hl-39 > code.sourceCode > span:nth-of-type(39)::after { content: ""; }
+pre.hl-40 > code.sourceCode > span:nth-of-type(40)::after { content: ""; }
