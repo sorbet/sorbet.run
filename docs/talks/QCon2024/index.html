@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jake Zimmerman, Getty D. Ritter">
+  <meta name="dcterms.date" content="2024-11-19">
+  <title>Refactoring Stubborn Legacy Codebases</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4/dist/reset.css">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4/dist/reveal.css">
+  <style>
+    .reveal .sourceCode {  /* see #7635 */
+      overflow: visible;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #0e3359; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ffbb00; font-weight: bold; } /* Alert */
+    code span.an { color: #aab7c4; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { } /* Attribute */
+    code span.bn { color: #ffbb00; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #7a73ff; } /* ControlFlow */
+    code span.ch { color: #ffbb00; } /* Char */
+    code span.cn { color: #ffbb00; } /* Constant */
+    code span.co { color: #aab7c4; font-style: italic; } /* Comment */
+    code span.cv { color: #aab7c4; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #aab7c4; font-style: italic; } /* Documentation */
+    code span.dt { color: #ffbb00; } /* DataType */
+    code span.dv { color: #ffbb00; } /* DecVal */
+    code span.er { color: #ffbb00; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ffbb00; } /* Float */
+    code span.fu { color: #ff80ff; } /* Function */
+    code span.im { color: #7a73ff; } /* Import */
+    code span.in { color: #aab7c4; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #7a73ff; } /* Keyword */
+    code span.op { color: #7a73ff; } /* Operator */
+    code span.ot { color: #ff80ff; } /* Other */
+    code span.pp { color: #ffbb00; } /* Preprocessor */
+    code span.sc { color: #ffbb00; } /* SpecialChar */
+    code span.ss { color: #ffbb00; } /* SpecialString */
+    code span.st { color: #ffbb00; } /* String */
+    code span.va { color: #ff80ff; } /* Variable */
+    code span.vs { } /* VerbatimString */
+    code span.wa { color: #ffbb00; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4/dist/theme/black.css" id="theme">
+  <link rel="stylesheet" href="css/stripe.css"/>
+  <link rel="stylesheet" href="css/line-highlights.css"/>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+<section id="section" class="slide level2">
+<h2></h2>
+<section data-background-image="/img/unhappy-codebases.png">
+</section>
+</section>
+<section id="section-1" class="slide level2">
+<h2></h2>
+<blockquote>
+<p>This code isn’t modular enough!</p>
+</blockquote>
+<blockquote>
+<p>We need to change how we talk to the database!</p>
+</blockquote>
+<blockquote>
+<p>Not enough code is typed!</p>
+</blockquote>
+<p>… etc.</p>
+<div class="fragment">
+<p>→ Need to <strong>refactor tons of code</strong></p>
+</div>
+</section>
+<section id="assumption" class="slide level2">
+<h2>Assumption:</h2>
+<p>Making it <strong>one team’s</strong> job to drive that refactor is a
+great idea!</p>
+<p><br />
+</p>
+<ul>
+<li>centralizes expertise—most problems will be repeat problems</li>
+<li>no waiting for each team’s to plan and prioritize</li>
+<li>incentivizes automation</li>
+</ul>
+</section>
+<section id="section-2" class="slide level2">
+<h2></h2>
+<p>This approach requires two things:</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Leverage</strong> over the codebase</p>
+<p><img data-src="/img/LeveragePoint_Diagram.gif" /></p>
+</div><div class="column" style="width:50%;">
+<p>Some way to <strong>ratchet</strong> incremental progress</p>
+<p><img data-src="/img/Ratchet_rotation_allowed.jpg" /></p>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h1>
+Refactoring Stubborn Legacy Codebases
+</h1>
+<p><span class="author">Jake Zimmerman
+<strong><code>@jez</code></strong><br />
+Getty D. Ritter <strong><code>@aisamanra</code></strong></span></p>
+<p><span class="date">November 19, 2024</span></p>
+<aside class="notes">
+<p>I’m Jake. This is Getty. Doing large-scale code migrations on
+Stripe’s Ruby codebase is our full time job, and has been for the better
+half of the last decade.</p>
+<p>We’re going to spend this session talking about how we refactor
+stubborn, tangled, legacy codebases.</p>
+</aside>
+</section>
+<section id="thesis" class="slide level2">
+<h2>Thesis</h2>
+<p><br />
+</p>
+<div style="text-align: center;">
+<p>“Refactoring stubborn legacy codebases”</p>
+<p><strong>==</strong></p>
+<p>“Having a point of leverage” <strong>+</strong> “Picking the right
+ratchets” </p>
+</div>
+<!-- TODO(jez) Should you expand on these here? -->
+<p><br />
+</p>
+<p><br />
+</p>
+</section>
+<section id="agenda" class="slide level2">
+<h2>Agenda 🎯</h2>
+<ul>
+<li><p><span class="fragment highlight-blurple">Building and adopting
+Sorbet</span></p></li>
+<li><p>Introducing modularity to Stripe’s Ruby monolith</p></li>
+</ul>
+</section>
+<section id="sorbet-is-stripes-type-checker-for-ruby"
+class="slide level2">
+<h2>Sorbet is Stripe’s type checker for Ruby</h2>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>sig <span class="kw">{</span> params(<span class="wa">x: </span><span class="dt">Integer</span>)<span class="at">.returns</span>(<span class="dt">String</span>) <span class="kw">}</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> int_to_str(x)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  x<span class="at">.to_s</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<aside class="notes">
+<p>TODO(jez) Capabilities, IDE support, focus on performance</p>
+<p>TODO(jez) Maybe replace with screenshot of sorbet.org?</p>
+</aside>
+</section>
+<section id="brief-history-of-sorbet" class="slide level2">
+<h2>Brief history of Sorbet 👨‍🏫</h2>
+<ul>
+<li>Began fall 2017</li>
+<li>Stripe: <strong>~800</strong> employees (200 – 400 engineers)</li>
+<li>Initial project: 3 engineers, full time</li>
+</ul>
+<p>Timeline</p>
+<ul>
+<li>Oct ’17 – kickoff</li>
+<li>May ’18 – blocking in CI</li>
+<li>Sep ’18 – 75% files opted into type checking</li>
+</ul>
+<aside class="notes">
+<p>About 9 months building Sorbet, another 3 months adopting it.</p>
+</aside>
+</section>
+<section id="building-sorbet-introduced-leverage" class="slide level2">
+<h2>💡 Building Sorbet introduced leverage</h2>
+<div class="columns">
+<div class="column" style="width:46%;">
+<p>“hard to understand”<br />
+“only breaks in production”<br />
+“don’t trust the docs”<br />
+“too slow to run all tests locally”<br />
+“too much low-quality code”</p>
+</div><div class="column fragment" style="width:54%;">
+<p><strong>→</strong> IDE aids understanding<br />
+<strong>→</strong> type checker catches bugs in CI<br />
+<strong>→</strong> runtime makes types trustworthy<br />
+<strong>→</strong> all code type checks in seconds<br />
+<strong>→</strong> bad code is hard to type</p>
+</div>
+</div>
+<aside class="notes">
+<p>Every few months, we’d survey developers, asking “what gets in the
+way of your productivity at Stripe?” Lots of answers.</p>
+<p>We could have solved these individually (better docs, more test
+coverage, faster tests) but we wanted LEVERAGE over the codebase: “a
+small force that has a big impact.”</p>
+<p>Sorbet provided that leverage.</p>
+</aside>
+</section>
+<section id="introducing-leverage-is-an-investment"
+class="slide level2">
+<h2>📈 Introducing leverage is an investment</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>9 months to build Sorbet…</p>
+<p><span class="fragment">… but has served as the foundation for
+<strong>hundreds of massive codemods</strong>!</span></p>
+</div><div class="column" style="width:50%;">
+<p>3 months to adopt typing…</p>
+<p><span class="fragment">… <strong>contained to three
+engineers</strong>, while everyone else remains focused!</span></p>
+</div>
+</div>
+</section>
+<section id="ratchet-at-the-right-granularity" class="slide level2">
+<h2>💡 Ratchet at the right granularity</h2>
+<p>→ <strong><code># typed:</code></strong> comment at the top of each
+file</p>
+<p>Alternatives:</p>
+<ul>
+<li>by folder, by team → too broad</li>
+<li>by method, by percent within a file → too granular</li>
+</ul>
+<p><strong><code># typed:</code></strong> comment is
+<strong>local</strong>, <strong>incremental</strong>, and
+<strong>actionable</strong></p>
+<aside class="notes">
+<p>Getting started just means flipping a single comment in the file
+you’re already working in.</p>
+<p>Only get type errors once you start adding annotations.</p>
+<p>Once you add <strong><code># typed: true</code></strong>, your
+reviewer is going to be really suspicious of downgrading to
+<strong><code># typed: false</code></strong> vs just using
+<strong><code>T.unsafe</code></strong> to regress one call
+site—discourages backsliding</p>
+</aside>
+</section>
+<section id="thesis-1" class="slide level2">
+<h2>Thesis</h2>
+<p><br />
+</p>
+<div style="text-align: center;">
+<p>“Refactoring stubborn legacy codebases”</p>
+<p><strong>==</strong></p>
+<p>“Having a point of leverage” <strong>+</strong> “Picking the right
+ratchets” </p>
+</div>
+<p><br />
+</p>
+<p><br />
+</p>
+<aside class="notes">
+<p>Adopting static typing at Stripe succeeded in large part because we
+cultivated a point of leverage (Sorbet) and we locked in incremental
+progress the right ratchets.</p>
+</aside>
+</section>
+<section id="agenda-1" class="slide level2">
+<h2>Agenda 🎯</h2>
+<ul>
+<li><p>Building and adopting Sorbet</p></li>
+<li><p><strong>Introducing modularity to Stripe’s Ruby
+monolith</strong></p></li>
+</ul>
+</section>
+<section id="todogdritter" class="slide level2">
+<h2>TODO(gdritter)</h2>
+<!-- vim:tw=60
+-->
+</section>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/reveal.js@^4/dist/reveal.js"></script>
+
+  <!-- reveal.js plugins -->
+  <script src="https://unpkg.com/reveal.js@^4/plugin/notes/notes.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4/plugin/search/search.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4/plugin/zoom/zoom.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: "c/t",
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: true,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: false,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 960,
+
+        height: 540,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 8.0e-2,
+
+        maxScale: 3,
+
+        // reveal.js plugins
+        plugins: [
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script src="js/toggle-theme.js"></script>
+    </body>
+</html>
