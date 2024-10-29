@@ -184,6 +184,14 @@
   color: var(--accent-color);
 }
 
+.reveal .fragment.highlight-blurple {
+    opacity: 1;
+    visibility: inherit
+}
+.reveal .fragment.highlight-blurple.visible {
+    color: var(--accent-color);
+}
+
 .reveal em {
   font-style: italic;
 }
