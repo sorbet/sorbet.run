@@ -33,62 +33,27 @@ include-after:
 - '<script src="js/toggle-theme.js"></script>'
 ---
 
-##
+-----
 
-<section data-background-image="/img/unhappy-codebases.png">
-</section>
+<h1 class="title">Refactoring Stubborn Legacy Codebases</h1>
 
-##
-
-> This code isn't modular enough!
-
-> We need to change how we talk to the database!
-
-> Not enough code is typed!
-
-... etc.
-
-. . .
-
-→ Need to **refactor tons of code**
-
-## Assumption:
-
-Making it **one team's** job to drive that refactor is a
-great idea!
-
-\
-
-* centralizes expertise---most problems will be repeat problems
-- no waiting for each team's to plan and prioritize
-- incentivizes automation
-
-##
-
-This approach requires two things:
-
-:::: {.columns}
-::: {.column width="50%"}
-**Leverage** over the codebase
-
-![](/img/LeveragePoint_Diagram.gif)
+::::{.columns}
+:::{.column width="27%"}
+Jake Zimmerman\
+Getty D. Ritter
 :::
-
-::: {.column width="50%"}
-Some way to **ratchet** incremental progress
-
-![](/img/Ratchet_rotation_allowed.jpg)
+:::{.column width="73%"}
+![][github-mark-light]![][github-mark-dark][`@jez`]\
+![][github-mark-light]![][github-mark-dark][`@aisamanra`]
 :::
 ::::
 
------
-
-<h1>Refactoring Stubborn Legacy Codebases</h1>
-
-[Jake Zimmerman **`@jez`**\
-Getty D. Ritter **`@aisamanra`**]{.author}
-
 [November 19, 2024]{.date}
+
+[`@jez`]: https://github.com/jez
+[`@aisamanra`]: https://github.com/aisamanra
+[github-mark-light]: img/light/github-mark.svg {style="height:30px; margin: 0 0.3em -5px;"}
+[github-mark-dark]: img/dark/github-mark.svg {style="height:30px; margin: 0 0.3em -5px;"}
 
 ::: notes
 
@@ -103,19 +68,99 @@ refactor stubborn, tangled, legacy codebases.
 
 -----
 
+## {background-image="img/unhappy-codebases.png"}
+
+
+## Unhappy codebases
+
+- _Our code isn't modular enough!_
+
+::: incremental
+
+- _This dependency is 10 years out of date!_
+
+- _We need to change how we talk to the database!_
+
+- _Not enough code is typed!_
+
+:::
+
+. . .
+
+### → We can refactor to a happy state!
+
+::: notes
+
+- monolith → tangled mess
+- super old Sinatra gem, AWS gem, bazel version, etc.
+- monolithic database → database per service
+- still plenty of untyped ruby and python apps out there
+
+:::
+
+## Best to centralize the refactor ☀️
+
+Have **one team** drive the refactor:
+
+* **concentrates expertise**\
+  most problems will be repeat problems
+
+- **avoids idle time**\
+  no need to wait for each team to plan and prioritize
+
+- **incentivizes automation**\
+  fewer man-hours overall
+
+::: notes
+
+Going to kind of take this as an assumption: not going to
+spend too much time on it.
+
+Instead, we're going to talk about what it takes to make
+this approach successful.
+
+:::
+
+## Centralized migration needs two things:
+
+<!-- TODO(jez) Better diagrams -->
+
+:::: {.columns}
+::: {.column width="45%"}
+**Leverage** over the codebase
+
+![](/img/LeveragePoint_Diagram.gif)
+:::
+
+::: {.column width="55%"}
+Way to **ratchet** incremental progress
+
+![](/img/Ratchet_rotation_allowed.jpg){height="180px"}
+:::
+::::
+
 ## Thesis
 
 \
 
-:::{style="text-align: center;"}
-"Refactoring stubborn legacy codebases"
+to successfully &nbsp; **refactor stubborn legacy codebases**
 
-**==**
-
-"Having a point of leverage" **+** "Picking the right ratchets"&nbsp;
-:::
+you need to &nbsp; **have a point of leverage** &nbsp; and &nbsp; **pick good ratchets**
 
 <!-- TODO(jez) Should you expand on these here? -->
+
+::: notes
+
+Doing large-scale code migrations on Stripe's Ruby codebase
+is our full time job, and has been for the better half of
+the last decade.
+
+We're going to spend this session talking about how we
+refactor stubborn, tangled, legacy codebases.
+
+:::
+
+
 
 \
 
@@ -123,18 +168,15 @@ refactor stubborn, tangled, legacy codebases.
 
 ## Agenda 🎯
 
-- [Building and adopting Sorbet]{.fragment .highlight-blurple}
+\
 
-- Introducing modularity to Stripe's Ruby monolith
+- **Improving developer satisfaction with Sorbet**
 
-## Sorbet is Stripe's type checker for Ruby
+- Making a Ruby monolith more modular
 
-```ruby
-sig { params(x: Integer).returns(String) }
-def int_to_str(x)
-  x.to_s
-end
-```
+\
+
+## {background-image="/img/sorbet.org.png"}
 
 ::: notes
 
@@ -143,6 +185,61 @@ TODO(jez) Capabilities, IDE support, focus on performance
 TODO(jez) Maybe replace with screenshot of sorbet.org?
 
 :::
+
+## 🥺 Stripe's codebase was unhappy
+
+::::{.columns}
+:::{.column width="46%" }
+"hard to understand"\
+["only breaks in production"]{.fragment}\
+["don't trust the docs"]{.fragment}\
+["too slow to run all tests locally"]{.fragment}\
+["too much low-quality code"]{.fragment}
+:::
+:::{.column width="54%"}
+&nbsp;\
+&nbsp;\
+&nbsp;\
+&nbsp;\
+&nbsp;
+:::
+::::
+
+(sentiment from company-wide survey)
+
+::: notes
+
+Every few months, we'd survey developers, asking "what gets
+in the way of your productivity at Stripe?" Lots of answers.
+
+We could have solved these individually (better docs, more
+test coverage, faster tests) but we wanted LEVERAGE over the
+codebase: "a small force that has a big impact."
+
+Sorbet provided that leverage.
+
+:::
+
+## 💡 Building Sorbet introduced leverage
+
+::::{.columns}
+:::{.column width="46%" }
+"hard to understand"\
+"only breaks in production"\
+"don't trust the docs"\
+"too slow to run all tests locally"\
+"too much low-quality code"
+:::
+:::{.column width="54%"}
+[**→** IDE aids understanding]{.fragment}\
+[**→** type checker catches bugs in CI]{.fragment}\
+[**→** runtime makes types trustworthy]{.fragment}\
+[**→** all code type checks in seconds]{.fragment}\
+[**→** bad code is hard to type]{.fragment}
+:::
+::::
+
+(sentiment from company-wide survey)
 
 ## Brief history of Sorbet 👨‍🏫
 
@@ -163,39 +260,7 @@ it.
 
 :::
 
-## 💡 Building Sorbet introduced leverage
-
-::::{.columns}
-:::{.column width="46%" }
-"hard to understand"\
-"only breaks in production"\
-"don't trust the docs"\
-"too slow to run all tests locally"\
-"too much low-quality code"
-:::
-:::{.column .fragment width="54%"}
-**→** IDE aids understanding\
-**→** type checker catches bugs in CI\
-**→** runtime makes types trustworthy\
-**→** all code type checks in seconds\
-**→** bad code is hard to type
-:::
-::::
-
-::: notes
-
-Every few months, we'd survey developers, asking "what gets
-in the way of your productivity at Stripe?" Lots of answers.
-
-We could have solved these individually (better docs, more
-test coverage, faster tests) but we wanted LEVERAGE over the
-codebase: "a small force that has a big impact."
-
-Sorbet provided that leverage.
-
-:::
-
-## 📈 Introducing leverage is an investment
+## Might be easier than you think?
 
 ::::{.columns}
 :::{.column width="50%"}
@@ -212,17 +277,33 @@ remains focused!]{.fragment}
 :::
 ::::
 
-## 💡 Ratchet at the right granularity
+::: notes
 
-→ **`# typed:`** comment at the top of each file
+As a rule, people overrate how hard building program
+analysis tools are.
 
-Alternatives:
+"but remember: we centralized this migration!"
 
-- by folder, by team → too broad
-- by method, by percent within a file → too granular
+:::
 
-**`# typed:`** comment is **local**, **incremental**, and
-**actionable**
+## Ratcheting in Sorbet...
+
+**`# typed:`** comment at the top of each file
+
+::::{.columns}
+:::{.column width="30%"}
+`# typed:` **`false`**\
+`# typed:` **`true`**\
+`# typed:` **`strict`**
+:::
+:::{.column width="70%"}
+→ just syntax and constants\
+→ inference in methods\
+→ every method needs a signature
+:::
+::::
+
+... is **local**, **incremental**, and **actionable**
 
 ::: notes
 
@@ -238,21 +319,43 @@ site---discourages backsliding
 
 :::
 
-## Thesis
+## 💡 **local**, **incremental**, and **actionable**
 
-\
+Alternatives to `# typed:` comment:
 
-:::{style="text-align: center;"}
-"Refactoring stubborn legacy codebases"
+- by folder or by team → too broad\
+  (not local enough, not incremental enough)
 
-**==**
+- by method or by percent within a file → too granular\
+  (noisy, hard to action)
 
-"Having a point of leverage" **+** "Picking the right ratchets"&nbsp;
+::: notes
+
+"all new methods"
+
+"coverage percentage only goes up"
+
 :::
 
-\
 
+## Thesis
+
+Developer satisfaction improved because we:
+
+::::{.columns style="gap: min(4vw, 0.5em);"}
+:::{.column style="width:6%; text-align:right;"}
 \
+by\
+and
+:::
+:::{.column width="94%"}
+**refactored a stubborn legacy codebase**\
+**having a point of leverage** (Sorbet)\
+**picking good ratchets** (`# typed:`)
+:::
+::::
+
+
 
 ::: notes
 
@@ -264,9 +367,13 @@ locked in incremental progress the right ratchets.
 
 ## Agenda 🎯
 
-- Building and adopting Sorbet
+\
 
-- **Introducing modularity to Stripe's Ruby monolith**
+- Improving developer satisfaction with Sorbet
+
+- **Making a Ruby monolith more modular**
+
+\
 
 
 ## TODO(gdritter)

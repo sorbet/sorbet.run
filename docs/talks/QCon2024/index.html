@@ -27,70 +27,6 @@
       vertical-align: middle;
     }
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
-    /* CSS for syntax highlighting */
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-        color: #aaaaaa;
-      }
-    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-    div.sourceCode
-      {  background-color: #0e3359; }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span.al { color: #ffbb00; font-weight: bold; } /* Alert */
-    code span.an { color: #aab7c4; font-weight: bold; font-style: italic; } /* Annotation */
-    code span.at { } /* Attribute */
-    code span.bn { color: #ffbb00; } /* BaseN */
-    code span.bu { } /* BuiltIn */
-    code span.cf { color: #7a73ff; } /* ControlFlow */
-    code span.ch { color: #ffbb00; } /* Char */
-    code span.cn { color: #ffbb00; } /* Constant */
-    code span.co { color: #aab7c4; font-style: italic; } /* Comment */
-    code span.cv { color: #aab7c4; font-weight: bold; font-style: italic; } /* CommentVar */
-    code span.do { color: #aab7c4; font-style: italic; } /* Documentation */
-    code span.dt { color: #ffbb00; } /* DataType */
-    code span.dv { color: #ffbb00; } /* DecVal */
-    code span.er { color: #ffbb00; font-weight: bold; } /* Error */
-    code span.ex { } /* Extension */
-    code span.fl { color: #ffbb00; } /* Float */
-    code span.fu { color: #ff80ff; } /* Function */
-    code span.im { color: #7a73ff; } /* Import */
-    code span.in { color: #aab7c4; font-weight: bold; font-style: italic; } /* Information */
-    code span.kw { color: #7a73ff; } /* Keyword */
-    code span.op { color: #7a73ff; } /* Operator */
-    code span.ot { color: #ff80ff; } /* Other */
-    code span.pp { color: #ffbb00; } /* Preprocessor */
-    code span.sc { color: #ffbb00; } /* SpecialChar */
-    code span.ss { color: #ffbb00; } /* SpecialString */
-    code span.st { color: #ffbb00; } /* String */
-    code span.va { color: #ff80ff; } /* Variable */
-    code span.vs { } /* VerbatimString */
-    code span.wa { color: #ffbb00; font-weight: bold; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4/dist/theme/black.css" id="theme">
   <link rel="stylesheet" href="css/stripe.css"/>
@@ -99,60 +35,28 @@
 <body>
   <div class="reveal">
     <div class="slides">
-<section id="section" class="slide level2">
-<h2></h2>
-<section data-background-image="/img/unhappy-codebases.png">
-</section>
-</section>
-<section id="section-1" class="slide level2">
-<h2></h2>
-<blockquote>
-<p>This code isn’t modular enough!</p>
-</blockquote>
-<blockquote>
-<p>We need to change how we talk to the database!</p>
-</blockquote>
-<blockquote>
-<p>Not enough code is typed!</p>
-</blockquote>
-<p>… etc.</p>
-<div class="fragment">
-<p>→ Need to <strong>refactor tons of code</strong></p>
-</div>
-</section>
-<section id="assumption" class="slide level2">
-<h2>Assumption:</h2>
-<p>Making it <strong>one team’s</strong> job to drive that refactor is a
-great idea!</p>
-<p><br />
-</p>
-<ul>
-<li>centralizes expertise—most problems will be repeat problems</li>
-<li>no waiting for each team’s to plan and prioritize</li>
-<li>incentivizes automation</li>
-</ul>
-</section>
-<section id="section-2" class="slide level2">
-<h2></h2>
-<p>This approach requires two things:</p>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>Leverage</strong> over the codebase</p>
-<p><img data-src="/img/LeveragePoint_Diagram.gif" /></p>
-</div><div class="column" style="width:50%;">
-<p>Some way to <strong>ratchet</strong> incremental progress</p>
-<p><img data-src="/img/Ratchet_rotation_allowed.jpg" /></p>
-</div>
-</div>
-</section>
 <section class="slide level2">
 
-<h1>
+<h1 class="title">
 Refactoring Stubborn Legacy Codebases
 </h1>
-<p><span class="author">Jake Zimmerman
-<strong><code>@jez</code></strong><br />
-Getty D. Ritter <strong><code>@aisamanra</code></strong></span></p>
+<div class="columns">
+<div class="column" style="width:27%;">
+<p>Jake Zimmerman<br />
+Getty D. Ritter</p>
+</div><div class="column" style="width:73%;">
+<p><img data-src="img/light/github-mark.svg"
+style="height:30px; margin: 0 0.3em -5px;" /><img
+data-src="img/dark/github-mark.svg"
+style="height:30px; margin: 0 0.3em -5px;" /><a
+href="https://github.com/jez"><code>@jez</code></a><br />
+<img data-src="img/light/github-mark.svg"
+style="height:30px; margin: 0 0.3em -5px;" /><img
+data-src="img/dark/github-mark.svg"
+style="height:30px; margin: 0 0.3em -5px;" /><a
+href="https://github.com/aisamanra"><code>@aisamanra</code></a></p>
+</div>
+</div>
 <p><span class="date">November 19, 2024</span></p>
 <aside class="notes">
 <p>I’m Jake. This is Getty. Doing large-scale code migrations on
@@ -162,17 +66,84 @@ half of the last decade.</p>
 stubborn, tangled, legacy codebases.</p>
 </aside>
 </section>
+<section id="section" class="slide level2"
+data-background-image="img/unhappy-codebases.png">
+<h2 data-background-image="img/unhappy-codebases.png"></h2>
+</section>
+<section id="unhappy-codebases" class="slide level2">
+<h2>Unhappy codebases</h2>
+<ul>
+<li><em>Our code isn’t modular enough!</em></li>
+</ul>
+<div>
+<ul>
+<li class="fragment"><p><em>This dependency is 10 years out of
+date!</em></p></li>
+<li class="fragment"><p><em>We need to change how we talk to the
+database!</em></p></li>
+<li class="fragment"><p><em>Not enough code is typed!</em></p></li>
+</ul>
+</div>
+<div class="fragment">
+<h3 id="we-can-refactor-to-a-happy-state">→ We can refactor to a happy
+state!</h3>
+<aside class="notes">
+<ul>
+<li>monolith → tangled mess</li>
+<li>super old Sinatra gem, AWS gem, bazel version, etc.</li>
+<li>monolithic database → database per service</li>
+<li>still plenty of untyped ruby and python apps out there</li>
+</ul>
+</aside>
+</div>
+</section>
+<section id="best-to-centralize-the-refactor" class="slide level2">
+<h2>Best to centralize the refactor ☀️</h2>
+<p>Have <strong>one team</strong> drive the refactor:</p>
+<ul>
+<li><p><strong>concentrates expertise</strong><br />
+most problems will be repeat problems</p></li>
+<li><p><strong>avoids idle time</strong><br />
+no need to wait for each team to plan and prioritize</p></li>
+<li><p><strong>incentivizes automation</strong><br />
+fewer man-hours overall</p></li>
+</ul>
+<aside class="notes">
+<p>Going to kind of take this as an assumption: not going to spend too
+much time on it.</p>
+<p>Instead, we’re going to talk about what it takes to make this
+approach successful.</p>
+</aside>
+</section>
+<section id="centralized-migration-needs-two-things"
+class="slide level2">
+<h2>Centralized migration needs two things:</h2>
+<!-- TODO(jez) Better diagrams -->
+<div class="columns">
+<div class="column" style="width:45%;">
+<p><strong>Leverage</strong> over the codebase</p>
+<p><img data-src="/img/LeveragePoint_Diagram.gif" /></p>
+</div><div class="column" style="width:55%;">
+<p>Way to <strong>ratchet</strong> incremental progress</p>
+<p><img data-src="/img/Ratchet_rotation_allowed.jpg" height="180" /></p>
+</div>
+</div>
+</section>
 <section id="thesis" class="slide level2">
 <h2>Thesis</h2>
 <p><br />
 </p>
-<div style="text-align: center;">
-<p>“Refactoring stubborn legacy codebases”</p>
-<p><strong>==</strong></p>
-<p>“Having a point of leverage” <strong>+</strong> “Picking the right
-ratchets” </p>
-</div>
+<p>to successfully   <strong>refactor stubborn legacy
+codebases</strong></p>
+<p>you need to   <strong>have a point of leverage</strong>   and  
+<strong>pick good ratchets</strong></p>
 <!-- TODO(jez) Should you expand on these here? -->
+<aside class="notes">
+<p>Doing large-scale code migrations on Stripe’s Ruby codebase is our
+full time job, and has been for the better half of the last decade.</p>
+<p>We’re going to spend this session talking about how we refactor
+stubborn, tangled, legacy codebases.</p>
+</aside>
 <p><br />
 </p>
 <p><br />
@@ -180,24 +151,74 @@ ratchets” </p>
 </section>
 <section id="agenda" class="slide level2">
 <h2>Agenda 🎯</h2>
+<p><br />
+</p>
 <ul>
-<li><p><span class="fragment highlight-blurple">Building and adopting
-Sorbet</span></p></li>
-<li><p>Introducing modularity to Stripe’s Ruby monolith</p></li>
+<li><p><strong>Improving developer satisfaction with
+Sorbet</strong></p></li>
+<li><p>Making a Ruby monolith more modular</p></li>
 </ul>
+<p><br />
+</p>
 </section>
-<section id="sorbet-is-stripes-type-checker-for-ruby"
-class="slide level2">
-<h2>Sorbet is Stripe’s type checker for Ruby</h2>
-<div class="sourceCode" id="cb1"><pre
-class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>sig <span class="kw">{</span> params(<span class="wa">x: </span><span class="dt">Integer</span>)<span class="at">.returns</span>(<span class="dt">String</span>) <span class="kw">}</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> int_to_str(x)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  x<span class="at">.to_s</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<section id="section-1" class="slide level2"
+data-background-image="/img/sorbet.org.png">
+<h2 data-background-image="/img/sorbet.org.png"></h2>
 <aside class="notes">
 <p>TODO(jez) Capabilities, IDE support, focus on performance</p>
 <p>TODO(jez) Maybe replace with screenshot of sorbet.org?</p>
 </aside>
+</section>
+<section id="stripes-codebase-was-unhappy" class="slide level2">
+<h2>🥺 Stripe’s codebase was unhappy</h2>
+<div class="columns">
+<div class="column" style="width:46%;">
+<p>“hard to understand”<br />
+<span class="fragment">“only breaks in production”</span><br />
+<span class="fragment">“don’t trust the docs”</span><br />
+<span class="fragment">“too slow to run all tests locally”</span><br />
+<span class="fragment">“too much low-quality code”</span></p>
+</div><div class="column" style="width:54%;">
+<p> <br />
+ <br />
+ <br />
+ <br />
+ </p>
+</div>
+</div>
+<p>(sentiment from company-wide survey)</p>
+<aside class="notes">
+<p>Every few months, we’d survey developers, asking “what gets in the
+way of your productivity at Stripe?” Lots of answers.</p>
+<p>We could have solved these individually (better docs, more test
+coverage, faster tests) but we wanted LEVERAGE over the codebase: “a
+small force that has a big impact.”</p>
+<p>Sorbet provided that leverage.</p>
+</aside>
+</section>
+<section id="building-sorbet-introduced-leverage" class="slide level2">
+<h2>💡 Building Sorbet introduced leverage</h2>
+<div class="columns">
+<div class="column" style="width:46%;">
+<p>“hard to understand”<br />
+“only breaks in production”<br />
+“don’t trust the docs”<br />
+“too slow to run all tests locally”<br />
+“too much low-quality code”</p>
+</div><div class="column" style="width:54%;">
+<p><span class="fragment"><strong>→</strong> IDE aids
+understanding</span><br />
+<span class="fragment"><strong>→</strong> type checker catches bugs in
+CI</span><br />
+<span class="fragment"><strong>→</strong> runtime makes types
+trustworthy</span><br />
+<span class="fragment"><strong>→</strong> all code type checks in
+seconds</span><br />
+<span class="fragment"><strong>→</strong> bad code is hard to
+type</span></p>
+</div>
+</div>
+<p>(sentiment from company-wide survey)</p>
 </section>
 <section id="brief-history-of-sorbet" class="slide level2">
 <h2>Brief history of Sorbet 👨‍🏫</h2>
@@ -216,35 +237,8 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="
 <p>About 9 months building Sorbet, another 3 months adopting it.</p>
 </aside>
 </section>
-<section id="building-sorbet-introduced-leverage" class="slide level2">
-<h2>💡 Building Sorbet introduced leverage</h2>
-<div class="columns">
-<div class="column" style="width:46%;">
-<p>“hard to understand”<br />
-“only breaks in production”<br />
-“don’t trust the docs”<br />
-“too slow to run all tests locally”<br />
-“too much low-quality code”</p>
-</div><div class="column fragment" style="width:54%;">
-<p><strong>→</strong> IDE aids understanding<br />
-<strong>→</strong> type checker catches bugs in CI<br />
-<strong>→</strong> runtime makes types trustworthy<br />
-<strong>→</strong> all code type checks in seconds<br />
-<strong>→</strong> bad code is hard to type</p>
-</div>
-</div>
-<aside class="notes">
-<p>Every few months, we’d survey developers, asking “what gets in the
-way of your productivity at Stripe?” Lots of answers.</p>
-<p>We could have solved these individually (better docs, more test
-coverage, faster tests) but we wanted LEVERAGE over the codebase: “a
-small force that has a big impact.”</p>
-<p>Sorbet provided that leverage.</p>
-</aside>
-</section>
-<section id="introducing-leverage-is-an-investment"
-class="slide level2">
-<h2>📈 Introducing leverage is an investment</h2>
+<section id="might-be-easier-than-you-think" class="slide level2">
+<h2>Might be easier than you think?</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>9 months to build Sorbet…</p>
@@ -256,18 +250,28 @@ class="slide level2">
 engineers</strong>, while everyone else remains focused!</span></p>
 </div>
 </div>
+<aside class="notes">
+<p>As a rule, people overrate how hard building program analysis tools
+are.</p>
+<p>“but remember: we centralized this migration!”</p>
+</aside>
 </section>
-<section id="ratchet-at-the-right-granularity" class="slide level2">
-<h2>💡 Ratchet at the right granularity</h2>
-<p>→ <strong><code># typed:</code></strong> comment at the top of each
+<section id="ratcheting-in-sorbet" class="slide level2">
+<h2>Ratcheting in Sorbet…</h2>
+<p><strong><code># typed:</code></strong> comment at the top of each
 file</p>
-<p>Alternatives:</p>
-<ul>
-<li>by folder, by team → too broad</li>
-<li>by method, by percent within a file → too granular</li>
-</ul>
-<p><strong><code># typed:</code></strong> comment is
-<strong>local</strong>, <strong>incremental</strong>, and
+<div class="columns">
+<div class="column" style="width:30%;">
+<p><code># typed:</code> <strong><code>false</code></strong><br />
+<code># typed:</code> <strong><code>true</code></strong><br />
+<code># typed:</code> <strong><code>strict</code></strong></p>
+</div><div class="column" style="width:70%;">
+<p>→ just syntax and constants<br />
+→ inference in methods<br />
+→ every method needs a signature</p>
+</div>
+</div>
+<p>… is <strong>local</strong>, <strong>incremental</strong>, and
 <strong>actionable</strong></p>
 <aside class="notes">
 <p>Getting started just means flipping a single comment in the file
@@ -280,20 +284,35 @@ reviewer is going to be really suspicious of downgrading to
 site—discourages backsliding</p>
 </aside>
 </section>
+<section id="local-incremental-and-actionable" class="slide level2">
+<h2>💡 <strong>local</strong>, <strong>incremental</strong>, and
+<strong>actionable</strong></h2>
+<p>Alternatives to <code># typed:</code> comment:</p>
+<ul>
+<li><p>by folder or by team → too broad<br />
+(not local enough, not incremental enough)</p></li>
+<li><p>by method or by percent within a file → too granular<br />
+(noisy, hard to action)</p></li>
+</ul>
+<aside class="notes">
+<p>“all new methods”</p>
+<p>“coverage percentage only goes up”</p>
+</aside>
+</section>
 <section id="thesis-1" class="slide level2">
 <h2>Thesis</h2>
+<p>Developer satisfaction improved because we:</p>
+<div class="columns" style="gap: min(4vw, 0.5em);">
+<div class="column" style="width:6%; text-align:right;">
 <p><br />
-</p>
-<div style="text-align: center;">
-<p>“Refactoring stubborn legacy codebases”</p>
-<p><strong>==</strong></p>
-<p>“Having a point of leverage” <strong>+</strong> “Picking the right
-ratchets” </p>
+by<br />
+and</p>
+</div><div class="column" style="width:94%;">
+<p><strong>refactored a stubborn legacy codebase</strong><br />
+<strong>having a point of leverage</strong> (Sorbet)<br />
+<strong>picking good ratchets</strong> (<code># typed:</code>)</p>
 </div>
-<p><br />
-</p>
-<p><br />
-</p>
+</div>
 <aside class="notes">
 <p>Adopting static typing at Stripe succeeded in large part because we
 cultivated a point of leverage (Sorbet) and we locked in incremental
@@ -302,11 +321,14 @@ progress the right ratchets.</p>
 </section>
 <section id="agenda-1" class="slide level2">
 <h2>Agenda 🎯</h2>
+<p><br />
+</p>
 <ul>
-<li><p>Building and adopting Sorbet</p></li>
-<li><p><strong>Introducing modularity to Stripe’s Ruby
-monolith</strong></p></li>
+<li><p>Improving developer satisfaction with Sorbet</p></li>
+<li><p><strong>Making a Ruby monolith more modular</strong></p></li>
 </ul>
+<p><br />
+</p>
 </section>
 <section id="todogdritter" class="slide level2">
 <h2>TODO(gdritter)</h2>
