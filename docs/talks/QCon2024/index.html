@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jake Zimmerman, Getty D. Ritter">
   <meta name="dcterms.date" content="2024-11-19">
-  <title>Refactoring Stubborn Legacy Codebases</title>
+  <title>Refactoring Large, Stubborn Codebases</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -38,7 +38,7 @@
 <section class="slide level2">
 
 <h1 class="title">
-Refactoring Stubborn Legacy Codebases
+Refactoring Large, Stubborn Codebases
 </h1>
 <div class="columns">
 <div class="column" style="width:27%;">
@@ -58,20 +58,9 @@ href="https://github.com/aisamanra"><code>@aisamanra</code></a></p>
 </div>
 </div>
 <p><span class="date">November 19, 2024</span></p>
-<aside class="notes">
-<p>I’m Jake. This is Getty. Doing large-scale code migrations on
-Stripe’s Ruby codebase is our full time job, and has been for the better
-half of the last decade.</p>
-<p>We’re going to spend this session talking about how we refactor
-stubborn, tangled, legacy codebases.</p>
-</aside>
 </section>
-<section id="section" class="slide level2"
-data-background-image="img/unhappy-codebases.png">
-<h2 data-background-image="img/unhappy-codebases.png"></h2>
-</section>
-<section id="unhappy-codebases" class="slide level2">
-<h2>Unhappy codebases</h2>
+<section id="complaints-about-stubborn-codebases" class="slide level2">
+<h2>Complaints about stubborn codebases</h2>
 <ul>
 <li><em>Our code isn’t modular enough!</em></li>
 </ul>
@@ -81,20 +70,12 @@ data-background-image="img/unhappy-codebases.png">
 date!</em></p></li>
 <li class="fragment"><p><em>We need to change how we talk to the
 database!</em></p></li>
-<li class="fragment"><p><em>Not enough code is typed!</em></p></li>
+<li class="fragment"><p>…</p></li>
 </ul>
 </div>
 <div class="fragment">
 <h3 id="we-can-refactor-to-a-happy-state">→ We can refactor to a happy
 state!</h3>
-<aside class="notes">
-<ul>
-<li>monolith → tangled mess</li>
-<li>super old Sinatra gem, AWS gem, bazel version, etc.</li>
-<li>monolithic database → database per service</li>
-<li>still plenty of untyped ruby and python apps out there</li>
-</ul>
-</aside>
 </div>
 </section>
 <section id="best-to-centralize-the-refactor" class="slide level2">
@@ -103,17 +84,11 @@ state!</h3>
 <ul>
 <li><p><strong>concentrates expertise</strong><br />
 most problems will be repeat problems</p></li>
-<li><p><strong>avoids idle time</strong><br />
-no need to wait for each team to plan and prioritize</p></li>
 <li><p><strong>incentivizes automation</strong><br />
 fewer man-hours overall</p></li>
+<li><p><strong>avoids idle time</strong><br />
+no need to wait for each team to plan and prioritize</p></li>
 </ul>
-<aside class="notes">
-<p>Going to kind of take this as an assumption: not going to spend too
-much time on it.</p>
-<p>Instead, we’re going to talk about what it takes to make this
-approach successful.</p>
-</aside>
 </section>
 <section id="centralized-migration-needs-two-things"
 class="slide level2">
@@ -133,17 +108,11 @@ class="slide level2">
 <h2>Thesis</h2>
 <p><br />
 </p>
-<p>to successfully   <strong>refactor stubborn legacy
+<p>to successfully   <strong>refactor large, stubborn
 codebases</strong></p>
 <p>you need to   <strong>have a point of leverage</strong>   and  
 <strong>pick good ratchets</strong></p>
 <!-- TODO(jez) Should you expand on these here? -->
-<aside class="notes">
-<p>Doing large-scale code migrations on Stripe’s Ruby codebase is our
-full time job, and has been for the better half of the last decade.</p>
-<p>We’re going to spend this session talking about how we refactor
-stubborn, tangled, legacy codebases.</p>
-</aside>
 <p><br />
 </p>
 <p><br />
@@ -161,22 +130,18 @@ Sorbet</strong></p></li>
 <p><br />
 </p>
 </section>
-<section id="section-1" class="slide level2"
+<section id="section" class="slide level2"
 data-background-image="/img/sorbet.org.png">
 <h2 data-background-image="/img/sorbet.org.png"></h2>
-<aside class="notes">
-<p>TODO(jez) Capabilities, IDE support, focus on performance</p>
-<p>TODO(jez) Maybe replace with screenshot of sorbet.org?</p>
-</aside>
 </section>
-<section id="stripes-codebase-was-unhappy" class="slide level2">
-<h2>🥺 Stripe’s codebase was unhappy</h2>
+<section id="stripes-developers-were-unhappy" class="slide level2">
+<h2>🥺 Stripe’s developers were unhappy</h2>
 <div class="columns">
 <div class="column" style="width:46%;">
 <p>“hard to understand”<br />
+<span class="fragment">“waiting for tests is slow”</span><br />
 <span class="fragment">“only breaks in production”</span><br />
 <span class="fragment">“don’t trust the docs”</span><br />
-<span class="fragment">“too slow to run all tests locally”</span><br />
 <span class="fragment">“too much low-quality code”</span></p>
 </div><div class="column" style="width:54%;">
 <p> <br />
@@ -187,33 +152,25 @@ data-background-image="/img/sorbet.org.png">
 </div>
 </div>
 <p>(sentiment from company-wide survey)</p>
-<aside class="notes">
-<p>Every few months, we’d survey developers, asking “what gets in the
-way of your productivity at Stripe?” Lots of answers.</p>
-<p>We could have solved these individually (better docs, more test
-coverage, faster tests) but we wanted LEVERAGE over the codebase: “a
-small force that has a big impact.”</p>
-<p>Sorbet provided that leverage.</p>
-</aside>
 </section>
 <section id="building-sorbet-introduced-leverage" class="slide level2">
 <h2>💡 Building Sorbet introduced leverage</h2>
 <div class="columns">
 <div class="column" style="width:46%;">
 <p>“hard to understand”<br />
+“waiting for tests is slow”<br />
 “only breaks in production”<br />
 “don’t trust the docs”<br />
-“too slow to run all tests locally”<br />
 “too much low-quality code”</p>
 </div><div class="column" style="width:54%;">
 <p><span class="fragment"><strong>→</strong> IDE aids
 understanding</span><br />
+<span class="fragment"><strong>→</strong> all code type checks in
+seconds</span><br />
 <span class="fragment"><strong>→</strong> type checker catches bugs in
 CI</span><br />
 <span class="fragment"><strong>→</strong> runtime makes types
 trustworthy</span><br />
-<span class="fragment"><strong>→</strong> all code type checks in
-seconds</span><br />
 <span class="fragment"><strong>→</strong> bad code is hard to
 type</span></p>
 </div>
@@ -229,32 +186,11 @@ type</span></p>
 </ul>
 <p>Timeline</p>
 <ul>
-<li>Oct ’17 – kickoff</li>
-<li>May ’18 – blocking in CI</li>
-<li>Sep ’18 – 75% files opted into type checking</li>
+<li><strong>9 months</strong> to build Sorbet…<br />
+… but has served as the foundation for hundreds of codemods</li>
+<li><strong>3 months</strong> to get to 75% adoption…<br />
+…contained to just three engineers</li>
 </ul>
-<aside class="notes">
-<p>About 9 months building Sorbet, another 3 months adopting it.</p>
-</aside>
-</section>
-<section id="might-be-easier-than-you-think" class="slide level2">
-<h2>Might be easier than you think?</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p>9 months to build Sorbet…</p>
-<p><span class="fragment">… but has served as the foundation for
-<strong>hundreds of massive codemods</strong>!</span></p>
-</div><div class="column" style="width:50%;">
-<p>3 months to adopt typing…</p>
-<p><span class="fragment">… <strong>contained to three
-engineers</strong>, while everyone else remains focused!</span></p>
-</div>
-</div>
-<aside class="notes">
-<p>As a rule, people overrate how hard building program analysis tools
-are.</p>
-<p>“but remember: we centralized this migration!”</p>
-</aside>
 </section>
 <section id="ratcheting-in-sorbet" class="slide level2">
 <h2>Ratcheting in Sorbet…</h2>
@@ -294,10 +230,6 @@ site—discourages backsliding</p>
 <li><p>by method or by percent within a file → too granular<br />
 (noisy, hard to action)</p></li>
 </ul>
-<aside class="notes">
-<p>“all new methods”</p>
-<p>“coverage percentage only goes up”</p>
-</aside>
 </section>
 <section id="thesis-1" class="slide level2">
 <h2>Thesis</h2>
@@ -308,16 +240,11 @@ site—discourages backsliding</p>
 by<br />
 and</p>
 </div><div class="column" style="width:94%;">
-<p><strong>refactored a stubborn legacy codebase</strong><br />
+<p><strong>refactored a large, stubborn codebase</strong><br />
 <strong>having a point of leverage</strong> (Sorbet)<br />
 <strong>picking good ratchets</strong> (<code># typed:</code>)</p>
 </div>
 </div>
-<aside class="notes">
-<p>Adopting static typing at Stripe succeeded in large part because we
-cultivated a point of leverage (Sorbet) and we locked in incremental
-progress the right ratchets.</p>
-</aside>
 </section>
 <section id="agenda-1" class="slide level2">
 <h2>Agenda 🎯</h2>

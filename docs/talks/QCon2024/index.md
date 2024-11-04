@@ -1,5 +1,5 @@
 ---
-title: 'Refactoring Stubborn Legacy Codebases'
+title: 'Refactoring Large, Stubborn Codebases'
 author: 'Jake Zimmerman, Getty D. Ritter'
 date: 'November 19, 2024'
 
@@ -35,7 +35,7 @@ include-after:
 
 -----
 
-<h1 class="title">Refactoring Stubborn Legacy Codebases</h1>
+<h1 class="title">Refactoring Large, Stubborn Codebases</h1>
 
 ::::{.columns}
 :::{.column width="27%"}
@@ -55,23 +55,9 @@ Getty D. Ritter
 [github-mark-light]: img/light/github-mark.svg {style="height:30px; margin: 0 0.3em -5px;"}
 [github-mark-dark]: img/dark/github-mark.svg {style="height:30px; margin: 0 0.3em -5px;"}
 
-::: notes
-
-I'm Jake. This is Getty. Doing large-scale code migrations
-on Stripe's Ruby codebase is our full time job, and has been
-for the better half of the last decade.
-
-We're going to spend this session talking about how we
-refactor stubborn, tangled, legacy codebases.
-
-:::
-
 -----
 
-## {background-image="img/unhappy-codebases.png"}
-
-
-## Unhappy codebases
+## Complaints about stubborn codebases
 
 - _Our code isn't modular enough!_
 
@@ -81,22 +67,13 @@ refactor stubborn, tangled, legacy codebases.
 
 - _We need to change how we talk to the database!_
 
-- _Not enough code is typed!_
+- ...
 
 :::
 
 . . .
 
 ### → We can refactor to a happy state!
-
-::: notes
-
-- monolith → tangled mess
-- super old Sinatra gem, AWS gem, bazel version, etc.
-- monolithic database → database per service
-- still plenty of untyped ruby and python apps out there
-
-:::
 
 ## Best to centralize the refactor ☀️
 
@@ -105,21 +82,11 @@ Have **one team** drive the refactor:
 * **concentrates expertise**\
   most problems will be repeat problems
 
-- **avoids idle time**\
-  no need to wait for each team to plan and prioritize
-
 - **incentivizes automation**\
   fewer man-hours overall
 
-::: notes
-
-Going to kind of take this as an assumption: not going to
-spend too much time on it.
-
-Instead, we're going to talk about what it takes to make
-this approach successful.
-
-:::
+- **avoids idle time**\
+  no need to wait for each team to plan and prioritize
 
 ## Centralized migration needs two things:
 
@@ -143,22 +110,12 @@ Way to **ratchet** incremental progress
 
 \
 
-to successfully &nbsp; **refactor stubborn legacy codebases**
+to successfully &nbsp; **refactor large, stubborn codebases**
 
 you need to &nbsp; **have a point of leverage** &nbsp; and &nbsp; **pick good ratchets**
 
 <!-- TODO(jez) Should you expand on these here? -->
 
-::: notes
-
-Doing large-scale code migrations on Stripe's Ruby codebase
-is our full time job, and has been for the better half of
-the last decade.
-
-We're going to spend this session talking about how we
-refactor stubborn, tangled, legacy codebases.
-
-:::
 
 
 
@@ -178,22 +135,14 @@ refactor stubborn, tangled, legacy codebases.
 
 ## {background-image="/img/sorbet.org.png"}
 
-::: notes
-
-TODO(jez) Capabilities, IDE support, focus on performance
-
-TODO(jez) Maybe replace with screenshot of sorbet.org?
-
-:::
-
-## 🥺 Stripe's codebase was unhappy
+## 🥺 Stripe's developers were unhappy
 
 ::::{.columns}
 :::{.column width="46%" }
 "hard to understand"\
+["waiting for tests is slow"]{.fragment}\
 ["only breaks in production"]{.fragment}\
 ["don't trust the docs"]{.fragment}\
-["too slow to run all tests locally"]{.fragment}\
 ["too much low-quality code"]{.fragment}
 :::
 :::{.column width="54%"}
@@ -207,34 +156,21 @@ TODO(jez) Maybe replace with screenshot of sorbet.org?
 
 (sentiment from company-wide survey)
 
-::: notes
-
-Every few months, we'd survey developers, asking "what gets
-in the way of your productivity at Stripe?" Lots of answers.
-
-We could have solved these individually (better docs, more
-test coverage, faster tests) but we wanted LEVERAGE over the
-codebase: "a small force that has a big impact."
-
-Sorbet provided that leverage.
-
-:::
-
 ## 💡 Building Sorbet introduced leverage
 
 ::::{.columns}
 :::{.column width="46%" }
 "hard to understand"\
+"waiting for tests is slow"\
 "only breaks in production"\
 "don't trust the docs"\
-"too slow to run all tests locally"\
 "too much low-quality code"
 :::
 :::{.column width="54%"}
 [**→** IDE aids understanding]{.fragment}\
+[**→** all code type checks in seconds]{.fragment}\
 [**→** type checker catches bugs in CI]{.fragment}\
 [**→** runtime makes types trustworthy]{.fragment}\
-[**→** all code type checks in seconds]{.fragment}\
 [**→** bad code is hard to type]{.fragment}
 :::
 ::::
@@ -249,42 +185,11 @@ Sorbet provided that leverage.
 
 Timeline
 
-- Oct '17 -- kickoff
-- May '18 -- blocking in CI
-- Sep '18 -- 75% files opted into type checking
-
-::: notes
-
-About 9 months building Sorbet, another 3 months adopting
-it.
-
-:::
-
-## Might be easier than you think?
-
-::::{.columns}
-:::{.column width="50%"}
-9 months to build Sorbet...
-
-[... but has served as the foundation for **hundreds of
-massive codemods**!]{.fragment}
-:::
-:::{.column width="50%"}
-3 months to adopt typing...
-
-[... **contained to three engineers**, while everyone else
-remains focused!]{.fragment}
-:::
-::::
-
-::: notes
-
-As a rule, people overrate how hard building program
-analysis tools are.
-
-"but remember: we centralized this migration!"
-
-:::
+- **9 months** to build Sorbet...\
+  ... but has served as the foundation for hundreds of
+  codemods
+- **3 months** to get to 75% adoption...\
+  ...contained to just three engineers
 
 ## Ratcheting in Sorbet...
 
@@ -329,15 +234,6 @@ Alternatives to `# typed:` comment:
 - by method or by percent within a file → too granular\
   (noisy, hard to action)
 
-::: notes
-
-"all new methods"
-
-"coverage percentage only goes up"
-
-:::
-
-
 ## Thesis
 
 Developer satisfaction improved because we:
@@ -349,21 +245,13 @@ by\
 and
 :::
 :::{.column width="94%"}
-**refactored a stubborn legacy codebase**\
+**refactored a large, stubborn codebase**\
 **having a point of leverage** (Sorbet)\
 **picking good ratchets** (`# typed:`)
 :::
 ::::
 
 
-
-::: notes
-
-Adopting static typing at Stripe succeeded in large part
-because we cultivated a point of leverage (Sorbet) and we
-locked in incremental progress the right ratchets.
-
-:::
 
 ## Agenda 🎯
 
