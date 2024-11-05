@@ -102,10 +102,15 @@
 /* --- Global styles -------------------------- */
 
 .reveal .slide-background-content {
-  background-image: url('../img/dark/background.png');
+  background-image: url('../img/dark/background-no-stripe.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-color: var(--bg-color);
+}
+
+.reveal .slide-background:nth-child(1) .slide-background-content,
+.reveal .slide-background:nth-last-child(1) .slide-background-content {
+  background-image: url('../img/dark/background.png');
 }
 
 .reveal {
@@ -432,7 +437,12 @@ html.stripe-light {
 }
 
 html.stripe-light .reveal .slide-background-content {
-  background-image: url(../img/light/background.png);
+  background-image: url(../img/light/background-no-stripe.png);
+}
+
+html.stripe-light .reveal .slide-background:nth-child(1) .slide-background-content,
+html.stripe-light .reveal .slide-background:nth-last-child(1) .slide-background-content {
+  background-image: url('../img/light/background.png');
 }
 
 /* The stripe.theme file can't use CSS variables,
