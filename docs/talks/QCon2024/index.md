@@ -228,10 +228,10 @@ site---discourages backsliding
 
 Alternatives to `# typed:` comment:
 
-- by folder or by team → too broad\
+- by folder → too broad\
   (not local enough, not incremental enough)
 
-- by method or by percent within a file → too granular\
+- by coverage percent → too granular\
   (noisy, hard to action)
 
 ## Thesis
