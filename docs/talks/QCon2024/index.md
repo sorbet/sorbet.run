@@ -268,6 +268,15 @@ and
 
 ## TODO(gdritter)
 
+## Questions?
+
+<!--
+Note: the last slide will be the one with the Stripe
+logo, so let's be sure to have a "questions" slide last to
+make the logo show up, or be sure to tweak the CSS to get
+the Stripe logo background to show up on whatever relevant
+slides too.
+-->
 
 
 
