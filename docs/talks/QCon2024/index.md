@@ -106,20 +106,22 @@ Way to **ratchet** incremental progress
 :::
 ::::
 
-## Thesis
+##
 
 \
 
-to successfully &nbsp; **refactor large, stubborn codebases**
-
-you need to &nbsp; **have a point of leverage** &nbsp; and &nbsp; **pick good ratchets**
-
-<!-- TODO(jez) Should you expand on these here? -->
-
-
-
-
-\
+::::{.columns style="gap: min(4vw, 0.5em);"}
+:::{.column style="width:20%; text-align:right;"}
+To \
+you need to\
+and to
+:::
+:::{.column width="80%"}
+**refactor a large, stubborn codebase**\
+**have a point of leverage**\
+**pick good ratchets**.
+:::
+::::
 
 \
 
@@ -234,13 +236,13 @@ Alternatives to `# typed:` comment:
 - by coverage percent → too granular\
   (noisy, hard to action)
 
-## Thesis
+##
 
-Developer satisfaction improved because we:
+Developer satisfaction improved because
 
 ::::{.columns style="gap: min(4vw, 0.5em);"}
 :::{.column style="width:6%; text-align:right;"}
-\
+we \
 by\
 and
 :::
