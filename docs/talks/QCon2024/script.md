@@ -90,9 +90,9 @@ Another alternative would have been to use some sort of "type coverage" percenta
 
 By contrast, the `# typed` comment is local (just check the top of the current file), incremental (only have to think about the file you have open), and actionable (always clear how to make progress adding types).
 
-So to sum that up, we were able to refactor a large, stubborn codese by building Sorbet to be a point of leverage, and picking `# typed:` comments to be a good ratchet, which ultimately made Stripe developers happier.
+So to sum that up, we were able to refactor a large, stubborn codebase by building Sorbet to be a point of leverage, and picking `# typed:` comments to be a good ratchet, which ultimately made Stripe developers happier.
 
-Next, I'm going to hand it off to Getty, and he's going to talk about the same ideas in the context of making Stripe's Ruby monolith more modular.
+Next, I'm going to hand it off to Getty, and he's going to talk about the same ideas in the context of making Stripe's Ruby monolith more modular. One of the big differences is that picking a good ratchet is way more subtle than Sorbet's typed comments, and he'll tell you all it.
 
 
 <!-- vim:tw=0
