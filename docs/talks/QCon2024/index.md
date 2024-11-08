@@ -266,7 +266,142 @@ and
 \
 
 
-## TODO(gdritter)
+## Why do we need modularity?
+
+## Simple example
+
+```ruby
+# a toy logger
+class Logger
+  def log(message, **storytime)
+    payload = storytime.map do |k, v|
+      "#{k}=#{v.inspect}"
+    end.join(" ")
+
+    @output.puts("#{Time.now.to_i}: ${message} #{payload}")
+  end
+end
+```
+
+## Simple example
+
+```ruby
+# elsewhere
+logger.log("Attempting operation", op: my_op, merchant: m)
+# 1730756308: Attempting operation op=:update merchant=#<Merchant id=22 secret="hunter2">
+```
+
+## Simple example
+
+``` { .ruby data-line-numbers="3" }
+    # ...
+    payload = storytime.map do |k, v|
+      if v.is_a?(Merchant)  # if we're logging a merchant...
+        "#{k}=Merchant(id=#{v.id}, ...)"  # redact most fields
+      else
+        "#{k}=#{v.inspect}"  # other objects can be logged as-is
+      end
+    end.join(" ")
+    # ...
+```
+
+## Well-intentioned changes can produce tangled code
+
+![](img/bad-dep-01.png)
+
+## ...and tangled code has non-local effects!
+
+![](img/bad-dep-02.png)
+
+## Why do we need modularity?
+
+* Tangled code is...
+  * difficult to **debug**
+  * difficult to **test**
+  * prone to **larger deploy artifacts**
+  * prone to **higher memory usage**
+* A drag on both **developer velocity** and **runtime performance**
+
+## Point of leverage: packaging
+
+```ruby
+# lib/logger/__package.rb
+class Logger < PackageSpec
+  import User
+
+  export Logger
+end
+
+# lib/user/__package.rb
+class User < PackageSpec
+  import Logger
+
+  export User
+end
+```
+
+## Point of leverage: layering
+
+> The essential principle is that any element of a layer depends only on other elements in the same layer or on elements of the layer ’beneath’ it. Communication upward must pass through some indirect mechanism.
+
+---Eric Evans, **Domain-Driven Design: Tackling Complexity in the Heart of Software**
+
+## Point of leverage: layering
+
+![](img/layers.png)
+
+## Point of leverage: layering
+
+![](img/bad-dep-03.png)
+
+## Point of leverage: layering
+
+```ruby
+class Logger < PackageSpec
+  layer 'utility'
+  import User # <- ill-layered import!
+  export Logger
+end
+
+class User < PackageSpec
+  layer 'business'
+  import Logger
+  export User
+end
+```
+
+## Building a ratchet: `strict_dependencies`
+
+* `strict_dependencies: 'false'`
+* `strict_dependencies: 'layered'`
+* `strict_dependencies: 'dag'`
+
+## ...and then use the ratchet!
+
+* Important to have:
+  * a **reason to refactor**
+  * **comprehensive documentation**
+  * **targeted tooling**
+  * **organizational support**
+
+## What makes a good ratchet?
+
+* Local:
+  * Sorbet: per-file
+  * Dependencies: per-package
+* Incremental:
+  * Sorbet: `false` to `true` to `strict`
+  * Dependencies: `false` to `layered` to `dag`
+* Actionable:
+  * Sorbet: "Where do I need types in my current files?"
+  * Dependencies: "What bad edges can I remove from my current package?"
+
+## Successful codebase-wide refactors
+
+* Find **points of leverage**
+* Build **clear, enforceable ratchets**
+* Staff a **focused and supported team**
+* (...and have patience: **it's hard work!**)
 
 ## Questions?
 
