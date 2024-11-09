@@ -96,13 +96,13 @@ Have **one team** drive the refactor:
 ::: {.column width="45%"}
 **Leverage** over the codebase
 
-![](/img/LeveragePoint_Diagram.gif)
+![](img/LeveragePoint_Diagram.gif)
 :::
 
 ::: {.column width="55%"}
 Way to **ratchet** incremental progress
 
-![](/img/Ratchet_rotation_allowed.jpg){height="180px"}
+![](img/Ratchet_rotation_allowed.jpg){height="180px"}
 :::
 ::::
 
@@ -305,13 +305,35 @@ logger.log("Attempting operation", op: my_op, merchant: m)
     # ...
 ```
 
+## Simple example
+
+``` { .ruby .hl-3 }
+    # ...
+    payload = storytime.map do |k, v|
+      if v.is_a?(Merchant)  # if we're logging a merchant...
+        "#{k}=Merchant(id=#{v.id}, ...)"  # redact most fields
+      else
+        "#{k}=#{v.inspect}"  # other objects can be logged as-is
+      end
+    end.join(" ")
+    # ...
+```
+
 ## Well-intentioned changes can produce tangled code
 
-![](img/bad-dep-01.png)
+:::: {.columns}
+::: {.column style="text-align: center;"}
+![](img/bad-dep-01.png){height="360px"}
+:::
+::::
 
 ## ...and tangled code has non-local effects!
 
-![](img/bad-dep-02.png)
+:::: {.columns}
+::: {.column style="text-align: center;"}
+![](img/bad-dep-02.png){height="360px"}
+:::
+::::
 
 ## Why do we need modularity?
 
@@ -347,12 +369,18 @@ end
 ---Eric Evans, **Domain-Driven Design: Tackling Complexity in the Heart of Software**
 
 ## Point of leverage: layering
-
-![](img/layers.png)
+:::: {.columns}
+::: {.column style="text-align: center;"}
+![](img/layers.png){height="320px"}
+:::
+::::
 
 ## Point of leverage: layering
-
-![](img/bad-dep-03.png)
+:::: {.columns}
+::: {.column style="text-align: center;"}
+![](img/bad-dep-03.png){height="320px"}
+:::
+::::
 
 ## Point of leverage: layering
 
@@ -383,6 +411,24 @@ end
   * **comprehensive documentation**
   * **targeted tooling**
   * **organizational support**
+
+
+##
+
+Developer velocity and production latency improved because
+
+::::{.columns style="gap: min(4vw, 0.5em);"}
+:::{.column style="width:6%; text-align:right;"}
+we \
+by\
+and
+:::
+:::{.column width="94%"}
+**modularized a large, stubborn codebase**\
+**having a point of leverage** (packages and layering)\
+**picking good ratchets** (`strict_dependencies`)
+:::
+::::
 
 ## What makes a good ratchet?
 

@@ -164,10 +164,10 @@ class="slide level2">
 <div class="columns">
 <div class="column" style="width:45%;">
 <p><strong>Leverage</strong> over the codebase</p>
-<p><img data-src="/img/LeveragePoint_Diagram.gif" /></p>
+<p><img data-src="img/LeveragePoint_Diagram.gif" /></p>
 </div><div class="column" style="width:55%;">
 <p>Way to <strong>ratchet</strong> incremental progress</p>
-<p><img data-src="/img/Ratchet_rotation_allowed.jpg" height="180" /></p>
+<p><img data-src="img/Ratchet_rotation_allowed.jpg" height="180" /></p>
 </div>
 </div>
 </section>
@@ -365,15 +365,36 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb3-1"><a href="
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span><span class="at">.join</span>(<span class="st">&quot; &quot;</span>)</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ...</span></span></code></pre></div>
 </section>
+<section id="simple-example-3" class="slide level2">
+<h2>Simple example</h2>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode ruby hl-3"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ...</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    payload <span class="kw">=</span> storytime<span class="at">.map</span> <span class="cf">do</span> <span class="kw">|</span>k, v<span class="kw">|</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> v<span class="at">.is_a?</span>(<span class="dt">Merchant</span>)  <span class="co"># if we&#39;re logging a merchant...</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;</span><span class="sc">#{</span>k<span class="sc">}</span><span class="st">=Merchant(id=</span><span class="sc">#{</span>v<span class="at">.id</span><span class="sc">}</span><span class="st">, ...)&quot;</span>  <span class="co"># redact most fields</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>      <span class="cf">else</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;</span><span class="sc">#{</span>k<span class="sc">}</span><span class="st">=</span><span class="sc">#{</span>v<span class="at">.inspect</span><span class="sc">}</span><span class="st">&quot;</span>  <span class="co"># other objects can be logged as-is</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>      <span class="cf">end</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span><span class="at">.join</span>(<span class="st">&quot; &quot;</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ...</span></span></code></pre></div>
+</section>
 <section id="well-intentioned-changes-can-produce-tangled-code"
 class="slide level2">
 <h2>Well-intentioned changes can produce tangled code</h2>
-<p><img data-src="img/bad-dep-01.png" /></p>
+<div class="columns">
+<div class="column" style="text-align: center;">
+<p><img data-src="img/bad-dep-01.png" height="360" /></p>
+</div>
+</div>
 </section>
 <section id="and-tangled-code-has-non-local-effects"
 class="slide level2">
 <h2>…and tangled code has non-local effects!</h2>
-<p><img data-src="img/bad-dep-02.png" /></p>
+<div class="columns">
+<div class="column" style="text-align: center;">
+<p><img data-src="img/bad-dep-02.png" height="360" /></p>
+</div>
+</div>
 </section>
 <section id="why-do-we-need-modularity-1" class="slide level2">
 <h2>Why do we need modularity?</h2>
@@ -391,20 +412,20 @@ class="slide level2">
 </section>
 <section id="point-of-leverage-packaging" class="slide level2">
 <h2>Point of leverage: packaging</h2>
-<div class="sourceCode" id="cb4"><pre
-class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># lib/logger/__package.rb</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">Logger</span> <span class="kw">&lt;</span> <span class="dt">PackageSpec</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  import <span class="dt">User</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  export <span class="dt">Logger</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># lib/user/__package.rb</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">User</span> <span class="kw">&lt;</span> <span class="dt">PackageSpec</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  import <span class="dt">Logger</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  export <span class="dt">User</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># lib/logger/__package.rb</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">Logger</span> <span class="kw">&lt;</span> <span class="dt">PackageSpec</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  import <span class="dt">User</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  export <span class="dt">Logger</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># lib/user/__package.rb</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">User</span> <span class="kw">&lt;</span> <span class="dt">PackageSpec</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  import <span class="dt">Logger</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  export <span class="dt">User</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 </section>
 <section id="point-of-leverage-layering" class="slide level2">
 <h2>Point of leverage: layering</h2>
@@ -419,26 +440,34 @@ Heart of Software</strong></p>
 </section>
 <section id="point-of-leverage-layering-1" class="slide level2">
 <h2>Point of leverage: layering</h2>
-<p><img data-src="img/layers.png" /></p>
+<div class="columns">
+<div class="column" style="text-align: center;">
+<p><img data-src="img/layers.png" height="320" /></p>
+</div>
+</div>
 </section>
 <section id="point-of-leverage-layering-2" class="slide level2">
 <h2>Point of leverage: layering</h2>
-<p><img data-src="img/bad-dep-03.png" /></p>
+<div class="columns">
+<div class="column" style="text-align: center;">
+<p><img data-src="img/bad-dep-03.png" height="320" /></p>
+</div>
+</div>
 </section>
 <section id="point-of-leverage-layering-3" class="slide level2">
 <h2>Point of leverage: layering</h2>
-<div class="sourceCode" id="cb5"><pre
-class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">Logger</span> <span class="kw">&lt;</span> <span class="dt">PackageSpec</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  layer <span class="vs">&#39;utility&#39;</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  import <span class="dt">User</span> <span class="co"># &lt;- ill-layered import!</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  export <span class="dt">Logger</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">User</span> <span class="kw">&lt;</span> <span class="dt">PackageSpec</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  layer <span class="vs">&#39;business&#39;</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  import <span class="dt">Logger</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  export <span class="dt">User</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">Logger</span> <span class="kw">&lt;</span> <span class="dt">PackageSpec</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  layer <span class="vs">&#39;utility&#39;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  import <span class="dt">User</span> <span class="co"># &lt;- ill-layered import!</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  export <span class="dt">Logger</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">User</span> <span class="kw">&lt;</span> <span class="dt">PackageSpec</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  layer <span class="vs">&#39;business&#39;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  import <span class="dt">Logger</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  export <span class="dt">User</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 </section>
 <section id="building-a-ratchet-strict_dependencies"
 class="slide level2">
@@ -460,6 +489,23 @@ class="slide level2">
 <li><strong>organizational support</strong></li>
 </ul></li>
 </ul>
+</section>
+<section id="section-3" class="slide level2">
+<h2></h2>
+<p>Developer velocity and production latency improved because</p>
+<div class="columns" style="gap: min(4vw, 0.5em);">
+<div class="column" style="width:6%; text-align:right;">
+<p>we<br />
+by<br />
+and</p>
+</div><div class="column" style="width:94%;">
+<p><strong>modularized a large, stubborn codebase</strong><br />
+<strong>having a point of leverage</strong> (packages and
+layering)<br />
+<strong>picking good ratchets</strong>
+(<code>strict_dependencies</code>)</p>
+</div>
+</div>
 </section>
 <section id="what-makes-a-good-ratchet" class="slide level2">
 <h2>What makes a good ratchet?</h2>
