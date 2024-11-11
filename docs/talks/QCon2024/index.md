@@ -349,16 +349,16 @@ logger.log("Attempting operation", op: my_op, merchant: m)
 ```ruby
 # lib/logger/__package.rb
 class Logger < PackageSpec
-  import User
+  import Merchant
 
   export Logger
 end
 
-# lib/user/__package.rb
-class User < PackageSpec
+# lib/merchant/__package.rb
+class Merchant < PackageSpec
   import Logger
 
-  export User
+  export Merchant
 end
 ```
 
@@ -387,14 +387,14 @@ end
 ```ruby
 class Logger < PackageSpec
   layer 'utility'
-  import User # <- ill-layered import!
+  import Merchant # <- ill-layered import!
   export Logger
 end
 
-class User < PackageSpec
+class Merchant < PackageSpec
   layer 'business'
   import Logger
-  export User
+  export Merchant
 end
 ```
 
