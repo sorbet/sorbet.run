@@ -293,7 +293,7 @@ logger.log("Attempting operation", op: my_op, merchant: m)
 
 ## Simple example
 
-``` { .ruby data-line-numbers="3" }
+```{.ruby .hl-3}
     # ...
     payload = storytime.map do |k, v|
       if v.is_a?(Merchant)  # if we're logging a merchant...
@@ -307,7 +307,7 @@ logger.log("Attempting operation", op: my_op, merchant: m)
 
 ## Simple example
 
-``` { .ruby .hl-3 }
+```{.ruby .hl-3}
     # ...
     payload = storytime.map do |k, v|
       if v.is_a?(Merchant)  # if we're logging a merchant...
