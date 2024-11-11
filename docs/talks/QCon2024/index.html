@@ -352,7 +352,7 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="
 <section id="simple-example-2" class="slide level2">
 <h2>Simple example</h2>
 <div class="sourceCode" id="cb3"><pre
-class="sourceCode ruby hl-3"><code class="sourceCode ruby"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ...</span></span>
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ...</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    payload <span class="kw">=</span> storytime<span class="at">.map</span> <span class="cf">do</span> <span class="kw">|</span>k, v<span class="kw">|</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> v<span class="at">.is_a?</span>(<span class="dt">Merchant</span>)  <span class="co"># if we&#39;re logging a merchant...</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;</span><span class="sc">#{</span>k<span class="sc">}</span><span class="st">=Merchant(id=</span><span class="sc">#{</span>v<span class="at">.id</span><span class="sc">}</span><span class="st">, ...)&quot;</span>  <span class="co"># redact most fields</span></span>
