@@ -395,17 +395,15 @@ class="slide level2">
 </section>
 <section id="why-do-we-need-modularity-1" class="slide level2">
 <h2>Why do we need modularity?</h2>
-<ul>
-<li>Tangled code is…
+<p>Tangled code is…</p>
 <ul>
 <li>difficult to <strong>debug</strong></li>
 <li>difficult to <strong>test</strong></li>
 <li>prone to <strong>larger deploy artifacts</strong></li>
 <li>prone to <strong>higher memory usage</strong></li>
-</ul></li>
-<li>A drag on both <strong>developer velocity</strong> and
-<strong>runtime performance</strong></li>
 </ul>
+<p>A drag on both <strong>developer velocity</strong> and
+<strong>runtime performance</strong></p>
 </section>
 <section id="point-of-leverage-packaging" class="slide level2">
 <h2>Point of leverage: packaging</h2>
@@ -454,7 +452,7 @@ Heart of Software</strong></p>
 <section id="point-of-leverage-layering-3" class="slide level2">
 <h2>Point of leverage: layering</h2>
 <div class="sourceCode" id="cb6"><pre
-class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">Logger</span> <span class="kw">&lt;</span> <span class="dt">PackageSpec</span></span>
+class="sourceCode ruby hl-3"><code class="sourceCode ruby"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">Logger</span> <span class="kw">&lt;</span> <span class="dt">PackageSpec</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  layer <span class="vs">&#39;utility&#39;</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  import <span class="dt">Merchant</span> <span class="co"># &lt;- ill-layered import!</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  export <span class="dt">Logger</span></span>
@@ -470,21 +468,22 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb6-1"><a href="
 class="slide level2">
 <h2>Building a ratchet: <code>strict_dependencies</code></h2>
 <ul>
-<li><code>strict_dependencies: 'false'</code></li>
-<li><code>strict_dependencies: 'layered'</code></li>
-<li><code>strict_dependencies: 'dag'</code></li>
+<li><code>strict_dependencies</code>
+<strong><code>'false'</code></strong></li>
+<li><code>strict_dependencies</code>
+<strong><code>'layered'</code></strong></li>
+<li><code>strict_dependencies</code>
+<strong><code>'dag'</code></strong></li>
 </ul>
 </section>
 <section id="and-then-use-the-ratchet" class="slide level2">
 <h2>…and then use the ratchet!</h2>
-<ul>
-<li>Important to have:
+<p>Important to have:</p>
 <ul>
 <li>a <strong>reason to refactor</strong></li>
 <li><strong>comprehensive documentation</strong></li>
 <li><strong>targeted tooling</strong></li>
 <li><strong>organizational support</strong></li>
-</ul></li>
 </ul>
 </section>
 <section id="section-3" class="slide level2">
@@ -507,19 +506,19 @@ layering)<br />
 <section id="what-makes-a-good-ratchet" class="slide level2">
 <h2>What makes a good ratchet?</h2>
 <ul>
-<li>Local:
+<li><strong>local</strong>
 <ul>
 <li>Sorbet: per-file</li>
 <li>Dependencies: per-package</li>
 </ul></li>
-<li>Incremental:
+<li><strong>incremental</strong>
 <ul>
 <li>Sorbet: <code>false</code> to <code>true</code> to
 <code>strict</code></li>
 <li>Dependencies: <code>false</code> to <code>layered</code> to
 <code>dag</code></li>
 </ul></li>
-<li>Actionable:
+<li><strong>actionable</strong>
 <ul>
 <li>Sorbet: “Where do I need types in my current files?”</li>
 <li>Dependencies: “What bad edges can I remove from my current

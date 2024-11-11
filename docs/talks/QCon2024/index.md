@@ -337,12 +337,14 @@ logger.log("Attempting operation", op: my_op, merchant: m)
 
 ## Why do we need modularity?
 
-* Tangled code is...
-  * difficult to **debug**
-  * difficult to **test**
-  * prone to **larger deploy artifacts**
-  * prone to **higher memory usage**
-* A drag on both **developer velocity** and **runtime performance**
+Tangled code is...
+
+- difficult to **debug**
+- difficult to **test**
+- prone to **larger deploy artifacts**
+- prone to **higher memory usage**
+
+A drag on both **developer velocity** and **runtime performance**
 
 ## Point of leverage: packaging
 
@@ -384,7 +386,7 @@ end
 
 ## Point of leverage: layering
 
-```ruby
+```{.ruby .hl-3}
 class Logger < PackageSpec
   layer 'utility'
   import Merchant # <- ill-layered import!
@@ -400,17 +402,18 @@ end
 
 ## Building a ratchet: `strict_dependencies`
 
-* `strict_dependencies: 'false'`
-* `strict_dependencies: 'layered'`
-* `strict_dependencies: 'dag'`
+* `strict_dependencies` **`'false'`**
+* `strict_dependencies` **`'layered'`**
+* `strict_dependencies` **`'dag'`**
 
 ## ...and then use the ratchet!
 
-* Important to have:
-  * a **reason to refactor**
-  * **comprehensive documentation**
-  * **targeted tooling**
-  * **organizational support**
+Important to have:
+
+- a **reason to refactor**
+- **comprehensive documentation**
+- **targeted tooling**
+- **organizational support**
 
 
 ##
@@ -432,15 +435,15 @@ and
 
 ## What makes a good ratchet?
 
-* Local:
-  * Sorbet: per-file
-  * Dependencies: per-package
-* Incremental:
-  * Sorbet: `false` to `true` to `strict`
-  * Dependencies: `false` to `layered` to `dag`
-* Actionable:
-  * Sorbet: "Where do I need types in my current files?"
-  * Dependencies: "What bad edges can I remove from my current package?"
+- **local**
+  - Sorbet: per-file
+  - Dependencies: per-package
+- **incremental**
+  - Sorbet: `false` to `true` to `strict`
+  - Dependencies: `false` to `layered` to `dag`
+- **actionable**
+  - Sorbet: "Where do I need types in my current files?"
+  - Dependencies: "What bad edges can I remove from my current package?"
 
 ## Successful codebase-wide refactors
 
