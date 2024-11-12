@@ -169,14 +169,14 @@
             "text-color": "#aab7c4",
             "background-color": null,
             "bold": false,
-            "italic": true,
+            "italic": false,
             "underline": false
         },
         "CommentVar": {
             "text-color": "#aab7c4",
             "background-color": null,
             "bold": true,
-            "italic": true,
+            "italic": false,
             "underline": false
         },
         "Constant": {
