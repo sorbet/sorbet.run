@@ -133,6 +133,8 @@ and to
 
 - Making a Ruby monolith more modular
 
+- Lessons learned from ratchets ratcheted
+
 \
 
 ## {background-image="/img/sorbet.org.png"}
@@ -276,6 +278,8 @@ and
 
 - **Making a Ruby monolith more modular**
 
+- Lessons learned from ratchets ratcheted
+
 \
 
 
@@ -350,6 +354,8 @@ logger.log("Attempting operation", op: my_op, merchant: m)
 
 ## Why do we need modularity?
 
+:::incremental
+
 Tangled code is...
 
 - difficult to **debug**
@@ -358,6 +364,8 @@ Tangled code is...
 - prone to **higher memory usage**
 
 A drag on both **developer velocity** and **runtime performance**
+
+:::
 
 ## Point of leverage: packaging
 
@@ -415,19 +423,26 @@ end
 
 ## Building a ratchet: `strict_dependencies`
 
+:::incremental
+
 * `strict_dependencies` **`'false'`**
 * `strict_dependencies` **`'layered'`**
 * `strict_dependencies` **`'dag'`**
 
+:::
+
 ## ...and then use the ratchet!
 
 Important to have:
+
+:::incremental
 
 - a **reason to refactor**
 - **comprehensive documentation**
 - **targeted tooling**
 - **organizational support**
 
+:::
 
 ##
 
@@ -457,6 +472,102 @@ and
 - **actionable**
   - Sorbet: "Where do I need types in my current files?"
   - Dependencies: "What bad edges can I remove from my current package?"
+
+## Agenda 🎯
+
+\
+
+- Improving developer satisfaction with Sorbet
+
+- Making a Ruby monolith more modular
+
+- **Lessons learned from ratchets ratcheted**
+
+\
+
+## [NICE PITCHY TITLE]
+
+## Tools aren't always perfect at first!
+
+:::: {.columns}
+::: {.column style="text-align: center;"}
+![](img/many-layers.png){height="360px"}
+:::
+::::
+
+## Tools aren't always perfect at first!
+
+\
+
+:::incremental
+* Originally packaging was **also runtime-enforced**
+  * ...but this was invasive and potentially risky.
+* Originally, we intended **exports to be hand-written**
+  * ...but this slowed down developer velocity unacceptably.
+
+:::
+
+\
+
+## Who ratchets the ratchets?
+
+[image of large number of files changes]
+
+## Our approach: two-level ratchets
+
+\
+
+```{.ruby .hl-2}
+class MyPackage < PackageSpec
+  sorbet min_typed_level: 'strict'
+  # ...
+end
+```
+
+\
+
+## Our approach: two-level ratchets
+
+\
+
+```{.ruby .hl-2}
+class MyPackage < PackageSpec
+  sorbet min_typed_level: 'strict', test_min_typed_level: 'true'
+  # ...
+end
+```
+
+\
+
+## Our approach: two-level ratchets
+
+\
+
+:::incremental
+
+* After two weeks, added to `try_not_to_regress.yaml`
+  * ...but can be removed by anyone.
+* After another two weeks, added to `never_regress.yaml`
+  * ...and can only be removed with our approval!
+
+:::
+
+\
+
+## Supporting tooling
+
+## Supporting tooling
+
+\
+
+:::incremental
+
+* Dependency Doctor
+
+
+:::
+
+\
 
 ## Successful codebase-wide refactors
 

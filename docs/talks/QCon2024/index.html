@@ -20,8 +20,11 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
@@ -29,7 +32,7 @@
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
     /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span { line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -40,7 +43,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -194,6 +197,7 @@ and to</p>
 <li><p><strong>Improving developer satisfaction with
 Sorbet</strong></p></li>
 <li><p>Making a Ruby monolith more modular</p></li>
+<li><p>Lessons learned from ratchets ratcheted</p></li>
 </ul>
 <p><br />
 </p>
@@ -337,6 +341,7 @@ and</p>
 <ul>
 <li><p>Improving developer satisfaction with Sorbet</p></li>
 <li><p><strong>Making a Ruby monolith more modular</strong></p></li>
+<li><p>Lessons learned from ratchets ratcheted</p></li>
 </ul>
 <p><br />
 </p>
@@ -411,15 +416,18 @@ class="slide level2">
 </section>
 <section id="why-do-we-need-modularity-1" class="slide level2">
 <h2>Why do we need modularity?</h2>
+<div>
 <p>Tangled code is…</p>
 <ul>
-<li>difficult to <strong>debug</strong></li>
-<li>difficult to <strong>test</strong></li>
-<li>prone to <strong>larger deploy artifacts</strong></li>
-<li>prone to <strong>higher memory usage</strong></li>
+<li class="fragment">difficult to <strong>debug</strong></li>
+<li class="fragment">difficult to <strong>test</strong></li>
+<li class="fragment">prone to <strong>larger deploy
+artifacts</strong></li>
+<li class="fragment">prone to <strong>higher memory usage</strong></li>
 </ul>
 <p>A drag on both <strong>developer velocity</strong> and
 <strong>runtime performance</strong></p>
+</div>
 </section>
 <section id="point-of-leverage-packaging" class="slide level2">
 <h2>Point of leverage: packaging</h2>
@@ -483,24 +491,28 @@ class="sourceCode ruby hl-3"><code class="sourceCode ruby"><span id="cb6-1"><a h
 <section id="building-a-ratchet-strict_dependencies"
 class="slide level2">
 <h2>Building a ratchet: <code>strict_dependencies</code></h2>
+<div>
 <ul>
-<li><code>strict_dependencies</code>
+<li class="fragment"><code>strict_dependencies</code>
 <strong><code>'false'</code></strong></li>
-<li><code>strict_dependencies</code>
+<li class="fragment"><code>strict_dependencies</code>
 <strong><code>'layered'</code></strong></li>
-<li><code>strict_dependencies</code>
+<li class="fragment"><code>strict_dependencies</code>
 <strong><code>'dag'</code></strong></li>
 </ul>
+</div>
 </section>
 <section id="and-then-use-the-ratchet" class="slide level2">
 <h2>…and then use the ratchet!</h2>
 <p>Important to have:</p>
+<div>
 <ul>
-<li>a <strong>reason to refactor</strong></li>
-<li><strong>comprehensive documentation</strong></li>
-<li><strong>targeted tooling</strong></li>
-<li><strong>organizational support</strong></li>
+<li class="fragment">a <strong>reason to refactor</strong></li>
+<li class="fragment"><strong>comprehensive documentation</strong></li>
+<li class="fragment"><strong>targeted tooling</strong></li>
+<li class="fragment"><strong>organizational support</strong></li>
 </ul>
+</div>
 </section>
 <section id="section-3" class="slide level2">
 <h2></h2>
@@ -541,6 +553,116 @@ layering)<br />
 package?”</li>
 </ul></li>
 </ul>
+</section>
+<section id="agenda-2" class="slide level2">
+<h2>Agenda 🎯</h2>
+<p><br />
+</p>
+<ul>
+<li><p>Improving developer satisfaction with Sorbet</p></li>
+<li><p>Making a Ruby monolith more modular</p></li>
+<li><p><strong>Lessons learned from ratchets ratcheted</strong></p></li>
+</ul>
+<p><br />
+</p>
+</section>
+<section id="nice-pitchy-title" class="slide level2">
+<h2>[NICE PITCHY TITLE]</h2>
+</section>
+<section id="tools-arent-always-perfect-at-first" class="slide level2">
+<h2>Tools aren’t always perfect at first!</h2>
+<div class="columns">
+<div class="column" style="text-align: center;">
+<p><img data-src="img/many-layers.png" height="360" /></p>
+</div>
+</div>
+</section>
+<section id="tools-arent-always-perfect-at-first-1"
+class="slide level2">
+<h2>Tools aren’t always perfect at first!</h2>
+<p><br />
+</p>
+<div>
+<ul>
+<li class="fragment">Originally packaging was <strong>also
+runtime-enforced</strong>
+<ul>
+<li class="fragment">…but this was invasive and potentially risky.</li>
+</ul></li>
+<li class="fragment">Originally, we intended <strong>exports to be
+hand-written</strong>
+<ul>
+<li class="fragment">…but this slowed down developer velocity
+unacceptably.</li>
+</ul></li>
+</ul>
+</div>
+<p><br />
+</p>
+</section>
+<section id="who-ratchets-the-ratchets" class="slide level2">
+<h2>Who ratchets the ratchets?</h2>
+<p>[image of large number of files changes]</p>
+</section>
+<section id="our-approach-two-level-ratchets" class="slide level2">
+<h2>Our approach: two-level ratchets</h2>
+<p><br />
+</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode ruby hl-2"><code class="sourceCode ruby"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">MyPackage</span> <span class="kw">&lt;</span> <span class="dt">PackageSpec</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  sorbet <span class="wa">min_typed_level: </span><span class="vs">&#39;strict&#39;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ...</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<p><br />
+</p>
+</section>
+<section id="our-approach-two-level-ratchets-1" class="slide level2">
+<h2>Our approach: two-level ratchets</h2>
+<p><br />
+</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode ruby hl-2"><code class="sourceCode ruby"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">MyPackage</span> <span class="kw">&lt;</span> <span class="dt">PackageSpec</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  sorbet <span class="wa">min_typed_level: </span><span class="vs">&#39;strict&#39;</span>, <span class="wa">test_min_typed_level: </span><span class="vs">&#39;true&#39;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ...</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<p><br />
+</p>
+</section>
+<section id="our-approach-two-level-ratchets-2" class="slide level2">
+<h2>Our approach: two-level ratchets</h2>
+<p><br />
+</p>
+<div>
+<ul>
+<li class="fragment">After two weeks, added to
+<code>try_not_to_regress.yaml</code>
+<ul>
+<li class="fragment">…but can be removed by anyone.</li>
+</ul></li>
+<li class="fragment">After another two weeks, added to
+<code>never_regress.yaml</code>
+<ul>
+<li class="fragment">…and can only be removed with our approval!</li>
+</ul></li>
+</ul>
+</div>
+<p><br />
+</p>
+</section>
+<section id="supporting-tooling" class="slide level2">
+<h2>Supporting tooling</h2>
+</section>
+<section id="supporting-tooling-1" class="slide level2">
+<h2>Supporting tooling</h2>
+<p><br />
+</p>
+<div>
+<ul>
+<li class="fragment">Dependency Doctor</li>
+</ul>
+</div>
+<p><br />
+</p>
 </section>
 <section id="successful-codebase-wide-refactors" class="slide level2">
 <h2>Successful codebase-wide refactors</h2>
