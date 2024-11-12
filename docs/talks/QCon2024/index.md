@@ -212,20 +212,6 @@ Timeline
 
 ... is **local**, **incremental**, and **actionable**
 
-::: notes
-
-Getting started just means flipping a single comment in the
-file you're already working in.
-
-Only get type errors once you start adding annotations.
-
-Once you add **`# typed: true`**, your reviewer is going to
-be really suspicious of downgrading to **`# typed: false`**
-vs just using **`T.unsafe`** to regress one call
-site---discourages backsliding
-
-:::
-
 ## 💡 **local**, **incremental**, and **actionable**
 
 Alternatives to `# typed:` comment:
