@@ -193,7 +193,7 @@ Timeline
 - **3 months** to get to 75% adoption...\
   ...contained to just three engineers
 
-## Aside: you can do it too!
+## Aside: you can do it too! 👷🏼‍♀️
 
 Tools that you can use to bootstrap something:
 
