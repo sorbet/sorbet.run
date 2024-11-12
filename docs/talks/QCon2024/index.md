@@ -193,9 +193,24 @@ Timeline
 - **3 months** to get to 75% adoption...\
   ...contained to just three engineers
 
-## Ratcheting in Sorbet...
+## Aside: you can do it too!
 
-**`# typed:`** comment at the top of each file
+Tools that you can use to bootstrap something:
+
+- [ESLint], [RuboCop], your language's linter
+- [Clang compiler plugins], [C# static analyzers], [go analysis package]
+- BYO: tree-sitter parsers, LSP server libraries, ...
+- GitHub code search for example projects using these tools
+
+[ESLint]: https://eslint.org/
+[RuboCop]: https://rubocop.org/
+[Clang compiler plugins]: https://clang.llvm.org/docs/ClangPlugins.html
+[C# static analyzers]: https://learn.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/tutorials/how-to-write-csharp-analyzer-code-fix
+[go analysis package]: https://pkg.go.dev/golang.org/x/tools/go/analysis
+
+## Ratcheting with `# typed` comments
+
+**`# typed`** comment at the top of each file
 
 ::::{.columns}
 :::{.column width="30%"}
@@ -210,7 +225,12 @@ Timeline
 :::
 ::::
 
-... is **local**, **incremental**, and **actionable**
+## `typed:` **`false`** → **`true`**
+
+<iframe
+  style="width: 100%; height: 400px;"
+  src="https://sorbet.run/#%23%20typed%3A%20ignore%0A%0Abegin%0A%20%20File.open%28%22%2Fetc%2Fhosts%22%29%20do%20%7Cf%7C%0A%20%20%20%20f%20%3C%3C%20%22example%22%0A%20%20end%0Arescue%20IoError%0A%20%20STDERR.log%28%22failed%20to%20write%20to%20host%20file!%22%29%0Aend"
+></iframe>
 
 ## 💡 **local**, **incremental**, and **actionable**
 
@@ -221,6 +241,13 @@ Alternatives to `# typed:` comment:
 
 - by coverage percent → too granular\
   (noisy, hard to action)
+
+## **actionable** = high **signal**, low noise
+
+<iframe
+  style="width: 100%; height: 400px;"
+  src="https://sorbet.run/#%23%20typed%3A%20true%0A%23%20%20%20%20%20%20%20%20%5E%20start%20with%20false%0A%0Aclass%20KnownParent%0A%20%20def%20method_on_parent%28x%29%3B%20end%0Aend%0A%0Aclass%20MyClass%20%3C%20UnknownParent%0A%20%20def%20example%0A%20%20%20%20self.method_on_parent%28%29%0A%20%20end%0Aend"
+></iframe>
 
 ##
 

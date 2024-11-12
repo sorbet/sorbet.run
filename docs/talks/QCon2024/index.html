@@ -260,9 +260,25 @@ type</span></p>
 …contained to just three engineers</li>
 </ul>
 </section>
-<section id="ratcheting-in-sorbet" class="slide level2">
-<h2>Ratcheting in Sorbet…</h2>
-<p><strong><code># typed:</code></strong> comment at the top of each
+<section id="aside-you-can-do-it-too" class="slide level2">
+<h2>Aside: you can do it too!</h2>
+<p>Tools that you can use to bootstrap something:</p>
+<ul>
+<li><a href="https://eslint.org/">ESLint</a>, <a
+href="https://rubocop.org/">RuboCop</a>, your language’s linter</li>
+<li><a href="https://clang.llvm.org/docs/ClangPlugins.html">Clang
+compiler plugins</a>, <a
+href="https://learn.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/tutorials/how-to-write-csharp-analyzer-code-fix">C#
+static analyzers</a>, <a
+href="https://pkg.go.dev/golang.org/x/tools/go/analysis">go analysis
+package</a></li>
+<li>BYO: tree-sitter parsers, LSP server libraries, …</li>
+<li>GitHub code search for example projects using these tools</li>
+</ul>
+</section>
+<section id="ratcheting-with-typed-comments" class="slide level2">
+<h2>Ratcheting with <code># typed</code> comments</h2>
+<p><strong><code># typed</code></strong> comment at the top of each
 file</p>
 <div class="columns">
 <div class="column" style="width:30%;">
@@ -275,8 +291,12 @@ file</p>
 → every method needs a signature</p>
 </div>
 </div>
-<p>… is <strong>local</strong>, <strong>incremental</strong>, and
-<strong>actionable</strong></p>
+</section>
+<section id="typed-false-true" class="slide level2">
+<h2><code>typed:</code> <strong><code>false</code></strong> →
+<strong><code>true</code></strong></h2>
+<iframe style="width: 100%; height: 400px;" src="https://sorbet.run/#%23%20typed%3A%20ignore%0A%0Abegin%0A%20%20File.open%28%22%2Fetc%2Fhosts%22%29%20do%20%7Cf%7C%0A%20%20%20%20f%20%3C%3C%20%22example%22%0A%20%20end%0Arescue%20IoError%0A%20%20STDERR.log%28%22failed%20to%20write%20to%20host%20file!%22%29%0Aend">
+</iframe>
 </section>
 <section id="local-incremental-and-actionable" class="slide level2">
 <h2>💡 <strong>local</strong>, <strong>incremental</strong>, and
@@ -288,6 +308,12 @@ file</p>
 <li><p>by coverage percent → too granular<br />
 (noisy, hard to action)</p></li>
 </ul>
+</section>
+<section id="actionable-high-signal-low-noise" class="slide level2">
+<h2><strong>actionable</strong> = high <strong>signal</strong>, low
+noise</h2>
+<iframe style="width: 100%; height: 400px;" src="https://sorbet.run/#%23%20typed%3A%20true%0A%23%20%20%20%20%20%20%20%20%5E%20start%20with%20false%0A%0Aclass%20KnownParent%0A%20%20def%20method_on_parent%28x%29%3B%20end%0Aend%0A%0Aclass%20MyClass%20%3C%20UnknownParent%0A%20%20def%20example%0A%20%20%20%20self.method_on_parent%28%29%0A%20%20end%0Aend">
+</iframe>
 </section>
 <section id="section-2" class="slide level2">
 <h2></h2>
