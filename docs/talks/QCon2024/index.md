@@ -83,7 +83,7 @@ Have **one team** drive the refactor:
   most problems will be repeat problems
 
 - **incentivizes automation**\
-  fewer man-hours overall
+  fewer engineer-hours overall
 
 - **avoids idle time**\
   no need to wait for each team to plan and prioritize
