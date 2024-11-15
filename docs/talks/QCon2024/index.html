@@ -20,8 +20,11 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
@@ -29,7 +32,7 @@
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
     /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span { line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -40,7 +43,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -356,7 +359,7 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;</span><span class="sc">#{</span>k<span class="sc">}</span><span class="st">=</span><span class="sc">#{</span>v<span class="at">.inspect</span><span class="sc">}</span><span class="st">&quot;</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span><span class="at">.join</span>(<span class="st">&quot; &quot;</span>)</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@output</span><span class="at">.puts</span>(<span class="st">&quot;</span><span class="sc">#{</span><span class="dt">Time</span><span class="at">.now.to_i</span><span class="sc">}</span><span class="st">: ${message} </span><span class="sc">#{</span>payload<span class="sc">}</span><span class="st">&quot;</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@output</span><span class="at">.puts</span>(<span class="st">&quot;</span><span class="sc">#{</span><span class="dt">Time</span><span class="at">.now.to_i</span><span class="sc">}</span><span class="st">: </span><span class="sc">#{</span>message<span class="sc">}</span><span class="st"> </span><span class="sc">#{</span>payload<span class="sc">}</span><span class="st">&quot;</span>)</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 </section>
@@ -499,6 +502,52 @@ class="slide level2">
 </ul>
 </div>
 </section>
+<section id="moving-from-layered-to-dag" class="slide level2">
+<h2>Moving from layered to dag</h2>
+<div class="columns">
+<div class="column" style="text-align: center;">
+<p><img data-src="img/layered-to-dag-01.png" height="320" /></p>
+</div>
+</div>
+</section>
+<section id="moving-from-layered-to-dag-1" class="slide level2">
+<h2>Moving from layered to dag</h2>
+<div class="columns">
+<div class="column" style="text-align: center;">
+<p><img data-src="img/layered-to-dag-02.png" height="320" /></p>
+</div>
+</div>
+</section>
+<section id="moving-from-layered-to-dag-2" class="slide level2">
+<h2>Moving from layered to dag</h2>
+<div class="columns">
+<div class="column" style="text-align: center;">
+<p><img data-src="img/layered-to-dag-03.png" height="320" /></p>
+</div>
+</div>
+</section>
+<section id="moving-from-layered-to-dag-3" class="slide level2">
+<h2>Moving from layered to dag</h2>
+<div class="columns">
+<div class="column" style="text-align: center;">
+<p><img data-src="img/layered-to-dag-04.png" height="320" /></p>
+</div>
+</div>
+</section>
+<section id="building-a-ratchet-strict_dependencies-1"
+class="slide level2">
+<h2>Building a ratchet: <code>strict_dependencies</code></h2>
+<ul>
+<li><code>strict_dependencies</code>
+<strong><code>'false'</code></strong></li>
+<li><code>strict_dependencies</code>
+<strong><code>'layered'</code></strong></li>
+<li><code>strict_dependencies</code>
+<strong><code>'layered_dag'</code></strong></li>
+<li><code>strict_dependencies</code>
+<strong><code>'dag'</code></strong></li>
+</ul>
+</section>
 <section id="and-then-use-the-ratchet" class="slide level2">
 <h2>…and then use the ratchet!</h2>
 <p>Important to have:</p>
@@ -563,8 +612,18 @@ package?”</li>
 <p><br />
 </p>
 </section>
-<section id="nice-pitchy-title" class="slide level2">
-<h2>[NICE PITCHY TITLE]</h2>
+<section id="how-can-this-approach-fall-down" class="slide level2">
+<h2>How can this approach fall down?</h2>
+<p><br />
+</p>
+<blockquote>
+<p>In theory, there is no difference between theory and practice. In
+practice, there is.</p>
+</blockquote>
+<p>— Walter J. Savitch, relaying an overheard quote at a computer
+science conference</p>
+<p><br />
+</p>
 </section>
 <section id="tools-arent-always-perfect-at-first" class="slide level2">
 <h2>Tools aren’t always perfect at first!</h2>
@@ -597,9 +656,34 @@ unacceptably.</li>
 <p><br />
 </p>
 </section>
+<section id="corollary-dont-rush-the-launch" class="slide level2">
+<h2>Corollary: don’t rush the launch!</h2>
+<p><br />
+</p>
+<div>
+<ul>
+<li class="fragment">First impressions matter a lot!</li>
+<li class="fragment">For Sorbet:
+<ul>
+<li class="fragment">…run in quiet mode for a while</li>
+</ul></li>
+<li class="fragment">For packages:
+<ul>
+<li class="fragment">…proved out on our CI service before we moved on to
+other code.</li>
+</ul></li>
+</ul>
+</div>
+<p><br />
+</p>
+</section>
 <section id="who-ratchets-the-ratchets" class="slide level2">
 <h2>Who ratchets the ratchets?</h2>
-<p>[image of large number of files changes]</p>
+<div class="columns">
+<div class="column" style="text-align: center;">
+<p><img data-src="img/files-changed.png" /></p>
+</div>
+</div>
 </section>
 <section id="our-approach-two-level-ratchets" class="slide level2">
 <h2>Our approach: two-level ratchets</h2>
@@ -648,14 +732,27 @@ class="sourceCode ruby hl-2"><code class="sourceCode ruby"><span id="cb8-1"><a h
 </section>
 <section id="supporting-tooling" class="slide level2">
 <h2>Supporting tooling</h2>
-</section>
-<section id="supporting-tooling-1" class="slide level2">
-<h2>Supporting tooling</h2>
 <p><br />
 </p>
 <div>
 <ul>
-<li class="fragment">Dependency Doctor</li>
+<li class="fragment">Gen-packages
+<ul>
+<li class="fragment">…with a lot of attention to error messages, since
+graphs are hard!</li>
+</ul></li>
+<li class="fragment">Package explorer
+<ul>
+<li class="fragment">…and a whole host of visibility/analysis tools</li>
+</ul></li>
+<li class="fragment">Dependency Doctor
+<ul>
+<li class="fragment">…for when automated suggestions are great!</li>
+</ul></li>
+<li class="fragment">LSP integration
+<ul>
+<li class="fragment">…for immediate feedback when possible!</li>
+</ul></li>
 </ul>
 </div>
 <p><br />

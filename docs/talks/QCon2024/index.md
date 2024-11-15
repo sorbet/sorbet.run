@@ -295,7 +295,7 @@ class Logger
       "#{k}=#{v.inspect}"
     end.join(" ")
 
-    @output.puts("#{Time.now.to_i}: ${message} #{payload}")
+    @output.puts("#{Time.now.to_i}: #{message} #{payload}")
   end
 end
 ```
@@ -431,6 +431,46 @@ end
 
 :::
 
+## Moving from layered to dag
+
+:::: {.columns}
+::: {.column style="text-align: center;"}
+![](img/layered-to-dag-01.png){height="320px"}
+:::
+::::
+
+## Moving from layered to dag
+
+:::: {.columns}
+::: {.column style="text-align: center;"}
+![](img/layered-to-dag-02.png){height="320px"}
+:::
+::::
+
+## Moving from layered to dag
+
+:::: {.columns}
+::: {.column style="text-align: center;"}
+![](img/layered-to-dag-03.png){height="320px"}
+:::
+::::
+
+## Moving from layered to dag
+
+:::: {.columns}
+::: {.column style="text-align: center;"}
+![](img/layered-to-dag-04.png){height="320px"}
+:::
+::::
+
+
+## Building a ratchet: `strict_dependencies`
+
+* `strict_dependencies` **`'false'`**
+* `strict_dependencies` **`'layered'`**
+* `strict_dependencies` **`'layered_dag'`**
+* `strict_dependencies` **`'dag'`**
+
 ## ...and then use the ratchet!
 
 Important to have:
@@ -485,7 +525,15 @@ and
 
 \
 
-## [NICE PITCHY TITLE]
+## How can this approach fall down?
+
+\
+
+> In theory, there is no difference between theory and practice. In practice, there is.
+
+--- Walter J. Savitch, relaying an overheard quote at a computer science conference
+
+\
 
 ## Tools aren't always perfect at first!
 
@@ -509,9 +557,27 @@ and
 
 \
 
+## Corollary: don't rush the launch!
+
+\
+
+:::incremental
+* First impressions matter a lot!
+* For Sorbet:
+  * ...run in quiet mode for a while
+* For packages:
+  * ...proved out on our CI service before we moved on to other code.
+:::
+
+\
+
 ## Who ratchets the ratchets?
 
-[image of large number of files changes]
+:::: {.columns}
+::: {.column style="text-align: center;"}
+![](img/files-changed.png)
+:::
+::::
 
 ## Our approach: two-level ratchets
 
@@ -556,14 +622,18 @@ end
 
 ## Supporting tooling
 
-## Supporting tooling
-
 \
 
 :::incremental
 
+* Gen-packages
+  * ...with a lot of attention to error messages, since graphs are hard!
+* Package explorer
+  * ...and a whole host of visibility/analysis tools
 * Dependency Doctor
-
+  * ...for when automated suggestions are great!
+* LSP integration
+  * ...for immediate feedback when possible!
 
 :::
 
