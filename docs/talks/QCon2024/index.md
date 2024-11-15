@@ -423,43 +423,59 @@ end
 
 ## Building a ratchet: `strict_dependencies`
 
-:::incremental
-
-* `strict_dependencies` **`'false'`**
-* `strict_dependencies` **`'layered'`**
-* `strict_dependencies` **`'dag'`**
-
-:::
-
-## Moving from layered to dag
+## Level zero: `'false'`
 
 :::: {.columns}
 ::: {.column style="text-align: center;"}
-![](img/layered-to-dag-01.png){height="320px"}
+![](img/sd2-false.png){height="420px"}
 :::
 ::::
 
-## Moving from layered to dag
+## Level one: `'layered'`
 
 :::: {.columns}
 ::: {.column style="text-align: center;"}
-![](img/layered-to-dag-02.png){height="320px"}
+![](img/sd2-layered-00.png){height="420px"}
 :::
 ::::
 
-## Moving from layered to dag
+## Level one: `'layered'`
 
 :::: {.columns}
 ::: {.column style="text-align: center;"}
-![](img/layered-to-dag-03.png){height="320px"}
+![](img/sd2-layered-01.png){height="420px"}
 :::
 ::::
 
-## Moving from layered to dag
+## Level two: `'layered_dag'`
 
 :::: {.columns}
 ::: {.column style="text-align: center;"}
-![](img/layered-to-dag-04.png){height="320px"}
+![](img/sd2-layered-dag-00.png){height="420px"}
+:::
+::::
+
+## Level two: `'layered_dag'`
+
+:::: {.columns}
+::: {.column style="text-align: center;"}
+![](img/sd2-layered-dag-01.png){height="420px"}
+:::
+::::
+
+## Level three: `'dag'`
+
+:::: {.columns}
+::: {.column style="text-align: center;"}
+![](img/sd2-dag-00.png){height="420px"}
+:::
+::::
+
+## Level three: `'dag'`
+
+:::: {.columns}
+::: {.column style="text-align: center;"}
+![](img/sd2-dag-01.png){height="420px"}
 :::
 ::::
 
@@ -486,7 +502,7 @@ Important to have:
 
 ##
 
-Developer velocity and production latency improved because
+Developer velocity and production latency are improving because
 
 ::::{.columns style="gap: min(4vw, 0.5em);"}
 :::{.column style="width:6%; text-align:right;"}
@@ -495,7 +511,7 @@ by\
 and
 :::
 :::{.column width="94%"}
-**modularized a large, stubborn codebase**\
+**are modularizing a large, stubborn codebase**\
 **having a point of leverage** (packages and layering)\
 **picking good ratchets** (`strict_dependencies`)
 :::
@@ -508,7 +524,7 @@ and
   - Dependencies: per-package
 - **incremental**
   - Sorbet: `false` to `true` to `strict`
-  - Dependencies: `false` to `layered` to `dag`
+  - Dependencies: `false` to `layered` to `layered_dag` to `dag`
 - **actionable**
   - Sorbet: "Where do I need types in my current files?"
   - Dependencies: "What bad edges can I remove from my current package?"
@@ -607,18 +623,27 @@ end
 
 ## Our approach: two-level ratchets
 
-\
-
-:::incremental
-
-* After two weeks, added to `try_not_to_regress.yaml`
-  * ...but can be removed by anyone.
-* After another two weeks, added to `never_regress.yaml`
-  * ...and can only be removed with our approval!
-
+:::: {.columns}
+::: {.column style="text-align: center;"}
+![](img/ratchet-ratchet-00.png){height="420px"}
 :::
+::::
 
-\
+## Our approach: two-level ratchets
+
+:::: {.columns}
+::: {.column style="text-align: center;"}
+![](img/ratchet-ratchet-01.png){height="420px"}
+:::
+::::
+
+## Our approach: two-level ratchets
+
+:::: {.columns}
+::: {.column style="text-align: center;"}
+![](img/ratchet-ratchet-02.png){height="420px"}
+:::
+::::
 
 ## Supporting tooling
 
@@ -626,14 +651,13 @@ end
 
 :::incremental
 
-* Gen-packages
-  * ...with a lot of attention to error messages, since graphs are hard!
-* Package explorer
-  * ...and a whole host of visibility/analysis tools
-* Dependency Doctor
-  * ...for when automated suggestions are great!
-* LSP integration
-  * ...for immediate feedback when possible!
+* `gen-packages`, for automatically fixing up imports and exports
+  * ...and visualizing error messages when we hit the ratchet!
+* Package Explorer, for visualizing package dependencies
+* Dependency Doctor: "I've hit a dependency issue, what do I do?"
+  * ...including automated codemod suggestions!
+* Editor integration for packaging errors and fixes
+  * ...immediate feedback is _invaluable_!
 
 :::
 
