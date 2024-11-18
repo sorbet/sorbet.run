@@ -93,9 +93,18 @@ Have **one team** drive the refactor:
 <!-- TODO(jez) Better diagrams -->
 :::: {.columns}
 ::: {.column style="text-align: center;"}
-![](img/ratchet.png){height="420px"}
+![][leverage-light]![][leverage-dark]
+:::
+::: {.column style="text-align: center;"}
+![][ratchet-light]![][ratchet-dark]
+![](img/RatchetDark.png){height="420px"}
 :::
 ::::
+
+[leverage-light]: img/LeverageLight.png {height="420px"}
+[leverage-dark]: img/LeverageDark.png {height="420px"}
+[ratchet-light]: img/RatchetLight.png {height="420px"}
+[ratchet-dark]: img/RatchetDark.png {height="420px"}
 
 ##
 
@@ -385,14 +394,14 @@ end
 ## Point of leverage: layering
 :::: {.columns}
 ::: {.column style="text-align: center;"}
-![](img/layers.png){height="320px"}
+![](img/layers.png){height="400px"}
 :::
 ::::
 
 ## Point of leverage: layering
 :::: {.columns}
 ::: {.column style="text-align: center;"}
-![](img/bad-dep-03.png){height="320px"}
+![](img/bad-dep-03.png){height="400px"}
 :::
 ::::
 
