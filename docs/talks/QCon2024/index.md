@@ -679,12 +679,27 @@ end
 
 \
 
-## Successful codebase-wide refactors
+##
 
-* Find **points of leverage**
-* Build **clear, enforceable ratchets**
-* Staff a **focused and supported team**
-* (...and have patience: **it's hard work!**)
+\
+
+::::{.columns style="gap: min(4vw, 0.5em);"}
+:::{.column style="width:30%; text-align:right;"}
+One team can\
+by\
+and
+:::
+:::{.column width="80%"}
+**refactor a large, stubborn codebase**\
+**having a point of leverage**\
+**picking good ratchets**
+:::
+::::
+
+\
+
+... _and don't forget to be patient---it's hard work!_
+
 
 ## Questions?
 
