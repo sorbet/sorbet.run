@@ -91,18 +91,9 @@ Have **one team** drive the refactor:
 ## Centralized migration needs two things:
 
 <!-- TODO(jez) Better diagrams -->
-
 :::: {.columns}
-::: {.column width="45%"}
-**Leverage** over the codebase
-
-![](img/LeveragePoint_Diagram.gif)
-:::
-
-::: {.column width="55%"}
-Way to **ratchet** incremental progress
-
-![](img/Ratchet_rotation_allowed.jpg){height="180px"}
+::: {.column style="text-align: center;"}
+![](img/ratchet.png){height="420px"}
 :::
 ::::
 
@@ -644,6 +635,23 @@ end
 ![](img/ratchet-ratchet-02.png){height="420px"}
 :::
 ::::
+
+## Supporting tooling
+
+\
+
+:::incremental
+
+* Sorbet autocorrects:
+  * Vital for evolving Sorbet itself
+  * Great for fixing knock-on changes
+* Editor integration
+  * In-editor feedback is ridiculously high-leverage
+  * Supporting editor code (for VSCode) to power analysis and refactoring
+
+:::
+
+\
 
 ## Supporting tooling
 
