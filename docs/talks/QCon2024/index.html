@@ -745,49 +745,47 @@ class="sourceCode ruby hl-2"><code class="sourceCode ruby"><span id="cb8-1"><a h
 </div>
 </div>
 </section>
-<section id="supporting-tooling" class="slide level2">
-<h2>Supporting tooling</h2>
-<p><br />
-</p>
+<section id="sorbet-supporting-tooling" class="slide level2">
+<h2>Sorbet supporting tooling</h2>
 <div>
 <ul>
-<li class="fragment">Sorbet autocorrects:
+<li class="fragment">Metrics and dashboards<br />
+<img data-src="img/typeable.png" height="100" /></li>
+<li class="fragment">Sorbet autocorrects
 <ul>
-<li class="fragment">Vital for evolving Sorbet itself</li>
-<li class="fragment">Great for fixing knock-on changes</li>
+<li class="fragment">“autofix these problems to ratchet up”</li>
+<li class="fragment">makes the ratchet <strong>actionable</strong> even
+post-migration</li>
 </ul></li>
 <li class="fragment">Editor integration
 <ul>
-<li class="fragment">In-editor feedback is ridiculously
-high-leverage</li>
-<li class="fragment">Supporting editor code (for VSCode) to power
-analysis and refactoring</li>
+<li class="fragment">turns unactionable (low-signal) error into
+<strong>actionable</strong></li>
 </ul></li>
 </ul>
 </div>
-<p><br />
-</p>
 </section>
-<section id="supporting-tooling-1" class="slide level2">
-<h2>Supporting tooling</h2>
+<section id="packager-supporting-tooling" class="slide level2">
+<h2>Packager supporting tooling</h2>
 <p><br />
 </p>
 <div>
 <ul>
-<li class="fragment"><code>gen-packages</code>, for automatically fixing
-up imports and exports
+<li class="fragment"><strong><code>gen-packages</code></strong>, for
+automatically fixing up imports and exports
 <ul>
 <li class="fragment">…and visualizing error messages when we hit the
 ratchet!</li>
 </ul></li>
-<li class="fragment">Package Explorer, for visualizing package
-dependencies</li>
-<li class="fragment">Dependency Doctor: “I’ve hit a dependency issue,
-what do I do?”
+<li class="fragment"><strong>Package Explorer</strong>, for visualizing
+package dependencies</li>
+<li class="fragment"><strong>Dependency Doctor</strong>: “I’ve hit a
+dependency issue, what do I do?”
 <ul>
 <li class="fragment">…including automated codemod suggestions!</li>
 </ul></li>
-<li class="fragment">Editor integration for packaging errors and fixes
+<li class="fragment"><strong>Editor integration</strong> for packaging
+errors and fixes
 <ul>
 <li class="fragment">…immediate feedback is <em>invaluable</em>!</li>
 </ul></li>
@@ -796,14 +794,24 @@ what do I do?”
 <p><br />
 </p>
 </section>
-<section id="successful-codebase-wide-refactors" class="slide level2">
-<h2>Successful codebase-wide refactors</h2>
-<ul>
-<li>Find <strong>points of leverage</strong></li>
-<li>Build <strong>clear, enforceable ratchets</strong></li>
-<li>Staff a <strong>focused and supported team</strong></li>
-<li>(…and have patience: <strong>it’s hard work!</strong>)</li>
-</ul>
+<section id="section-4" class="slide level2">
+<h2></h2>
+<p><br />
+</p>
+<div class="columns" style="gap: min(4vw, 0.5em);">
+<div class="column" style="width:30%; text-align:right;">
+<p>One team can<br />
+by<br />
+and</p>
+</div><div class="column" style="width:80%;">
+<p><strong>refactor a large, stubborn codebase</strong><br />
+<strong>having a point of leverage</strong><br />
+<strong>picking good ratchets</strong></p>
+</div>
+</div>
+<p><br />
+</p>
+<p>… <em>and don’t forget to be patient—it’s hard work!</em></p>
 </section>
 <section id="questions" class="slide level2">
 <h2>Questions?</h2>
