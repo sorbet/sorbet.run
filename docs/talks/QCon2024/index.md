@@ -647,35 +647,32 @@ end
 :::
 ::::
 
-## Supporting tooling
-
-\
+## Sorbet supporting tooling
 
 :::incremental
 
-* Sorbet autocorrects:
-  * Vital for evolving Sorbet itself
-  * Great for fixing knock-on changes
-* Editor integration
-  * In-editor feedback is ridiculously high-leverage
-  * Supporting editor code (for VSCode) to power analysis and refactoring
+- Metrics and dashboards\
+  ![](img/typeable.png){height="100px"}
+- Sorbet autocorrects
+  - "autofix these problems to ratchet up"
+  - makes the ratchet **actionable** even post-migration
+- Editor integration
+  - turns unactionable (low-signal) error into **actionable**
 
 :::
 
-\
-
-## Supporting tooling
+## Packager supporting tooling
 
 \
 
 :::incremental
 
-* `gen-packages`, for automatically fixing up imports and exports
+* **`gen-packages`**, for automatically fixing up imports and exports
   * ...and visualizing error messages when we hit the ratchet!
-* Package Explorer, for visualizing package dependencies
-* Dependency Doctor: "I've hit a dependency issue, what do I do?"
+* **Package Explorer**, for visualizing package dependencies
+* **Dependency Doctor**: "I've hit a dependency issue, what do I do?"
   * ...including automated codemod suggestions!
-* Editor integration for packaging errors and fixes
+* **Editor integration** for packaging errors and fixes
   * ...immediate feedback is _invaluable_!
 
 :::
