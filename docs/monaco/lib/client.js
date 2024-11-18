@@ -71,7 +71,14 @@ var editor = monaco.editor.create(element, {
     acceptSuggestionOnCommitCharacter: false,
 });
 window.editor = editor; // Useful for prototyping in dev tools
-editor.focus();
+var inIframe = window.self !== window.top;
+if (!inIframe) {
+    // Don't focus the editor if rendered in an iframe, because that means
+    // sorbet.run is being embedded in something else (usually: a slide show) and
+    // that makes it impossible to use the host page's keyboard shortcuts (like
+    // "advance the slide") until blurring the editor.
+    editor.focus();
+}
 var useVimKeybindings = function () {
     var stored = window.localStorage.getItem('useVimKeybindings');
     if (stored == null) {
