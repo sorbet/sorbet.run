@@ -90,21 +90,23 @@ Have **one team** drive the refactor:
 
 ## Centralized migration needs two things:
 
-<!-- TODO(jez) Better diagrams -->
-:::: {.columns}
-::: {.column style="text-align: center;"}
+:::: {.columns style="text-align: center;"}
+::: {.column width="45%"}
+**Leverage** over the codebase
+
 ![][leverage-light]![][leverage-dark]
 :::
-::: {.column style="text-align: center;"}
+::: {.column width="55%"}
+Way to **ratchet** incremental progress
+
 ![][ratchet-light]![][ratchet-dark]
-![](img/RatchetDark.png){height="420px"}
 :::
 ::::
 
-[leverage-light]: img/LeverageLight.png {height="420px"}
-[leverage-dark]: img/LeverageDark.png {height="420px"}
-[ratchet-light]: img/RatchetLight.png {height="420px"}
-[ratchet-dark]: img/RatchetDark.png {height="420px"}
+[leverage-light]: img/light/leverage.png {width="70%"}
+[leverage-dark]: img/dark/leverage.png {width="70%"}
+[ratchet-light]: img/light/ratchet.png {width="55%"}
+[ratchet-dark]: img/dark/ratchet.png {width="55%"}
 
 ##
 
