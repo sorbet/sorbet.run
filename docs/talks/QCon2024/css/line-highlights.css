@@ -7,6 +7,10 @@ pre > code {
 }
 
 pre > code.sourceCode > span {
+  /* Have to re-apply a change that was reverted upstream,
+   * see https://github.com/jgm/skylighting/pull/202 */
+  display: inline-block;
+
   position: relative;
   min-width: 100%;
 }
