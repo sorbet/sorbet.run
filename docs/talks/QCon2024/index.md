@@ -512,8 +512,8 @@ and
   - Sorbet: per-file
   - Dependencies: per-package
 - **incremental**
-  - Sorbet: `false` to `true` to `strict`
-  - Dependencies: `false` to `layered` to `layered_dag` to `dag`
+  - Sorbet: `false` **→** `true` **→** `strict`
+  - Dependencies: `false` **→** `layered` **→** `layered_dag` **→** `dag`
 - **actionable**
   - Sorbet: "Where do I need types in my current files?"
   - Dependencies: "What bad edges can I remove from my current package?"
