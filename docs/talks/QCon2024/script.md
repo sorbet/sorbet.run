@@ -2,7 +2,7 @@ Welcome! My name is Jake, I'm joined today by Getty, and for the better half of 
 
 One thing we've noticed in that time, is that stubborn codebases rack up all sorts of complaints about them as time goes on.
 
-For example, people say things like "our code isn't modular enough" because the it's hard to untangle one piece without it seeming like you have to untangle everything at once.
+For example, people say things like "our code isn't modular enough" because it's hard to untangle one piece without it seeming like you have to untangle everything at once.
 
 You'll find people noticing "this dependency is 10 years out of date" because that dependency is so pervasive, and over the years, people have started to depend on every imaginable implementation detail of that dependency.
 
@@ -24,13 +24,13 @@ And finally having one team drive a migration means it's way more likely to fini
 
 So what we really want to talk about today are two things that make a centralized migration successful.
 
-The first is leverage over the codebase. Leverage is so much of a buzz word that people have forgotten what it means, but really it's about using a small driving force to have a large effect on a system. Without leverage over a codebase, there's no way that a small team can carry out a large refactor. So "how can I build that leverage" is our first talking point.
+The first is leverage over the codebase. Leverage is so much of a buzz word that people have forgotten what it means, but really it's about using a small driving force to have a large effect on a system. Without leverage over a codebase, there's no way that a small team can carry out a large refactor.
 
 The second thing a centralized migration needs is some way to ratchet incremental progress. A centralized refactor is going to take fewer engineer hours overall, but it'll be spread over a long time overall. While the refactor is happening there's gonna be plenty of chances for our progress to be undone by accident unless there's a mechanism in place to prevent backsliding. And specifically, it's not enough to just have some way to ratchet progress: it has to be a **good ratchet**, and we'll talk about what makes a good ratchet later on.
 
 So to say that one more time: our thesis in this talk is that to successfully refactor a large, stubborn codebase, you need to **have** a point of leverage and to **pick** good ratchets.
 
-The rest of the talk we'll drive this point home by exploring two of the large refactors that the Ruby Infrastructure team at Stripe has run over the years. I'll start with a discussion of how we refactored Stripe's codebase to make developers happier using Sorbet, and then Getty will discuss how we're taking Stripe's Ruby monolith and making it more modular.
+The rest of the talk we'll drive this point home by exploring two of the large refactors that the Ruby Infrastructure team at Stripe has run over the years. I'll start with a discussion of how we refactored Stripe's codebase to make developers happier using Sorbet, and then Getty will discuss how we're taking Stripe's Ruby monolith and making it more modular. After that, we'll bring it back and talk a little bit more about some of the higher-level lessons we've learned. So let's dive in.
 
 Before we get too far into the specifics, I want to introduce Sorbet. Sorbet is a fast, powerful type checker for Ruby that we built at Stripe. It's completely open source and has all sorts of docs in case you want to try it out on your own Ruby codebase. And it has three headline features:
 
@@ -46,11 +46,11 @@ They said things like "the code is hard to understand" because given the size of
 
 Another complaint was that we had so many tests that it was no longer possible to run them all locally. You had to push your change and wait 5 or 10 minutes before learning whether you broke something.
 
-Despite that sheer volume of tests, people still noticed that it was common to have things break only in production, not getting caught by tests!
+And then kind of counterintuitively, despite that sheer volume of tests, people still noticed that it was common to have things break only in production, not getting caught by tests!
 
 That meant that people couldn't trust the docs, because it was by following the docs that the production problems happened in the first place.
 
-And overall, people complained that it seemed like the code in general was poor quality and haphazard, leading to this vicious cycle, where the code was hard to understand.
+And overall, people complained that it seemed like the code in general was haphazard and maybe even poor quality, leading to this vicious cycle, where the code was hard to understand.
 
 We set out to fix this by staffing a team to refactor the code. The first thing that team needed was a point of leverage, and **that's** why we built Sorbet: to be that leverage.
 
@@ -58,9 +58,9 @@ Building Sorbet represented a comparatively small force (we'll talk about how sm
 
 Building Sorbet made the codebase easier to understand, because it could power an IDE that let people navigate through the codebase more precisely than before.
 
-Where before people spent all their time waiting for tests, now they had a tool that that could run locally in just a few seconds and showed them a list of problems before having to push to CI.
+Where before people spent all their time waiting for tests, now they had this type checker that that could run locally in just a few seconds and showed them a list of problems before having to push to CI.
 
-Simply having type checking eliminated whole class of errors from production, like "you typo'd the name of a class" is a runtime exception that just doesn't happen at Stripe anymore. Other kinds of errors aren't quite gone but are incredibly rare, like "you typo'd a method name," and these get more rare as people write more type annotations.
+And then simply having a type checker eliminated whole class of errors from production. Having a typo in the name of a constant is a runtime exception that just doesn't happen at Stripe anymore. Other kinds of errors aren't quite gone but are incredibly rare, like "you typo'd a method name," and these get more rare as people write more type annotations.
 
 These type annotations then became a sort of machine-checked documentation, meaning that the type annotations are incredibly trustworthy. Especially so, because the annotations are also checked at runtime in addition to statically. So if you open up a file and see a type signature on a method, there is every reason to believe it, unlike any nearby comments.
 
@@ -68,13 +68,13 @@ And somewhat more subtly, Sorbet set a baseline for code quality. Specifically: 
 
 So clearly Sorbet let us make a huge positive impact on the codebase—but you might ask: "was it really a small effort?"
 
-We started working on Sorbet in the fall of 2017, at a time when there were a couple hundreds engineers at Stripe. It took 9 months to build Sorbet, and then another 3 months to get 75% of files opted into type checking. That's probably less time than you might have thought! In 2017 if you had asked me to guess how long it'd take, I'd have been quoting a number in years, not months.
+We started working on Sorbet in the fall of 2017, at a time when there were a couple hundred engineers at Stripe. It took 9 months to build Sorbet, and then another 3 months to get 75% of files opted into type checking. That's probably less time than you might have thought! If you had asked me to guess how long it'd take in 2017, I'd have been quoting a number in years, not months.
 
-This is kind of a whole nother rant, but in general one thing I've learned: you're probably overestimating how hard it is to build new, language-level static analysis tooling. At the end of the day, type checkers are still just programs, and I bet that if you're here, you're good at writing programs! Even if you don't go all the way to building a type checker, building a new lint rule or building some static analysis pass with your programming language's toolchain is something that people consider out of reach when they absolutely don't have to.
+This is kind of a whole nother rant, but in general one thing I've learned: you're probably overestimating how hard it is to build new, language-level static analysis tooling. At the end of the day, type checkers are still just programs, and I bet that if you're here, you're good at writing programs!
 
-To drive this point home: there's all sorts of tools you can use to bootstrap a new tool like this. Basically every language has a linter which allows user-defined rules, like ESLint for JavaScript and RuboCop for Ruby. You can get an early prototype pretty far with just a linter plus some hacked-together supporting code. Stepping up from there, most statically compiled languages also have some sort of compiler plugin architecture, which gives you access to various parts of the compiler internals, including the AST, any definitions, their types, etc. With a quick search I was able to find how to do this in C++, C#, and Go.
+You can get pretty far with a prototype that's just a lint rule plus some hacked-together supporting code. If you need more power, chances are your build toolchain already has some sort of plugin system that'll give you access to various compiler internals. And even if you have to build something yourself, there's tons of high quality libraries these days.
 
-These days, even if you have to build something yourself, there's a ton of great tools for bootstrapping something quickly. If you can't find an easy-to-use parser for your language, chances are the tree-sitter project has one that's good enough. And there's a ton of great libraries that abstract the boring bits of wiring up an LSP server to get an IDE integration. You can whip something up quickly to prove out the idea and make it better later. The first version of Sorbet started from the guts of a toy Scala compiler which worked well enough to convince the company to invest in building a full-fledged version.
+Whip something up quickly to prove out the idea, and make it better later. This is just "how we build software," that doesn't go away when it's a type checker! Few people know this, but the first version of Sorbet started by ripping the guts of a toy Scala compiler and replacing it with code that deals with Ruby. That worked well enough to convince us that we were on to something.
 
 So basically, yes: building Sorbet represented a relatively small effort which gave us a ton of leverage over Stripe's codebase.
 
