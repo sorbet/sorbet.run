@@ -536,7 +536,7 @@ and
 
 > In theory, there is no difference between theory and practice. In practice, there is.
 
---- Walter J. Savitch, relaying an overheard quote at a computer science conference
+--- Walter J. Savitch, relaying a quote overheard at a computer science conference
 
 \
 
