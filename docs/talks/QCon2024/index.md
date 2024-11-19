@@ -362,8 +362,8 @@ Tangled code is...
 
 - difficult to **debug**
 - difficult to **test**
-- prone to **larger deploy artifacts**
-- prone to **higher memory usage**
+- prone to **larger deploys or builds**
+- prone to **higher runtime memory usage**
 
 A drag on both **developer velocity** and **runtime performance**
 
@@ -489,19 +489,6 @@ end
 * `strict_dependencies` **`'layered_dag'`**
 * `strict_dependencies` **`'dag'`**
 
-## ...and then use the ratchet!
-
-Important to have:
-
-:::incremental
-
-- a **reason to refactor**
-- **comprehensive documentation**
-- **targeted tooling**
-- **organizational support**
-
-:::
-
 ##
 
 Developer velocity and production latency are improving because
@@ -552,6 +539,19 @@ and
 --- Walter J. Savitch, relaying an overheard quote at a computer science conference
 
 \
+
+## Beyond leverage and ratchets:
+
+Important to have:
+
+:::incremental
+
+- a **reason to refactor**
+- **comprehensive documentation**
+- **targeted tooling**
+- **organizational support**
+
+:::
 
 ## Tools aren't always perfect at first!
 

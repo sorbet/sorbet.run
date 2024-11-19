@@ -20,8 +20,11 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
@@ -29,7 +32,7 @@
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
     /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span { line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -40,7 +43,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -419,9 +422,10 @@ class="slide level2">
 <ul>
 <li class="fragment">difficult to <strong>debug</strong></li>
 <li class="fragment">difficult to <strong>test</strong></li>
-<li class="fragment">prone to <strong>larger deploy
-artifacts</strong></li>
-<li class="fragment">prone to <strong>higher memory usage</strong></li>
+<li class="fragment">prone to <strong>larger deploys or
+builds</strong></li>
+<li class="fragment">prone to <strong>higher runtime memory
+usage</strong></li>
 </ul>
 <p>A drag on both <strong>developer velocity</strong> and
 <strong>runtime performance</strong></p>
@@ -560,18 +564,6 @@ class="slide level2">
 <strong><code>'dag'</code></strong></li>
 </ul>
 </section>
-<section id="and-then-use-the-ratchet" class="slide level2">
-<h2>…and then use the ratchet!</h2>
-<p>Important to have:</p>
-<div>
-<ul>
-<li class="fragment">a <strong>reason to refactor</strong></li>
-<li class="fragment"><strong>comprehensive documentation</strong></li>
-<li class="fragment"><strong>targeted tooling</strong></li>
-<li class="fragment"><strong>organizational support</strong></li>
-</ul>
-</div>
-</section>
 <section id="section-3" class="slide level2">
 <h2></h2>
 <p>Developer velocity and production latency are improving because</p>
@@ -636,6 +628,18 @@ practice, there is.</p>
 science conference</p>
 <p><br />
 </p>
+</section>
+<section id="beyond-leverage-and-ratchets" class="slide level2">
+<h2>Beyond leverage and ratchets:</h2>
+<p>Important to have:</p>
+<div>
+<ul>
+<li class="fragment">a <strong>reason to refactor</strong></li>
+<li class="fragment"><strong>comprehensive documentation</strong></li>
+<li class="fragment"><strong>targeted tooling</strong></li>
+<li class="fragment"><strong>organizational support</strong></li>
+</ul>
+</div>
 </section>
 <section id="tools-arent-always-perfect-at-first" class="slide level2">
 <h2>Tools aren’t always perfect at first!</h2>
