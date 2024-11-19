@@ -82,17 +82,19 @@ But that's enough on leverage, let's talk about ratcheting. In Sorbet, the way r
 
 At typed false, Sorbet only validates syntax and resolves constant names.
 
-At typed true, Sorbet also runs type inference in methods using whatever type annotations it has, if any.
+At typed true, Sorbet also runs type inference in method bodies using whatever type annotations it has, if any.
 
 And at typed strict, every method needs an explicit signature, even if the signature declares that the method is effectively untyped.
 
 The `# typed` level behaves like a ratchet because it's easy to go up a level (just change the comment, fix the errors, and you're set), but there's friction preventing the level sliding back down. At Stripe, that friction comes from code review: if you try to make a PR that drops the `# typed` level of a file, your reviewer is going to grill you on why you've chosen to do that, instead of just fixing or even silencing the individual type errors.
 
-Thanks to the power of `iframe` and WebAssembly, I can actually walk you through an example of this process.
+Thanks to the power of `iframe`s and WebAssembly, I can actually walk you through an example of this process.
 
-Here we've got a Ruby file. It's trying to open a file, write a line to it, an close it, while printing a warning message if that process fails. The first step of adopting Sorbet is to put `# typed: false` at the top. As soon as we do that, Sorbet tells us that this `IoError` constant doesn't exist. This was a super common class of problem we found while rolling out Sorbet: the happy path works, but the error path is a ticking time bomb that hasn't been tripped in production yet.
+Here we've got a Ruby file. It's trying to open a file, write a line to it, and then close it, while printing a warning message if that process fails. The first step of adopting Sorbet is to put `# typed: false` at the top. As soon as we do that, Sorbet tells us that this `IoError` constant doesn't exist.
 
-You'll notice that this bad constant reference is in a `rescue` handler, which is the way Ruby writes `try` / `catch` exception handling blocks. And notably, the snippet doesn't re-raise the caught exception in the `rescue` body: it seems to be trying to swallow the exception and print a warning so that execution can continue. But because of this typo, the first time an `IOError` is actually raised, we're going to hit this typo and the Ruby VM will raise an (uncaught!) `NameError` for the unknown constant name.
+This was a super common class of problem we found while rolling out Sorbet: the happy path works, but the error path is a ticking time bomb that hasn't been tripped in production yet. You'll notice that this bad constant reference is in a `rescue` handler, which is the way Ruby writes `try` / `catch` exception handling blocks. And notably, the snippet doesn't re-raise the caught exception in the `rescue` body: it seems to be trying to swallow the exception and print a warning so that execution can continue.
+
+But because of this typo, the first time an `IOError` is actually raised, we're going to hit this typo and the Ruby VM will raise an (uncaught!) `NameError` for the unknown constant name.
 
 Fixing this is pretty easy, thanks to Sorbet's quick fix code action: the error message shows us that there's a fix available, and we can use the IDE to accept the suggested fix. This is how a ratchet works: it's easy to turn the crank in the right direction, and once we've fixed all the errors, we can lock in that incremental progress.
 
