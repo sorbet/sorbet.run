@@ -85,7 +85,7 @@ Have **one team** drive the refactor:
 - **incentivizes automation**\
   fewer engineer-hours overall
 
-- **avoids idle time**\
+- **more likely to finish**\
   no need to wait for each team to plan and prioritize
 
 ## Centralized migration needs two things:
