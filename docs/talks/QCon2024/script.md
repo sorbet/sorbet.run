@@ -14,7 +14,7 @@ But on our team, we're pretty optimistic: we believe it's basically always possi
 
 Specifically, we believe that is almost always possible for **one team** to refactor the codebase to that better state. The alternative would be to just declare "this is the ideal end state" of some refactor, and then instruct individual teams or the entire organization to figure out how to get from here to there.
 
-We're kind of going to take this as a given, that it's better to centralize large migrations to one team, but for context there are a couple reasons why we operate this way.
+We're kind of going to take this as a given, that it's better to centralize large migrations to one team, and focus the rest of the talk on what we've learned for doing this successfully. But for the sake of completeness, these are the top reasons why we operate this way.
 
 The first is that having one team drive a migration will concentrate expertise. If 10 teams go out and try to refactor their code, they're going to run into the same problem 10 times, and each have to figure out what to do about it. But with one team driving a refactor, by the second or third time that problem comes up, the team will be really good at figuring out how to deal with it.
 
@@ -36,7 +36,9 @@ Before we get too far into the specifics, I want to introduce Sorbet. Sorbet is 
 
 First, it's fast. To our knowledge, Stripe's Ruby codebase is the largest in the world, which meant we had no choice but to make this type checker fast enough to handle a huge codebase.
 
-Second, you can use it in your IDE. Not only will it show you errors, but you can use it to jump to definition, find all reference, get autocompletion results, and apply quick fixes, etc. We hear from people adopting Sorbet that while lots of people are remain skeptical about introducing static typing, basically everyone likes fast, powerful editor tooling, so Sorbet's IDE integration is a critical part of pitching Sorbet to get added to untyped codebases.
+Second, you can use it in your IDE. Not only will it show you errors, but you can use it to jump to definition, find all reference, get autocompletion results, and apply quick fixes, etc.
+
+While there's sometimes skepticism about introducing static typing in some organizations, basically everyone likes fast, powerful editor tooling, so Sorbet's IDE integration is a critical part of pitching Sorbet to get added to untyped codebases.
 
 And finally, Sorbet is gradual, which means that it's designed to be able to take a completely untyped Ruby codebase and introduce Sorbet piece by piece. It adds value even if you only use it a little bit, and gets better the more you lean into it.
 
@@ -62,11 +64,11 @@ Where before people spent all their time waiting for tests, now they had this ty
 
 And then simply having a type checker eliminated whole class of errors from production. Having a typo in the name of a constant is a runtime exception that just doesn't happen at Stripe anymore. Other kinds of errors aren't quite gone but are incredibly rare, like "you typo'd a method name," and these get more rare as people write more type annotations.
 
-These type annotations then became a sort of machine-checked documentation, meaning that the type annotations are incredibly trustworthy. Especially so, because the annotations are also checked at runtime in addition to statically. So if you open up a file and see a type signature on a method, there is every reason to believe it, unlike any nearby comments.
+These type annotations then became a sort of machine-checked documentation, meaning that the type annotations are incredibly trustworthy. Especially so, because the annotations are also checked at runtime in addition to statically. So if you open up a file and see a type signature on a method, there is every reason to believe it, unlike any nearby documentation comments.
 
 And somewhat more subtly, Sorbet set a baseline for code quality. Specifically: if it's hard or annoying to write a type annotation for a method, chances are that's because the method is complicated and poor quality. Finding a way to add types often means simplifying the code outright.
 
-So clearly Sorbet let us make a huge positive impact on the codebase—but you might ask: "was it really a small effort?"
+So I think it's pretty clear that Sorbet let us make a huge positive impact on the codebase—but you might ask: "was it really a small effort?"
 
 We started working on Sorbet in the fall of 2017, at a time when there were a couple hundred engineers at Stripe. It took 9 months to build Sorbet, and then another 3 months to get 75% of files opted into type checking. That's probably less time than you might have thought! If you had asked me to guess how long it'd take in 2017, I'd have been quoting a number in years, not months.
 
@@ -76,9 +78,9 @@ You can get pretty far with a prototype that's just a lint rule plus some hacked
 
 Whip something up quickly to prove out the idea, and make it better later. This is just "how we build software," that doesn't go away when it's a type checker! Few people know this, but the first version of Sorbet started by ripping the guts of a toy Scala compiler and replacing it with code that deals with Ruby. That worked well enough to convince us that we were on to something.
 
-So basically, yes: building Sorbet represented a relatively small effort which gave us a ton of leverage over Stripe's codebase.
+So basically, yes: building Sorbet represented a relatively small effort which gave us a ton of leverage over Stripe's codebase. So now, let's talk about ratcheting.
 
-But that's enough on leverage, let's talk about ratcheting. In Sorbet, the way ratcheting works is that there's a `# typed:` comment at the top of every file, specifying the typed level.
+In Sorbet, the way ratcheting works is that there's a `# typed:` comment at the top of every file, specifying the typed level.
 
 At typed false, Sorbet only validates syntax and resolves constant names.
 
@@ -88,7 +90,7 @@ And at typed strict, every method needs an explicit signature, even if the signa
 
 The `# typed` level behaves like a ratchet because it's easy to go up a level (just change the comment, fix the errors, and you're set), but there's friction preventing the level sliding back down. At Stripe, that friction comes from code review: if you try to make a PR that drops the `# typed` level of a file, your reviewer is going to grill you on why you've chosen to do that, instead of just fixing or even silencing the individual type errors.
 
-Thanks to the power of `iframe`s and WebAssembly, I can actually walk you through an example of this process.
+So, thanks to the power of `iframe`s and WebAssembly, I can actually walk you through an example of this process.
 
 Here we've got a Ruby file. It's trying to open a file, write a line to it, and then close it, while printing a warning message if that process fails. The first step of adopting Sorbet is to put `# typed: false` at the top. As soon as we do that, Sorbet tells us that this `IoError` constant doesn't exist.
 
@@ -98,9 +100,9 @@ But because of this typo, the first time an `IOError` is actually raised, we're 
 
 Fixing this is pretty easy, thanks to Sorbet's quick fix code action: the error message shows us that there's a fix available, and we can use the IDE to accept the suggested fix. This is how a ratchet works: it's easy to turn the crank in the right direction, and once we've fixed all the errors, we can lock in that incremental progress.
 
-But we're not done yet: let's see what happens when we kick it up to `# typed: true`. This time, we see that the `log` method doesn't actually exist: in Ruby, the name of the method to write a line of text is called `puts`, so we can fix that one too. As we increase the typed level of a file, Sorbet reports more fine-grained errors about problems in the codebase, and the choice of which errors go in which level gets at the heart of the issue: what makes a **good** ratchet?
+But we're not done yet: let's see what happens when we kick it up to `# typed: true`. This time, we see that the `log` method doesn't actually exist: in Ruby, the name of the method to write a line of text is called `puts`, so we can fix that one too. So what we notice here is that as we increase the typed level of a file, Sorbet reports more fine-grained errors about problems in the codebase. The choice of which errors go in which level gets at the heart of why we think that this is a **good** ratchet.
 
-Remember earlier I said it's not enough to just have a ratchet when refactoring: it has to be a good ratchet. Sorbet's typed comments are good because they're local, incremental, and actionable. To see what I mean, let's consider some alternative ways we could have ratcheted our progress adopting Sorbet.
+Remember, I said earlier, it's not enough to just have a ratchet when refactoring: it has to be a good ratchet. Sorbet's typed comments are good because they're local, incremental, and actionable. To see what I mean, let's consider some alternative ways we could have ratcheted our progress adopting Sorbet.
 
 Instead of by file, we could have done by folder. This would not have been local: it would have been hard to confirm, when looking at a piece of code, whether Sorbet would apply to it—you'd have to traipse up through the directory hierarchy to find some config file and see whether that slice of the codebase opted into typing.
 
@@ -110,19 +112,21 @@ Another alternative would have been to use some sort of "type coverage" percenta
 
 Another problem is that if you need to call a method owned by some other team who haven't added types to their code yet, it's kind of punishing for you to be blocked from calling their method until you go add types to it on their behalf. So because of this, coverage percentage ratchets are hard to action.
 
-I actually want to drill in a little more on what makes `# typed` comments actionable. An actionable ratchet is high signal, low noise. The ratchet should only stop you from doing truly bad things, and things that are within your power to fix. This is why "method does not exist" errors are at `# typed: true`, not `# typed: false`. In this example, we've got a file at `# typed: true`, and it has two errors: the `UnknownParent` constant fails to resolve, and Sorbet thinks this call to `method_on_parent` in the `example` method doesn't exist.
+I still want to drill in a little more about what makes `# typed` comments actionable. An actionable ratchet is high signal, low noise. The ratchet should only stop you from doing truly bad things, and things that are within your power to fix. This is why "that method does not exist" error that we saw earlier wasn't reported until `# typed: true`. We can see why with another example.
 
-But when you're adopting Sorbet, you wouldn't jump straight to `# typed: false`. You'd start by turning the ratchet one notch at a time. In our case: making the file have no errors in `# typed: false`.
+Here we've got a file at `# typed: true`, and it has two errors: the `UnknownParent` constant fails to resolve, and Sorbet thinks this call to `method_on_parent` in the `example` method doesn't exist.
+
+But when you're adopting Sorbet, you wouldn't jump straight to `# typed: true`. You'd start by turning the ratchet one notch at a time. In our case: making the file have no errors in `# typed: false`.
 
 If we start there by changing the `# typed:` comment, now the only error is the constant resolution error. We'll fix that, and notice that, we can now lock in this incremental progress!
 
-The actionable aspect comes next. Starting from a `# typed: false` file with no errors, now we see a different error when we upgrade the file to `# typed: true`. This time, notice that the error has changed: instead of saying "method does not exist," it says "not enough arguments!"
+The actionable aspect comes next. Starting from a `# typed: false` file with no errors, now we see a different error when we upgrade the file to `# typed: true`. This time, instead of saying "method does not exist," it says "not enough arguments!"
 
-That's a high-signal error. If we lumped together constant related errors and method related errors, it'd be noisy: you wouldn't know which errors are the real errors that you have to fix now, vs which errors are spurious and downstream of the true cause. The `# typed` level makes for an actionable ratchet by separating out these different classes of errors.
+That's a high-signal error. If we lumped together constant related errors and method related errors, it'd be noisy: you wouldn't know which errors are the real errors that you have to fix now, vs which errors are spurious and downstream of the true cause. Sorbet's `# typed` level makes for an actionable ratchet by separating out these different classes of errors.
 
 To recap, the `# typed` comment is local (just check the top of the current file), incremental (only have to think about the file you have open, and you can lock in granular progress), and actionable (because the problems you'll encounter by upgrading a file are high-signal and within your power to fix).
 
-So to sum that up, developer satisfaction improved because we refactored a large, stubborn codebase by building Sorbet to be a point of leverage, and picking `# typed:` comments to be a good ratchet.
+So to sum that up, developer satisfaction improved because we refactored a large, stubborn codebase by building Sorbet to be a point of leverage, and designing `# typed:` comments to be a good ratchet.
 
 Next, I'm going to hand it off to Getty, and he's going to talk about the same ideas, but in the context of making Stripe's Ruby monolith more modular. So while the ideas are the same, some of the specific choices of how to cultivate leverage and what ratchets to pick are way more subtle and non-obvious. He'll tell you all it.
 
