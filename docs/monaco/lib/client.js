@@ -111,6 +111,7 @@ else {
 document.getElementById('vim-button').addEventListener('click', function (ev) {
     ev.preventDefault();
     toggleVimKeybindings();
+    document.getElementById('menu').classList.remove('is-showing');
 });
 window.addEventListener('hashchange', function () {
     // Remove leading '#'

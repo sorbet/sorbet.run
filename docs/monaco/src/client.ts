@@ -99,6 +99,7 @@ if (initialUseVimKeybindings === true) {
 document.getElementById('vim-button')!.addEventListener('click', (ev) => {
   ev.preventDefault();
   toggleVimKeybindings();
+  document.getElementById('menu')!.classList.remove('is-showing');
 });
 
 window.addEventListener('hashchange', () => {
