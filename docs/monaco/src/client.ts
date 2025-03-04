@@ -41,7 +41,7 @@ foo("not an int")`;
 const model = monaco.editor.createModel(
   initialValue,
   'ruby',
-  monaco.Uri.parse('inmemory://model/default')
+  monaco.Uri.parse('inmemory://model/default.rb')
 );
 const editor = monaco.editor.create(element, {
   model: model,

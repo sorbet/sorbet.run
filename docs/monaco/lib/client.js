@@ -56,7 +56,7 @@ var initialValue = hash
     ? decodeURIComponent(hash)
     : "# typed: true\nextend T::Sig\n\nsig {params(x: Integer).void}\ndef foo(x)\n  puts(x + 1)\nend\n\nffoo(0)\nfoo(\"not an int\")";
 // create Monaco editor
-var model = monaco.editor.createModel(initialValue, 'ruby', monaco.Uri.parse('inmemory://model/default'));
+var model = monaco.editor.createModel(initialValue, 'ruby', monaco.Uri.parse('inmemory://model/default.rb'));
 var editor = monaco.editor.create(element, {
     model: model,
     theme: 'vs-dark',
