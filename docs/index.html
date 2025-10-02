@@ -249,6 +249,8 @@ a[data-href^="inmemory://model/"] {
           </li><li>
             <a href="?arg=--print&arg=rewrite-tree#%23%20typed%3A%20true%0A%0Aclass%20A%20<%20T%3A%3AStruct%0A%20%20prop%20%3Afoo%2C%20Integer%0Aend">Custom command line args</a>
           </li><li>
+            <a href="?arg=--enable-experimental-rbs-comments#%23%20typed%3A%20true%0A%0A%23%3A%20%28Integer%2C%20Integer%29%20->%20Integer%0Adef%20add%28a%2C%20b%29%0A%20%20%20%20a%20%2B%20b%0Aend%0A%0Aadd%28''%2C%2042%29%0A%0Ax%20%3D%20add%281%2C%202%29%20%23%3A%20Numeric%0AT.reveal_type%28x%29">Experimental RBS comments</a>
+          </li><li>
             <a href="#" id="toggle-editor-only">Toggle editor only</a>
           </li><li>
             <a href="#" id="vim-button">Toggle Vim keybindings</a>
