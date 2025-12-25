@@ -253,6 +253,8 @@ a[data-href^="inmemory://model/"] {
           </li><li>
             <a href="#" id="vim-button">Toggle Vim keybindings</a>
           </li><li>
+            <a href="#" id="change-title">Change Title</a>
+          </li><li>
             <a href="#" id="create-issue-from-example">Create issue with example</a>
           </li>
         </ul>
@@ -277,11 +279,16 @@ if (window.top != window.self) {
 <script src="monaco/lib/main.bundle.js"></script>
 <script>
   (function() {
-    var button = document.getElementById('toggle-editor-only');
-    button.addEventListener('click', function(ev) {
+    var toggleEditorButton = document.getElementById('toggle-editor-only');
+    toggleEditorButton.addEventListener('click', function(ev) {
       ev.preventDefault();
       document.getElementById('editor').classList.toggle('editor-only');
       document.getElementById('output').classList.toggle('editor-only');
+    });
+    var changeTitleButton = document.getElementById('change-title');
+    changeTitleButton.addEventListener('click', function(ev) {
+      ev.preventDefault();
+      document.title = prompt('Enter a new title:') + " - Sorbet Playground";
     });
   })();
 </script>
