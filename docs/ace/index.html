@@ -176,19 +176,17 @@ main {
     </header>
 
     <main>
-      <div id="editor">class A
-  extend T::Sig
+      <div id="editor"># typed: true
+class Module; include T::Sig; end
+extend T::Sig
 
-  sig {params(x: Integer).returns(String)}
-  def bar(x)
-    x.to_s
-  end
+sig {params(x: Integer).void}
+def foo(x)
+  puts(x + 1)
 end
 
-def main
-  A.new.barr(91)   # error: Typo!
-  A.new.bar("91")  # error: Type mismatch!
-end</div>
+ffoo(0)
+foo("not an int")</div>
       <pre id="output">Loading...</pre>
     </main>
 
