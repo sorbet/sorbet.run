@@ -54,7 +54,7 @@ element.addEventListener('click', function (e) {
 var hash = window.location.hash.slice(1);
 var initialValue = hash
     ? decodeURIComponent(hash)
-    : "# typed: true\nextend T::Sig\n\nsig {params(x: Integer).void}\ndef foo(x)\n  puts(x + 1)\nend\n\nffoo(0)\nfoo(\"not an int\")";
+    : "# typed: true\nclass Module; include T::Sig; end\nextend T::Sig\n\nsig {params(x: Integer).void}\ndef foo(x)\n  puts(x + 1)\nend\n\nffoo(0)\nfoo(\"not an int\")";
 // create Monaco editor
 var model = monaco.editor.createModel(initialValue, 'ruby', monaco.Uri.parse('inmemory://model/default.rb'));
 var editor = monaco.editor.create(element, {
