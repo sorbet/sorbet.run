@@ -27,6 +27,7 @@ const hash = window.location.hash.slice(1);
 const initialValue = hash
   ? decodeURIComponent(hash)
   : `# typed: true
+class Module; include T::Sig; end
 extend T::Sig
 
 sig {params(x: Integer).void}
