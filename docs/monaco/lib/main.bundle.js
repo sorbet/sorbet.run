@@ -126003,6 +126003,8 @@ function instantiateSorbet() {
 }
 mockServer.on('connection', function (s) {
     socket = s;
+    var commandLineArguments = new URLSearchParams(window.location.search).getAll('arg');
+    sorbet.ccall('initializeLsp', null, ['string'], [JSON.stringify(commandLineArguments)]);
     var processLSPResponse = sorbet.addFunction(function (arg) {
         var message = (typeof sorbet.UTF8ToString == 'function')
             ? sorbet.UTF8ToString(arg)
