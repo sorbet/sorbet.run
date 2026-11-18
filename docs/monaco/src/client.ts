@@ -252,6 +252,16 @@ async function instantiateSorbet() {
 mockServer.on('connection', (s: any) => {
   socket = s;
 
+  const commandLineArguments = new URLSearchParams(
+    window.location.search
+  ).getAll('arg');
+  sorbet.ccall(
+    'initializeLsp',
+    null,
+    ['string'],
+    [JSON.stringify(commandLineArguments)]
+  );
+
   const processLSPResponse = sorbet.addFunction((arg: any) => {
     const message =
       (typeof sorbet.UTF8ToString == 'function')
